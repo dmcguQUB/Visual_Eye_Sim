@@ -35,7 +35,7 @@ a.card-link:hover {
 
 a.card-link img {
   object-fit: cover;
-  height: 14.5rem;
+  height: 12rem;
 }
 
 .card-body {
@@ -56,4 +56,20 @@ a.card-link img {
 
 .btn-primary {
   margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red; /* Update the background color to red */
+  color: white; /* Set the text color to white */
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
 }
+
+.btn-primary:hover {
+  background-color: darkred; /* Update the background color on hover */
+  cursor: pointer;
+}
+
