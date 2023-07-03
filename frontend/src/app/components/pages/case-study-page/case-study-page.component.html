@@ -1,12 +1,34 @@
-<div class="container">
-  <img [src]="caseStudy.imageUrl" [alt]="caseStudy.name"/>
-
-  <div class="details">
-    <div class="header">
-      <span class="name">
-        {{caseStudy.name}}
-      </span>
+<!-- case-study-page.component.html -->
+<div class="container case-study">
+  <div class="navbar navbar-default">
+    <h1 class="case-study-header"><a routerLink="/case-study/{{caseStudy.id}}">{{caseStudy.name}}</a></h1>
+    <div class="navbar-inner">
+      <ul class="nav navbar-nav">
+        <li class="active"><a routerLink="/case-study-detail/{{caseStudy.id}}">Background Info</a></li>
+        <li class="dropdown">
+          <button mat-button [matMenuTriggerFor]="examinations" (mouseenter)="menu.openMenu()">Examinations</button>
+          <mat-menu #examinations="matMenu">
+            <!--Links to the tests-->
+            <button mat-menu-item><a routerLink="/case-study-detail/{{caseStudy.id}}">Speak to {{caseStudy.name}}</a></button>
+            <button mat-menu-item><a routerLink="/pupil-reflexes-test/{{caseStudy.id}}">Pupil Reflexes Test</a></button>
+            <button mat-menu-item>Visual Fields Test By Confrontation</button>
+            <button mat-menu-item>Visual Acuity Test</button>
+            <button mat-menu-item>Eye Movements Test</button>
+            <button mat-menu-item>Direct Ophthalmoscopy Test</button>
+            <button mat-menu-item>Examination Summary</button>
+          </mat-menu>
+        </li>
+        <li><a href="#">Investigation</a></li>
+        <li><a href="#">Investigation images</a></li>
+        <li><a href="#">Diagnosis</a></li>
+      </ul>
     </div>
+  </div>
 
+  <div class="case-study-details">
+    <img [src]="caseStudy.imageUrl" [alt]="caseStudy.name"/>
+    <div class="header">
+      <span class="name">{{caseStudy.name}}</span>
+    </div>
   </div>
 </div>

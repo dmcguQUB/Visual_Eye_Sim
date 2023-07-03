@@ -10,4 +10,17 @@ export class CaseStudies {
   drugInfo!: string;
   socialInfo!: string;
   familyHistory!: string;
+
+  //intialise incase a empty value is found within the search
+  constructor() {
+    this.id = '';
+    this.name = '';
+    this.age = '';
+    this.gender = '';
+  this.medicalHistory='';
+  this.drugInfo='';
+  this.socialInfo='';
+  this.familyHistory='';
+  }
 }
+
