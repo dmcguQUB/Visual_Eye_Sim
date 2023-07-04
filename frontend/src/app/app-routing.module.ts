@@ -5,6 +5,7 @@ import { CaseStudyPageComponent } from './components/pages/case-study-page/case-
 import { HomeComponent } from './components/pages/home/home.component';
 import { CaseStudyDetailComponent } from './components/pages/case-study-detail/case-study-detail.component'; // Adjust the path as needed
 import { PupilReflexesTestComponent } from './components/pages/pupil-reflexes-test/pupil-reflexes-test.component';
+import { VisualFieldsTestComponent } from './components/pages/visual-fields-test/visual-fields-test.component'; // visual fields test by confrontation imported route
 
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path: 'case-study/:id', component: CaseStudyPageComponent},
   { path: 'case-study-detail/:id', component: CaseStudyDetailComponent },
   { path: 'pupil-reflexes-test/:id', component: PupilReflexesTestComponent },
+  { path: 'visual-fields-test/:id', component: VisualFieldsTestComponent }, // adding route to the routes array
 ];
 
 @NgModule({
