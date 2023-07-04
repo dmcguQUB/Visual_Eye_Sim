@@ -1,96 +1,177 @@
- //create variables
- var canvas = document.getElementById("myCanvas");
- var ctx = canvas.getContext("2d");
+//create variables
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+// mouse move listener
+canvas.addEventListener("mousemove", mouseMoveHandler, false);
 
- // mouse move listener
- document.addEventListener("mousemove", mouseMoveHandler, false);
+//create rectangles to represent the visual fields
+var rectangles = [
+  {
+    x: 20,
+    y: 20,
+    width: 380,
+    height: 200,
+    fill: "rgba(0, 0, 255, 0.5)",
+  }, // top left
+  {
+    x: 400,
+    y: 20,
+    width: 380,
+    height: 200,
+    fill: "rgba(0, 0, 255, 0.5)",
+  }, // top right
+  {
+    x: 20,
+    y: 220,
+    width: 380,
+    height: 200,
+    fill: "rgba(0, 0, 255, 0.5)",
+  }, // bottom left
+  {
+    x: 400,
+    y: 220,
+    width: 380,
+    height: 200,
+    fill: "rgba(0, 0, 255, 0.5)",
+  }, // bottom right
+];
 
- //create eyeballs
- var eyes = [
-   {
-     eyeball: { x: 100, y: 100, radius: 50 },
-     pupil: { x: 100, y: 100, radius: 20 },
-   },
-   {
-     eyeball: { x: 300, y: 100, radius: 50 },
-     pupil: { x: 300, y: 100, radius: 20 },
-   },
- ];
+//create face
+var face = {
+  x: 400,
+  y: 400,
+  radiusX: 300,
+  radiusY: 300,
+  rotation: 0,
+};
 
- //function to build one eye
- function drawEye(eye) {
-   ctx.beginPath();
-   ctx.arc(
-     eye.eyeball.x,
-     eye.eyeball.y,
-     eye.eyeball.radius,
-     0,
-     Math.PI * 2
-   );
-   ctx.strokeStyle = "rgba(0, 0, 0, 1)"; // black colour
-   ctx.stroke();
-   ctx.closePath();
- }
+//create eyeballs
+var eyes = [
+  {
+    eyeball: { x: 300, y: 200, radius: 50 },
+    pupil: { x: 300, y: 200, radius: 20, targetRadius: 20 },
+  },
+  {
+    eyeball: { x: 500, y: 200, radius: 50 },
+    pupil: { x: 500, y: 200, radius: 20, targetRadius: 20 },
+  },
+];
 
- //function to build one pupil
- function drawPupil(pupil) {
-   ctx.beginPath();
-   ctx.arc(pupil.x, pupil.y, pupil.radius, 0, Math.PI * 2);
-   ctx.fillStyle = "rgba(0, 0, 0, 1)"; // black colour
-   ctx.fill(); // fill in pupil
-   ctx.stroke();
-   ctx.closePath();
- }
+//function to build rectangles to represent visual fields
+function drawRectangle(rect) {
+  ctx.fillStyle = rect.fill;
+  ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+}
 
- // function for pupil to track the mouse
- function mouseMoveHandler(e) {
-   // get the X and Y coordinates of the mouse
-   var mouseX = e.clientX - canvas.offsetLeft;
-   var mouseY = e.clientY - canvas.offsetTop;
+//function to build face
+function drawFace(face) {
+  ctx.beginPath();
+  ctx.ellipse(
+    face.x,
+    face.y,
+    face.radiusX,
+    face.radiusY,
+    face.rotation,
+    0,
+    Math.PI * 2
+  );
+  ctx.stroke();
+  ctx.closePath();
+}
 
-   // Get the center point between the eyes
-   var centerX = (eyes[0].eyeball.x + eyes[1].eyeball.x) / 2;
+//function to build one eye
+function drawEye(eye) {
+  ctx.beginPath();
+  //arc method in HTML to draw a circle
+  ctx.arc(
+    eye.eyeball.x,
+    eye.eyeball.y,
+    eye.eyeball.radius,
+    0,
+    Math.PI * 2
+  );
+  ctx.strokeStyle = "rgba(0, 0, 0, 1)"; // black color
+  ctx.stroke();
+  ctx.closePath();
+}
 
-   for (var i = 0; i < eyes.length; i++) {
-     var eye = eyes[i];
+//function to build one pupil
+function drawPupil(pupil) {
+  ctx.beginPath();
+  ctx.arc(pupil.x, pupil.y, pupil.radius, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(0, 0, 0, 1)"; // black color
+  ctx.fill(); // fill in pupil
+  ctx.stroke();
+  ctx.closePath();
+}
+// function to highlight visual field when hovering over rectangle
+function mouseMoveHandler(e) {
+  // get the X and Y coordinates of the mouse
+  var mouseX = e.clientX - canvas.offsetLeft;
+  var mouseY = e.clientY - canvas.offsetTop;
 
-     // Calculate the direction of the mouse from the center of the eyeball
-     var dirX = mouseX - eye.eyeball.x;
-     var dirY = mouseY - eye.eyeball.y;
+  // Check if the mouse is over any rectangle
+  rectangles.forEach(function (rect) {
+    // Reset color
+    rect.fill = "rgba(0, 0, 255, 0.5)";
 
-     // Calculate the distance of the mouse from the center of the eyeball
-     var distance = Math.sqrt(dirX * dirX + dirY * dirY);
+    // Check if mouse is within rectangle boundaries
+    if (
+      mouseX > rect.x &&
+      mouseX < rect.x + rect.width &&
+      mouseY > rect.y &&
+      mouseY < rect.y + rect.height
+    ) {
+      rect.fill = "rgba(255, 0, 0, 0.5)"; // Change color to red if mouse is over
+    }
+  });
 
-     // Normalize the direction
-     var dirNormX = dirX / distance;
-     var dirNormY = dirY / distance;
+  // Start the animation
+  window.requestAnimationFrame(animation);
+}
 
-     // Calculate the max distance the pupil can move inside the eyeball
-     var maxPupilDistance = eye.eyeball.radius - eye.pupil.radius;
+function animation() {
+  // Clear the previous drawing
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-     // Calculate the effective distance the pupil should move (it can't move beyond the eyeball)
-     var effectivePupilDistance = Math.min(distance, maxPupilDistance);
+  // For each eye, gradually adjust the radius of the pupil towards the target radius
+  for (var i = 0; i < eyes.length; i++) {
+    var eye = eyes[i];
 
-     // Check if the mouse X is within the boundaries (center of both eyes)
-     if (mouseX > eyes[0].eyeball.x && mouseX < eyes[1].eyeball.x) {
-       // If so, keep the pupil centered in the X direction
-       eye.pupil.x = eye.eyeball.x;
-     } else {
-       // Otherwise, allow the pupil to move
-       eye.pupil.x = eye.eyeball.x + dirNormX * effectivePupilDistance;
-     }
+    if (eye.pupil.radius < eye.pupil.targetRadius) {
+      eye.pupil.radius += 0.004;
+    } else if (eye.pupil.radius > eye.pupil.targetRadius) {
+      eye.pupil.radius -= 0.004;
+    }
 
-     // Move the pupil in Y direction
-     eye.pupil.y = eye.eyeball.y + dirNormY * effectivePupilDistance;
-   }
+    // Draw rectangles
+    rectangles.forEach(drawRectangle);
+    // Draw the face
+    drawFace(face);
+    // Redraw the eye and pupil
+    drawEye(eye);
+    drawPupil(eye.pupil);
+  }
 
-   // Clear the previous drawing
-   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Continue the animation
+  window.requestAnimationFrame(animation);
+}
 
-   // Draw the eyes and pupils
-   for (var i = 0; i < eyes.length; i++) {
-     var eye = eyes[i];
-     drawEye(eye);
-     drawPupil(eye.pupil);
-   }
- }
+// Start the animation
+window.requestAnimationFrame(animation);
+var buttons = [
+  "topLeftButton",
+  "topRightButton",
+  "bottomLeftButton",
+  "bottomRightButton",
+];
+var message = document.getElementById("message");
+
+function showMessage(event) {
+  message.textContent = event.target.id + " clicked!";
+}
+
+buttons.forEach(function (id) {
+  var button = document.getElementById(id);
+  button.addEventListener("click", showMessage, false);
+});

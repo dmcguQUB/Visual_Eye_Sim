@@ -1,0 +1,15 @@
+   /* Canvas container */
+   #canvasContainer {
+    position: relative; /*postion canvas relative to its normal position in doc*/
+    height: 800px;
+    width: 1200px;
+    border: 1px solid black;
+    overflow: auto; /* Set to auto to allow for scrolling. This ensures the zoom does not go outside of the canvas */
+  }
+
+  /*Snellen Chart CSS*/
+  #snellenChart {
+    position: absolute; /* Position the snellen chart precisely in relation to the canvas  */
+    width: 100%;
+    height: auto; /*Height set to auto to maintain the ratio of the image when zooming*/
+  }

@@ -1,4 +1,3 @@
-// Import necessary dependencies
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -9,7 +8,6 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./visual-fields-test.component.css']
 })
 export class VisualFieldsTestComponent implements OnInit, AfterViewInit {
-  // Obtain a reference to the canvas element
   @ViewChild('myCanvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;  
 

@@ -12,6 +12,7 @@ import { CaseStudyDetailComponent } from './components/pages/case-study-detail/c
 import { PupilReflexesTestComponent } from './components/pages/pupil-reflexes-test/pupil-reflexes-test.component';
 import { VisualFieldsTestComponent } from './components/pages/visual-fields-test/visual-fields-test.component';
 import { VisualAcuityTestComponent } from './components/pages/visual-acuity-test/visual-acuity-test.component';
+import { EyeMovementsTestComponent } from './components/pages/eye-movements-test/eye-movements-test.component';
 
 
 
@@ -24,7 +25,8 @@ import { VisualAcuityTestComponent } from './components/pages/visual-acuity-test
     CaseStudyDetailComponent,
     PupilReflexesTestComponent,
     VisualFieldsTestComponent,
-    VisualAcuityTestComponent
+    VisualAcuityTestComponent,
+    EyeMovementsTestComponent
   ],
   imports: [
     BrowserModule,

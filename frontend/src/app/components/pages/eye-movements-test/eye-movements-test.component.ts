@@ -1,13 +1,15 @@
+// Import necessary dependencies
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
-  selector: 'app-visual-acuity-test',
-  templateUrl: './visual-acuity-test.component.html',
-  styleUrls: ['./visual-acuity-test.component.css']
+  selector: 'app-eye-movements-test',
+  templateUrl: './eye-movements-test.component.html',
+  styleUrls: ['./eye-movements-test.component.css']
 })
-export class VisualAcuityTestComponent implements OnInit, AfterViewInit {
+export class EyeMovementsTestComponent implements OnInit, AfterViewInit {
+  // Obtain a reference to the canvas element
   @ViewChild('myCanvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;  
 
@@ -16,8 +18,8 @@ export class VisualAcuityTestComponent implements OnInit, AfterViewInit {
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    // Call the method to add the script file for the Visual Acuity Test
-    this.addScriptToElement("./assets/visual-acuity-test.js");
+    // Call the method to add the script file for the Eye Movements Test
+    this.addScriptToElement("./assets/eye-movements-test.js");
   }
 
   addScriptToElement(src: string): HTMLScriptElement {

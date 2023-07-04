@@ -7,3 +7,37 @@ canvas {
   display: block;
   margin: 0 auto;
 }
+
+#canvasContainer {
+  position: relative;
+  display: inline-block;
+}
+
+#myCanvas {
+  background: #eee;
+  display: block;
+}
+
+button {
+  position: absolute;
+}
+/* Top left button for visual eye field*/
+#topLeftButton {
+  top: 20px;
+  left: 20px;
+}
+/* Top right button for visual eye field*/
+#topRightButton {
+  top: 20px;
+  right: 20px;
+}
+/* bottom left button for visual eye field*/
+#bottomLeftButton {
+  bottom: 280px;
+  left: 20px;
+}
+/* Top right button for visual eye field*/
+#bottomRightButton {
+  bottom: 280px;
+  right: 20px;
+}
