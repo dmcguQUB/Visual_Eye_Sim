@@ -16,7 +16,7 @@ export class PupilReflexesTestComponent implements OnInit, AfterViewInit {
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    this.addScriptToElement("./assets/pupil-flexes-test.js");
+    this.addScriptToElement("./assets/pupil-reflexes-test.js");
   }
 
   addScriptToElement(src: string): HTMLScriptElement {

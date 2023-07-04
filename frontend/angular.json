@@ -30,7 +30,7 @@
               "./node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [
-              "src/assets/pupilReflexes.js"//import script to run JS script for pupil relexes test
+              "src/assets/pupil-reflexes-test.js"//import script to run JS script for pupil relexes test
             ]
           },
           "configurations": {
