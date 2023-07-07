@@ -1,0 +1,22 @@
+<div class="container">
+  <h1>Direct Ophthalmoscopy</h1>
+<!--Black Background-->
+<div id="black-background"></div>
+
+<!--Background image of eye -->
+<div id="background-image"></div>
+
+
+<!--Mask layer-->
+<div id="maskLayer">
+<svg id="maskSvg" width="100%" height="100%">
+  <defs>
+    <mask id="mask">
+      <rect width="100%" height="100%" fill="white"/>
+      <circle id="maskCircle" cx="0" cy="0" r="50" fill="black"/>
+    </mask>
+  </defs>
+  <rect width="100%" height="100%" fill="black" mask="url(#mask)"/>
+</svg>
+</div>
+</div>

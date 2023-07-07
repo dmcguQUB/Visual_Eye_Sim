@@ -1,0 +1,33 @@
+/* opthamoloscopy page. Provide black background*/
+#black-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 1; /* Ensures this div stays below the others */
+}
+/* opthamoloscopy page. Provide eye image*/
+#background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://www.bmj.com/content/bmj/329/7461/s56/F1.large.jpg");
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: center;
+  z-index: 2; /* This div will be above the black background */
+}
+
+/* opthamoloscopy page. Provide mask black background*/
+#maskLayer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3; /* This div will be above the image and black background */
+}

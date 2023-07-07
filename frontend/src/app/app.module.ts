@@ -13,6 +13,7 @@ import { PupilReflexesTestComponent } from './components/pages/pupil-reflexes-te
 import { VisualFieldsTestComponent } from './components/pages/visual-fields-test/visual-fields-test.component';
 import { VisualAcuityTestComponent } from './components/pages/visual-acuity-test/visual-acuity-test.component';
 import { EyeMovementsTestComponent } from './components/pages/eye-movements-test/eye-movements-test.component';
+import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
 
 
 
@@ -26,7 +27,8 @@ import { EyeMovementsTestComponent } from './components/pages/eye-movements-test
     PupilReflexesTestComponent,
     VisualFieldsTestComponent,
     VisualAcuityTestComponent,
-    EyeMovementsTestComponent
+    EyeMovementsTestComponent,
+    DirectOphthalmoscopyTestComponent
   ],
   imports: [
     BrowserModule,

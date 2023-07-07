@@ -104,11 +104,12 @@ function drawPupil(pupil) {
   ctx.stroke();
   ctx.closePath();
 }
+
 // function to highlight visual field when hovering over rectangle
 function mouseMoveHandler(e) {
   // get the X and Y coordinates of the mouse
   var mouseX = e.clientX - canvas.offsetLeft;
-  var mouseY = e.clientY - canvas.offsetTop;
+  var mouseY = e.clientY - canvas.offsetTop - getHeaderHeight();
 
   // Check if the mouse is over any rectangle
   rectangles.forEach(function (rect) {
@@ -128,6 +129,11 @@ function mouseMoveHandler(e) {
 
   // Start the animation
   window.requestAnimationFrame(animation);
+}
+
+function getHeaderHeight() {
+  var header = document.querySelector("header");
+  return header ? header.offsetHeight : 0;
 }
 
 function animation() {
