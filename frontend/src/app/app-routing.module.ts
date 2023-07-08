@@ -9,10 +9,13 @@ import { VisualFieldsTestComponent } from './components/pages/visual-fields-test
 import { VisualAcuityTestComponent } from './components/pages/visual-acuity-test/visual-acuity-test.component';//visual acuity test
 import { EyeMovementsTestComponent } from './components/pages/eye-movements-test/eye-movements-test.component'; //eye movemebts
 import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
+import { QuestionComponent } from './components/pages/question/question.component';
+import { WelcomeComponent } from './components/pages/welcome/welcome.component';
+
 
 const routes: Routes = [
   //home route
-  {path: '',component:HomeComponent},
+  {path: '',component:HomeComponent,pathMatch:"full"},
   {path: 'case-study/:id', component: CaseStudyPageComponent},
   { path: 'case-study-detail/:id', component: CaseStudyDetailComponent },
   { path: 'pupil-reflexes-test/:id', component: PupilReflexesTestComponent },
@@ -20,7 +23,8 @@ const routes: Routes = [
   { path: 'visual-acuity-test/:id', component: VisualAcuityTestComponent }, 
   { path: 'eye-movements-test/:id', component: EyeMovementsTestComponent },
   { path: 'direct-ophthalmoscopy-test/:id', component: DirectOphthalmoscopyTestComponent },
-
+  {path:"welcome", component:WelcomeComponent},
+  {path:"question", component:QuestionComponent}
 ];
 
 @NgModule({
