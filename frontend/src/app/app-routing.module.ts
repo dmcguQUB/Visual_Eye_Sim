@@ -15,7 +15,7 @@ import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 
 const routes: Routes = [
   //home route
-  {path: '',component:HomeComponent,pathMatch:"full"},
+  {path: '',component:HomeComponent},
   {path: 'case-study/:id', component: CaseStudyPageComponent},
   { path: 'case-study-detail/:id', component: CaseStudyDetailComponent },
   { path: 'pupil-reflexes-test/:id', component: PupilReflexesTestComponent },

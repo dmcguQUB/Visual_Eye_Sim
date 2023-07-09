@@ -1,5 +1,4 @@
-//case-study-page.component.ts
-
+// case-study-page.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UseCaseService } from 'src/app/services/usecases.service';
@@ -13,15 +12,19 @@ import { MatMenuTrigger } from '@angular/material/menu';
 })
 export class CaseStudyPageComponent implements OnInit {
   caseStudy!: CaseStudies;
-  @ViewChild(MatMenuTrigger) menu!: MatMenuTrigger;  // add ! here
 
   constructor(private activatedRoute: ActivatedRoute, private useCaseService: UseCaseService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
+      console.log(params)
       if (params['id']) {
-        this.caseStudy = this.useCaseService.getUseCaseById(params['id']);
+        this.useCaseService.getUseCaseById(params['id']).subscribe(serverCaseStudy => {
+          this.caseStudy = serverCaseStudy;
+        });
       }
     });
   }
+  @ViewChild(MatMenuTrigger) menu!: MatMenuTrigger;
+
 }

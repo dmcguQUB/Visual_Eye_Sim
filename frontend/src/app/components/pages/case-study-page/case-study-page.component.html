@@ -1,5 +1,5 @@
 <!-- case-study-page.component.html -->
-<div class="container case-study">
+<div class="container case-study" *ngIf="caseStudy">
   <div class="navbar navbar-default">
     <h1 class="case-study-header"><a routerLink="/case-study/{{caseStudy.id}}">{{caseStudy.name}}</a></h1>
     <div class="navbar-inner">
@@ -32,4 +32,8 @@
       <span class="name">{{caseStudy.name}}</span>
     </div>
   </div>
+</div>
+
+<div class="loading" *ngIf="!caseStudy">
+  Loading case study...
 </div>

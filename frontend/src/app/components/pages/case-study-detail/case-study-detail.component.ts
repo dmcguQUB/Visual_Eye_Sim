@@ -1,7 +1,6 @@
 //case-study-detail.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { sample_case_studies } from '../../../../data';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 import { UseCaseService } from 'src/app/services/usecases.service';
 
@@ -17,9 +16,15 @@ export class CaseStudyDetailComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, private useCaseService: UseCaseService) { }
 
   ngOnInit(): void {
+    //locate the case study phase
     this.activatedRoute.params.subscribe(params => {
+      console.log(params);
       if (params['id']) {
-        this.caseStudy = this.useCaseService.getUseCaseById(params['id']);
+        this.useCaseService.getUseCaseById(params['id']).subscribe(serverCaseStudy=>{
+          this.caseStudy = serverCaseStudy;
+
+        });
       }
     });
-} }
+
+  } }
