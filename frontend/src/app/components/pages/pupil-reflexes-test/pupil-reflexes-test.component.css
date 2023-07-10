@@ -1,12 +1,10 @@
-
 canvas {
   background: #eee;
   display: block;
   margin: 0 auto;
-  justify-content: center;
 }
 
-/* Parent Container allow them to be on the same line*/
+/* Parent Container allow them to be on the same line */
 .parent-container {
   display: flex;
 }
@@ -16,7 +14,7 @@ canvas {
   width: 25%; /* Adjust width according to your needs */
 }
 
-/* Puipil reflexes Test Styles */
+/* Pupil Reflexes Test Styles */
 .eye-movements-container {
   width: 75%; /* Adjust width according to your needs */
 }
@@ -26,5 +24,4 @@ canvas {
   margin-left: 0px;
   padding-left: 0px;
 }
-
 

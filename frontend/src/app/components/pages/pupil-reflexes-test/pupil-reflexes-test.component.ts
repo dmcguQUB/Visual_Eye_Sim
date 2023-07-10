@@ -16,11 +16,7 @@ export class PupilReflexesTestComponent implements OnInit, AfterViewInit {
 
   constructor(private renderer2: Renderer2, @Inject(DOCUMENT) private _document:Document) { }
 
-  ngOnInit(): void { }
-
-  ngAfterViewInit(): void {
-    this.addScriptToElement("./assets/pupil-reflexes-test.js");
-  }
+  
 
   addScriptToElement(src: string): HTMLScriptElement {
     const script = this.renderer2.createElement('script');
@@ -30,5 +26,10 @@ export class PupilReflexesTestComponent implements OnInit, AfterViewInit {
     script.defer = true;
     this.renderer2.appendChild(this._document.body, script);
     return script;
+  }
+  ngOnInit(): void { }
+
+  ngAfterViewInit(): void {
+    this.addScriptToElement("./assets/pupil-reflexes-test.js");
   }
 }
