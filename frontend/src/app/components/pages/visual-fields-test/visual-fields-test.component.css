@@ -1,43 +1,67 @@
-* {
-  padding: 0;
-  margin: 0;
+/* General button styles */
+.button {
+  position: absolute;
 }
+
+/* Container for canvas and buttons */
+#canvasContainer {
+  position: relative;
+  height: 50%; /* This should match your canvas height */
+  width: 80%;
+}
+
+/* Top left button for visual eye field */
+#topLeftButton {
+  top: 20px;
+  left: 20px;
+}
+
+/* Top right button for visual eye field */
+#topRightButton {
+  top: 20px;
+  right: 20px;
+}
+
+/* Bottom left button for visual eye field */
+#bottomLeftButton {
+  bottom: 20px;
+  left: 20px;
+}
+
+/* Bottom right button for visual eye field */
+#bottomRightButton {
+  bottom: 20px;
+  right: 20px;
+}
+
+/* Canvas styles */
 canvas {
   background: #eee;
   display: block;
   margin: 0 auto;
 }
 
-#canvasContainer {
-  position: relative;
-  display: inline-block;
+canvas#myCanvas {
+  width: 100%;
+  height: 100%;
 }
 
-#myCanvas {
-  background: #eee;
-  display: block;
+/* Parent container styles */
+.parent-container {
+  display: flex;
+  flex-direction: row; /* Changed to row to layout elements horizontally */
+  align-items: flex-start; /* Aligns items to the top */
+  height: 100vh; /* Added to make it fullscreen */
 }
 
-button {
-  position: absolute;
+.eye-movements-container {
+  flex-grow: 1; /* Makes the eye movements container take up remaining space */
+  display: flex; /* Needed to layout title and canvas vertically */
+  flex-direction: column; /* Layouts title and canvas vertically */
+  align-items: center; /* Centers title and canvas */
 }
-/* Top left button for visual eye field*/
-#topLeftButton {
-  top: 20px;
-  left: 20px;
-}
-/* Top right button for visual eye field*/
-#topRightButton {
-  top: 20px;
-  right: 20px;
-}
-/* bottom left button for visual eye field*/
-#bottomLeftButton {
-  bottom: 280px;
-  left: 20px;
-}
-/* Top right button for visual eye field*/
-#bottomRightButton {
-  bottom: 280px;
-  right: 20px;
+
+/* Title styles */
+.title {
+  text-align: center;
 }
