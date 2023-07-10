@@ -1,33 +1,63 @@
-/* opthamoloscopy page. Provide black background*/
-#black-background {
-  position: fixed;
+/* Parent Container allows for a row layout */
+.parent-container {
+  display: flex;
+}
+
+/* Navbar Styles */
+.app-navbar {
+  width: 25%; /* Adjust width according to your needs */
+}
+
+/* Right Container allows for a column layout */
+.right-container {
+  display: flex;
+  flex-direction: column;
+  width: 75%; /* Adjust width according to your needs */
+}
+
+/* Title Container */
+.title-container {
+  background-color: white;
+  text-align: center; /* Center the title */
+  padding: 20px 0; /* Add some vertical padding */
+}
+
+/* Title Styles */
+.title {
+  margin: 0; /* Reset the margin */
+}
+
+/* Direct Ophthalmoscopy Test Styles */
+.ophthalmoscopy-container {
+  position: relative;
+  flex-grow: 1; /* Allows the ophthalmoscopy container to take up the rest of the space in the right container */
+}
+
+/* Direct Ophthalmoscopy layers */
+#black-background, #background-image, #maskLayer {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100%; 
+}
+
+/* Provide black background */
+#black-background {
   background-color: black;
   z-index: 1; /* Ensures this div stays below the others */
 }
-/* opthamoloscopy page. Provide eye image*/
+
+/* Provide eye image */
 #background-image {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: url("https://www.bmj.com/content/bmj/329/7461/s56/F1.large.jpg");
   background-repeat: no-repeat;
-  background-size: 50%;
+  background-size: contain; /* Adjusted to contain */
   background-position: center;
   z-index: 2; /* This div will be above the black background */
 }
 
-/* opthamoloscopy page. Provide mask black background*/
+/* Provide mask black background */
 #maskLayer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   z-index: 3; /* This div will be above the image and black background */
 }
