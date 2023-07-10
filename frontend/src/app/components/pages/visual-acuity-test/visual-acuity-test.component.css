@@ -2,7 +2,7 @@
    #canvasContainer {
     position: relative; /*postion canvas relative to its normal position in doc*/
     height: 800px;
-    width: 1200px;
+    width: 600px;
     border: 1px solid black;
     overflow: auto; /* Set to auto to allow for scrolling. This ensures the zoom does not go outside of the canvas */
   }
@@ -13,3 +13,27 @@
     width: 100%;
     height: auto; /*Height set to auto to maintain the ratio of the image when zooming*/
   }
+
+  
+  /* Parent Container allow them to be on the same line */
+  .parent-container {
+    display: flex;
+  }
+  
+  /* Navbar Styles */
+  .app-navbar {
+    width: 25%; /* Adjust width according to your needs */
+  }
+  
+  /* Pupil Reflexes Test Styles */
+  .eye-movements-container {
+    width: 75%; /* Adjust width according to your needs */
+  }
+  
+  .title {
+    text-align: center;
+    margin-left: 0px;
+    padding-left: 0px;
+  }
+  
+  
