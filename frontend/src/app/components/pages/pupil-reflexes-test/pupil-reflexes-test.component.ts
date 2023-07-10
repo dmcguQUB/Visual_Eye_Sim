@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { CaseStudies } from 'src/app/shared/models/casestudies';
 
 @Component({
   selector: 'app-pupil-reflexes-test',
@@ -8,6 +9,8 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./pupil-reflexes-test.component.css']
 })
 export class PupilReflexesTestComponent implements OnInit, AfterViewInit {
+  //input casestudy to navbar
+  @Input() caseStudy!: CaseStudies;
   @ViewChild('myCanvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;  
 

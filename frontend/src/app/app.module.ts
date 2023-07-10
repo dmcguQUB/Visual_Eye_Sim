@@ -19,6 +19,7 @@ import { VisualFieldsTestComponent } from './components/pages/visual-fields-test
 import { VisualAcuityTestComponent } from './components/pages/visual-acuity-test/visual-acuity-test.component';
 import { EyeMovementsTestComponent } from './components/pages/eye-movements-test/eye-movements-test.component';
 import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
+import { NavbarComponent } from './components/partials/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-oph
     VisualFieldsTestComponent,
     VisualAcuityTestComponent,
     EyeMovementsTestComponent,
-    DirectOphthalmoscopyTestComponent
+    DirectOphthalmoscopyTestComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,

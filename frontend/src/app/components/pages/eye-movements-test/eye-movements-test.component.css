@@ -1,9 +1,30 @@
-* {
-  padding: 0;
-  margin: 0;
-}
+
 canvas {
   background: #eee;
   display: block;
   margin: 0 auto;
+  justify-content: center;
 }
+
+/* Parent Container allow them to be on the same line*/
+.parent-container {
+  display: flex;
+}
+
+/* Navbar Styles */
+.app-navbar {
+  width: 25%; /* Adjust width according to your needs */
+}
+
+/* Puipil reflexes Test Styles */
+.eye-movements-container {
+  width: 75%; /* Adjust width according to your needs */
+}
+
+.title {
+  text-align: center;
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+

@@ -1,7 +1,8 @@
 // Import necessary dependencies
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { CaseStudies } from 'src/app/shared/models/casestudies';
 
 @Component({
   selector: 'app-eye-movements-test',
@@ -9,6 +10,8 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./eye-movements-test.component.css']
 })
 export class EyeMovementsTestComponent implements OnInit, AfterViewInit {
+   //input casestudy to navbar
+   @Input() caseStudy!: CaseStudies;
   // Obtain a reference to the canvas element
   @ViewChild('myCanvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;  
@@ -37,4 +40,5 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit {
 
     return script;
   }
+
 }

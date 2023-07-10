@@ -1,30 +1,9 @@
 <!-- case-study-page.component.html -->
 <div class="container case-study" *ngIf="caseStudy">
-  <div class="navbar navbar-default">
-    <h1 class="case-study-header"><a routerLink="/case-study/{{caseStudy.id}}">{{caseStudy.name}}</a></h1>
-    <div class="navbar-inner">
-      <ul class="nav navbar-nav">
-        <li class="active"><a routerLink="/case-study-detail/{{caseStudy.id}}">Background Info</a></li>
-        <li class="dropdown">
-          <button mat-button [matMenuTriggerFor]="examinations" (mouseenter)="menu.openMenu()">Examinations</button>
-          <mat-menu #examinations="matMenu">
-            <!--Links to the tests-->
-            <button mat-menu-item><a routerLink="/case-study-detail/{{caseStudy.id}}">Speak to {{caseStudy.name}}</a></button>
-            <button mat-menu-item><a routerLink="/pupil-reflexes-test/{{caseStudy.id}}">Pupil Reflexes Test</a></button>
-            <button mat-menu-item><a routerLink="/visual-fields-test/{{caseStudy.id}}">Visual Fields Test By Confrontation **this is just eye movements need to edit code</a></button>       
-            <button mat-menu-item><a routerLink="/visual-acuity-test/{{caseStudy.id}}">Visual Acuity Test</a></button>  
-            <button mat-menu-item><a routerLink="/eye-movements-test/{{caseStudy.id}}">Eye Movements Test</a></button>        
-            <button mat-menu-item><a routerLink="/direct-ophthalmoscopy-test/{{caseStudy.id}}">Direct Ophthalmoscopy</a></button> 
-            <button mat-menu-item><a routerLink="/welcome">Test Yourself</a></button> 
-            <button mat-menu-item>Examination Summary</button>
-          </mat-menu>
-        </li>
-        <li><a href="#">Investigation</a></li>
-        <li><a href="#">Investigation images</a></li>
-        <li><a href="#">Diagnosis</a></li>
-      </ul>
-    </div>
-  </div>
+<!-- case-study-page.component.html -->
+
+<!--call the navbar partial-->
+<app-navbar></app-navbar>
 
   <div class="case-study-details">
     <img [src]="caseStudy.imageUrl" [alt]="caseStudy.name"/>
