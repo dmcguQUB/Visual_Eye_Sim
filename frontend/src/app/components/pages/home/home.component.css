@@ -23,7 +23,7 @@ a.card-link {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  color: #e72929;
+  color: #9c88ff;
   text-decoration: none;
 
 }
@@ -59,7 +59,7 @@ a.card-link img {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: red; /* Update the background color to red */
+  background-color: #9c88ff; /* Update the background color to red */
   color: white; /* Set the text color to white */
   padding: 0.5rem 1rem;
   border: none;
@@ -69,7 +69,7 @@ a.card-link img {
 }
 
 .btn-primary:hover {
-  background-color: darkred; /* Update the background color on hover */
+  background-color: #495057; /* Update the background color on hover */
   cursor: pointer;
 }
 

@@ -1,0 +1,41 @@
+/* Parent Container allows for a row layout */
+.parent-container {
+  display: flex;
+}
+
+/* Navbar Styles */
+.app-navbar {
+  width: 25%; /* Adjust width according to your needs */
+}
+
+/* Right Container allows for a column layout */
+.right-container {
+  display: flex;
+  flex-direction: column;
+  width: 75%; /* Adjust width according to your needs */
+  padding: 2em;
+  background-color: #f9f9f9;
+}
+
+.case-study-details {
+  max-width: 800px;
+  background-color: white;
+  padding: 1em 2em;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.case-study-image {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.header {
+  margin-top: 1em;
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+.name {
+  font-size: 1.5em;
+}

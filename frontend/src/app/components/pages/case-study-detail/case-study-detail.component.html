@@ -1,17 +1,21 @@
-<!--case-study-detail.component.html-->
-
-
-<div class="case-study-details">
-  <img [src]="caseStudy.imageUrl" [alt]="caseStudy.name" />
-  <div class="header">
-    <span class="name"><strong>Name: </strong> {{caseStudy.name}}</span>
+<div class="parent-container">
+  <!-- Navbar Component -->
+  <app-navbar></app-navbar>
+  
+  <!-- Right Container -->
+  <div class="right-container">
+    <!-- case-study-detail.component.html -->
+    <div class="case-study-details">
+      <img class="case-study-image" [src]="caseStudy.imageUrl" [alt]="caseStudy.name" />
+      <div class="header">
+        <span class="name"><strong>Name: </strong> {{caseStudy.name}}</span>
+      </div>
+      <p><strong>Age:</strong> {{ caseStudy.age }}</p>
+      <p><strong>Gender:</strong> {{ caseStudy.gender }}</p>
+      <p><strong>Medical History:</strong> {{ caseStudy.medicalHistory }}</p>
+      <p><strong>Drug Information:</strong> {{ caseStudy.drugInfo }}</p>
+      <p><strong>Social Information:</strong> {{ caseStudy.socialInfo }}</p>
+      <p><strong>Family History:</strong> {{ caseStudy.familyHistory }}</p>
+    </div>
   </div>
-  <p><strong>Age:</strong> {{ caseStudy.age }}</p>
-  <p><strong>Gender:</strong> {{ caseStudy.gender }}</p>
-  <p><strong>Medical History:</strong> {{ caseStudy.medicalHistory }}</p>
-  <p><strong>Drug Information:</strong> {{ caseStudy.drugInfo }}</p>
-  <p><strong>Social Information:</strong> {{ caseStudy.socialInfo }}</p>
-  <p><strong>Family History:</strong> {{ caseStudy.familyHistory }}</p>
 </div>
-
-<!-- and so on, for all the fields you want to display -->

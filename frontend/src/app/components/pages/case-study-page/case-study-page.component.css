@@ -12,7 +12,7 @@
 .navbar {
   display: flex;
   flex-direction: column; /* Vertically stack navbar items */
-  border-right: 1px solid #e72929;
+  border-right: 1px solid #9c88ff;
   padding-right: 1rem;
   margin-right: 1rem;
 }
