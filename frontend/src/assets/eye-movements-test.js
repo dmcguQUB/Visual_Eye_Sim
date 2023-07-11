@@ -8,12 +8,12 @@
  //create eyeballs
  var eyes = [
    {
-     eyeball: { x: 100, y: 100, radius: 50 },
-     pupil: { x: 100, y: 100, radius: 20 },
+     eyeball: { x: 200, y: 200, radius: 50 },
+     pupil: { x: 200, y: 200, radius: 20 },
    },
    {
-     eyeball: { x: 300, y: 100, radius: 50 },
-     pupil: { x: 300, y: 100, radius: 20 },
+     eyeball: { x: 400, y: 200, radius: 50 },
+     pupil: { x: 400, y: 200, radius: 20 },
    },
  ];
 

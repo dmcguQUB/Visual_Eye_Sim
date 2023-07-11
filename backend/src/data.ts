@@ -34,6 +34,4 @@ export const sample_case_studies: any[] =[
     socialInfo: 'Stopped smoking 5 years ago. She has alcohol at Christmas only. Ex-office worker.',
     familyHistory: 'Mother had cateracts. Father had lazy eye.'
   },
-
-
 ]

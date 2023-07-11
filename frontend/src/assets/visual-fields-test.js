@@ -1,44 +1,14 @@
 //create variables
 var canvas = document.getElementById("myCanvas");
+canvas.width = document.getElementById("canvasContainer").offsetWidth;
+canvas.height = document.getElementById("canvasContainer").offsetHeight;
 var ctx = canvas.getContext("2d");
 // mouse move listener
 canvas.addEventListener("mousemove", mouseMoveHandler, false);
 
-//create rectangles to represent the visual fields
-var rectangles = [
-  {
-    x: 20,
-    y: 20,
-    width: 380,
-    height: 200,
-    fill: "rgba(0, 0, 255, 0.5)",
-  }, // top left
-  {
-    x: 400,
-    y: 20,
-    width: 380,
-    height: 200,
-    fill: "rgba(0, 0, 255, 0.5)",
-  }, // top right
-  {
-    x: 20,
-    y: 220,
-    width: 380,
-    height: 200,
-    fill: "rgba(0, 0, 255, 0.5)",
-  }, // bottom left
-  {
-    x: 400,
-    y: 220,
-    width: 380,
-    height: 200,
-    fill: "rgba(0, 0, 255, 0.5)",
-  }, // bottom right
-];
-
 //create face
 var face = {
-  x: 400,
+  x: canvas.width / 2,  // center of the canvas
   y: 400,
   radiusX: 300,
   radiusY: 300,
@@ -48,14 +18,47 @@ var face = {
 //create eyeballs
 var eyes = [
   {
-    eyeball: { x: 300, y: 200, radius: 50 },
-    pupil: { x: 300, y: 200, radius: 20, targetRadius: 20 },
+    eyeball: { x: (canvas.width / 2) - 100, y: 200, radius: 50 },
+    pupil: { x: (canvas.width / 2) - 100, y: 200, radius: 20, targetRadius: 20 },
   },
   {
-    eyeball: { x: 500, y: 200, radius: 50 },
-    pupil: { x: 500, y: 200, radius: 20, targetRadius: 20 },
+    eyeball: { x: (canvas.width / 2) + 100, y: 200, radius: 50 },
+    pupil: { x: (canvas.width / 2) + 100, y: 200, radius: 20, targetRadius: 20 },
   },
 ];
+
+//create rectangles to represent the visual fields
+var rectangles = [
+  {
+    x: 20,
+    y: 20,
+    width: (canvas.width / 2),
+    height: (canvas.height / 2),
+    fill: "rgba(0, 0, 255, 0.5)",
+  }, // top left
+  {
+    x: (canvas.width / 2)+20,
+    y: 20,
+    width: (canvas.width / 2),
+    height: (canvas.height / 2),
+    fill: "rgba(0, 0, 255, 0.5)",
+  }, // top right
+  {
+    x: 20,
+    y: (canvas.height / 2)+20,
+    width: (canvas.width / 2),
+    height: (canvas.height / 2),
+    fill: "rgba(0, 0, 255, 0.5)",
+  }, // bottom left
+  {
+    x: (canvas.width / 2)+20,
+    y: (canvas.height / 2)+20,
+    width: (canvas.width / 2),
+    height: (canvas.height / 2),
+    fill: "rgba(0, 0, 255, 0.5)",
+  }, // bottom right
+];
+
 
 //function to build rectangles to represent visual fields
 function drawRectangle(rect) {
@@ -108,8 +111,9 @@ function drawPupil(pupil) {
 // function to highlight visual field when hovering over rectangle
 function mouseMoveHandler(e) {
   // get the X and Y coordinates of the mouse
-  var mouseX = e.clientX - canvas.offsetLeft;
-  var mouseY = e.clientY - canvas.offsetTop - getHeaderHeight();
+  var rect = canvas.getBoundingClientRect();
+  var mouseX = e.clientX - rect.left;
+  var mouseY = e.clientY - rect.top;
 
   // Check if the mouse is over any rectangle
   rectangles.forEach(function (rect) {
