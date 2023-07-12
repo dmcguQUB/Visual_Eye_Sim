@@ -2,9 +2,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { sample_case_studies } from 'src/data';
 import { CaseStudies } from '../shared/models/casestudies';
-import { CASE_STUDIES_URL } from '../shared/models/constants/url';
+import { CASE_STUDIES_URL, CASE_STUDY_BY_ID_URL } from '../shared/models/constants/url';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +19,9 @@ export class UseCaseService {
   }
 
   //create a page for usecase when you click onto it. You only need a type of CaseStudy it is not an array type
-  getUseCaseById(useCaseId:string):Observable<CaseStudies>{
+  getUseCaseById(useCaseId:number):Observable<CaseStudies>{
     //search use case by id 
-    return this.http.get<CaseStudies>(CASE_STUDIES_URL+ "/"+useCaseId);
+    return this.http.get<CaseStudies>(CASE_STUDY_BY_ID_URL+useCaseId);
 
   }
 }

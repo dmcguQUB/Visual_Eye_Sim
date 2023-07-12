@@ -1,4 +1,4 @@
-// src/middleware/not-found.middleware.ts
+// backend/src/middleware/not-found.middleware.ts
 
 import { Request, Response, NextFunction } from "express";
 

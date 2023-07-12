@@ -1,5 +1,4 @@
-// src/common/http-exception.ts
-
+// backend/src/common/http-exception.ts
 export default class HttpException extends Error {
   statusCode?: number;
   status?: number;

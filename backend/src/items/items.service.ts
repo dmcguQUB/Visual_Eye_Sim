@@ -1,4 +1,4 @@
-// src/items/items.service.ts
+// backend/src/items/items.service.ts
 
 /**
  * Data Model Interfaces

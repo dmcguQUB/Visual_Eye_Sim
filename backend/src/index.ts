@@ -1,3 +1,4 @@
+//backend/src/middleware/permissions.middleware.ts
 /**
  * Required External Modules
  */
@@ -25,7 +26,7 @@ const app = express();
 app.use(helmet()); //you with sensible defaults such as DNS Prefetch Control, Frameguard, Hide Powered-By, HSTS, IE No Open, Don't Sniff Mimetype, and XSS Filter.
 app.use(cors());//you enable all CORS requests
 app.use(express.json());//you parse incoming requests with JSON payloads, which populates the request object with a new body object containing the parsed data.
-app.use("/api/menu/items", itemsRouter);
+app.use("/api/case_studies", itemsRouter);
 app.use(errorHandler);
 app.use(notFoundHandler);
 

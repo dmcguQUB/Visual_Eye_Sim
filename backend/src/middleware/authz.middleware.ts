@@ -1,4 +1,4 @@
-// src/middleware/authz.middleware.ts
+// backend/src/middleware/authz.middleware.ts
 import * as dotenv from "dotenv";
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');

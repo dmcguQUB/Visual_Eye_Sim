@@ -11,21 +11,21 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
 })
 export class NavbarComponent {
 
-  caseStudy!: CaseStudies;
+  caseStudy: CaseStudies = new CaseStudies(); // Set to a default value
 
   constructor(private activatedRoute: ActivatedRoute, private useCaseService: UseCaseService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       console.log(params)
-      if (params['id']) {
-        this.useCaseService.getUseCaseById(params['id']).subscribe(serverCaseStudy => {
+      if (params['useCaseId']) {
+        this.useCaseService.getUseCaseById(params['useCaseId']).subscribe(serverCaseStudy => {
           this.caseStudy = serverCaseStudy;
+        }, error => {
+          console.log('An error occurred:', error); // Log any errors for debugging
         });
       }
     });
   }
   @ViewChild(MatMenuTrigger) menu!: MatMenuTrigger;
-
-
 }

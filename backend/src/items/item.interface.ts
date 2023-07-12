@@ -1,5 +1,4 @@
-// src/items/item.interface.ts
-
+//backend/src/items/item.interface.ts
 export interface BaseItem {
   name: string,
   imageUrl: string,

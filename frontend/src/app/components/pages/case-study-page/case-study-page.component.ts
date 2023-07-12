@@ -18,13 +18,14 @@ export class CaseStudyPageComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       console.log(params)
-      if (params['id']) {
-        this.useCaseService.getUseCaseById(params['id']).subscribe(serverCaseStudy => {
+      if (params['useCaseId']) {
+        this.useCaseService.getUseCaseById(params['useCaseId']).subscribe(serverCaseStudy => {
           this.caseStudy = serverCaseStudy;
         });
       }
     });
   }
+  
   @ViewChild(MatMenuTrigger) menu!: MatMenuTrigger;
 
 }

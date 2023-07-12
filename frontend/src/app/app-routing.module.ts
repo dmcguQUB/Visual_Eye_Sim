@@ -1,4 +1,4 @@
-//app-routing-module.ts
+//frontend/src/app/app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CaseStudyPageComponent } from './components/pages/case-study-page/case-study-page.component';
@@ -16,7 +16,7 @@ import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 const routes: Routes = [
   //home route
   {path: '',component:HomeComponent},
-  {path: 'case-study/:id', component: CaseStudyPageComponent},
+  {path: 'case-study/:useCaseId', component: CaseStudyPageComponent},
   { path: 'case-study-detail/:id', component: CaseStudyDetailComponent },
   { path: 'pupil-reflexes-test/:id', component: PupilReflexesTestComponent },
   { path: 'visual-fields-test/:id', component: VisualFieldsTestComponent }, // adding route to the routes array

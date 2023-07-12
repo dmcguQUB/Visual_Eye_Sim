@@ -1,5 +1,4 @@
-// src/items/items.interface.ts
-
+//backend/src/items/item.interface.ts
 import { Item } from "./item.interface";
 
 export interface Items {
