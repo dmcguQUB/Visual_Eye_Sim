@@ -1,5 +1,5 @@
-//backend/src/items/item.interface.ts
-export interface BaseItem {
+//backend/src/items/case-study.interface.ts
+export interface BaseCaseStudy {
   name: string,
   imageUrl: string,
   age: string,
@@ -10,6 +10,6 @@ export interface BaseItem {
   familyHistory: string
 }
 
-export interface Item extends BaseItem {
+export interface CaseStudy extends BaseCaseStudy {
   id: number;
 }

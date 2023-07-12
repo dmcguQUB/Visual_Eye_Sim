@@ -1,15 +1,14 @@
-// backend/src/items/items.service.ts
-
+//backend/src/items/case-studies.service.ts
 /**
  * Data Model Interfaces
  */
-import { BaseItem, Item } from "./item.interface";
-import { Items } from "./items.interface";
+import { BaseCaseStudy, CaseStudy } from "./case-study.interface";
+import { CaseStudies } from "./case-studies.interface";
 
 /**
  * In-Memory Store
  */
- let items: Items =
+ let caseStudies: CaseStudies =
     [
       {
         id: 1,
@@ -53,37 +52,39 @@ import { Items } from "./items.interface";
  */
 
 //find all
-export const findAll = async (): Promise<Item[]> => Object.values(items);
+export const findAll = async (): Promise<CaseStudy[]> => Object.values(caseStudies);
 
 //find
-export const find = async (id: number): Promise<Item> => items[id];
+export const find = async (id: number): Promise<CaseStudy> => {
+  return caseStudies.find(caseStudy => caseStudy.id === id);
+};
 
 //create
-export const create = async (newItem: BaseItem): Promise<Item> => {
+export const create = async (newItem: BaseCaseStudy): Promise<CaseStudy> => {
   const id = new Date().valueOf();
 
-  items[id] = {
+  caseStudies[id] = {
     id,
     ...newItem,
   };
 
-  return items[id];
+  return caseStudies[id];
 };
 
 //update
 export const update = async (
   id: number,
-  itemUpdate: BaseItem
-): Promise<Item | null> => {
+  itemUpdate: BaseCaseStudy
+): Promise<CaseStudy | null> => {
   const item = await find(id);
 
   if (!item) {
     return null;
   }
 
-  items[id] = { id, ...itemUpdate };
+  caseStudies[id] = { id, ...itemUpdate };
 
-  return items[id];
+  return caseStudies[id];
 };
 
 //remove
@@ -94,5 +95,5 @@ export const remove = async (id: number): Promise<null | void> => {
     return null;
   }
 
-  delete items[id];
+  delete caseStudies[id];
 };

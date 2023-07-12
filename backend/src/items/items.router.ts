@@ -3,12 +3,12 @@
  * Required External Modules and Interfaces
  */
 import express, { Request, Response } from "express";
-import * as ItemService from "./items.service";
-import { BaseItem, Item } from "./item.interface";
+import * as CaseStudiesServices from "./case-studies.service";
+import { BaseCaseStudy, CaseStudy } from "./case-study.interface";
 
 import { checkJwt } from "../middleware/authz.middleware";
 import { checkPermissions } from "../middleware/permissions.middleware";
-import { ItemPermission } from "./item-permission";
+import { caseStudyPermission } from "./case-study-permission";
 /**
  * Router Definition
  */
@@ -21,19 +21,19 @@ export const itemsRouter = express.Router();
 // GET items
 itemsRouter.get("/", async (req: Request, res: Response) => {
   try {
-    const items: Item[] = await ItemService.findAll();
+    const caseStudies: CaseStudy[] = await CaseStudiesServices.findAll();
 
-    res.status(200).send(items);
+    res.status(200).send(caseStudies);
   } catch (e:any) {
     res.status(500).send(e.message);
   }
 });
 // GET items/:id
-itemsRouter.get("/:useCaseId", async (req: Request, res: Response) => {
-  const id: number = parseInt(req.params.useCaseId, 10);
+itemsRouter.get("/:id", async (req: Request, res: Response) => {
+  const id: number = parseInt(req.params.id, 10);
 
   try {
-    const item: Item = await ItemService.find(id);
+    const item: CaseStudy = await CaseStudiesServices.find(id);
 
     if (item) {
       return res.status(200).send(item);
@@ -52,12 +52,12 @@ itemsRouter.use(checkJwt);
 
 itemsRouter.post(
   "/",
-  checkPermissions(ItemPermission.CreateItems),
+  checkPermissions(caseStudyPermission.CreateItems),
   async (req: Request, res: Response) => {
     try {
-      const item: BaseItem = req.body;
+      const item: BaseCaseStudy = req.body;
 
-      const newItem = await ItemService.create(item);
+      const newItem = await CaseStudiesServices.create(item);
 
       res.status(201).json(newItem);
     } catch (e:any) {
@@ -70,21 +70,21 @@ itemsRouter.post(
 
 itemsRouter.put(
   "/:useCaseId",
-  checkPermissions(ItemPermission.UpdateItems),
+  checkPermissions(caseStudyPermission.UpdateItems),
   async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.useCaseId, 10);
 
     try {
-      const itemUpdate: Item = req.body;
+      const itemUpdate: CaseStudy = req.body;
 
-      const existingItem: Item = await ItemService.find(id);
+      const existingItem: CaseStudy = await CaseStudiesServices.find(id);
 
       if (existingItem) {
-        const updatedItem = await ItemService.update(id, itemUpdate);
+        const updatedItem = await CaseStudiesServices.update(id, itemUpdate);
         return res.status(200).json(updatedItem);
       }
 
-      const newItem = await ItemService.create(itemUpdate);
+      const newItem = await CaseStudiesServices.create(itemUpdate);
 
       res.status(201).json(newItem);
     } catch (e:any) {
@@ -97,11 +97,11 @@ itemsRouter.put(
 
 itemsRouter.delete(
   "/:id",
-  checkPermissions(ItemPermission.DeleteItems),
+  checkPermissions(caseStudyPermission.DeleteItems),
   async (req: Request, res: Response) => {
     try {
       const id: number = parseInt(req.params.id, 10);
-      await ItemService.remove(id);
+      await CaseStudiesServices.remove(id);
 
       res.sendStatus(204);
     } catch (e:any) {

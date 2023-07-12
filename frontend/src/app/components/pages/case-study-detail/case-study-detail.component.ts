@@ -11,7 +11,9 @@ import { MatMenuTrigger } from '@angular/material/menu';
   styleUrls: ['./case-study-detail.component.css'],
 })
 export class CaseStudyDetailComponent implements OnInit {
-  caseStudy?: CaseStudies; // Set to undefined initially
+
+  //this is a method to return an array of case studies
+  caseStudy: CaseStudies = new CaseStudies();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -29,7 +31,8 @@ export class CaseStudyDetailComponent implements OnInit {
           console.log('this.caseStudy after assignment:', this.caseStudy);  // And this
         }, error => {
           console.log('An error occurred:', error); // Log any errors for debugging
-        });      
+        });
+      
       }
     });
   }

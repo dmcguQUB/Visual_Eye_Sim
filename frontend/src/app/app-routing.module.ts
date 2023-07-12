@@ -17,7 +17,7 @@ const routes: Routes = [
   //home route
   {path: '',component:HomeComponent},
   {path: 'case-study/:useCaseId', component: CaseStudyPageComponent},
-  { path: 'case-study-detail/:id', component: CaseStudyDetailComponent },
+  { path: 'case-study-detail/:useCaseId', component: CaseStudyDetailComponent },
   { path: 'pupil-reflexes-test/:id', component: PupilReflexesTestComponent },
   { path: 'visual-fields-test/:id', component: VisualFieldsTestComponent }, // adding route to the routes array
   { path: 'visual-acuity-test/:id', component: VisualAcuityTestComponent }, 

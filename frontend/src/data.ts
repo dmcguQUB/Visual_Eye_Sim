@@ -1,4 +1,4 @@
-//file to temporarily hold the data needed to show the case studies
+//frontend/src/data.ts
 
 //import case study model
 import {CaseStudies} from './app/shared/models/casestudies';
@@ -7,7 +7,7 @@ import {CaseStudies} from './app/shared/models/casestudies';
 export const sample_case_studies: CaseStudies[] =[
 
   {
-    id:'1',
+    id:1,
     name: 'Lizzy Bard',
     imageUrl: 'assets/patient-1.jpg',
     age: '70',
@@ -18,7 +18,7 @@ export const sample_case_studies: CaseStudies[] =[
     familyHistory: 'Mother had cateracts. Father had lazy eye.'
   },
   {
-    id:'2',
+    id:2,
     name: 'Beth Tate',
     imageUrl: 'assets/patient-2.jpg',
     age: '70',
@@ -29,7 +29,7 @@ export const sample_case_studies: CaseStudies[] =[
     familyHistory: 'Mother had cateracts. Father had lazy eye.'
   },
   {
-    id:'3',
+    id:3,
     name: 'Frank Howard',
     imageUrl: 'assets/patient-3.jpg',
     age: '70',
