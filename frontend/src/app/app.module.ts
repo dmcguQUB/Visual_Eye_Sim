@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 import { QuestionComponent } from './components/pages/question/question.component';
-import { HeaderComponent } from './components/partials/header/header.component';
+import { HeaderComponent } from './shared/components/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ChangeBgDirective } from './change-bg.directive';
 import { HomeComponent } from './components/pages/home/home.component';
@@ -19,7 +19,8 @@ import { VisualFieldsTestComponent } from './components/pages/visual-fields-test
 import { VisualAcuityTestComponent } from './components/pages/visual-acuity-test/visual-acuity-test.component';
 import { EyeMovementsTestComponent } from './components/pages/eye-movements-test/eye-movements-test.component';
 import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
-import { NavbarComponent } from './components/partials/navbar/navbar.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
+
 
 @NgModule({
   declarations: [

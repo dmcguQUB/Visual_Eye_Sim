@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CaseStudies } from '../shared/models/casestudies';
-import { CASE_STUDIES_URL, CASE_STUDY_BY_ID_URL } from '../shared/models/constants/url';
+import { CASE_STUDIES_URL, CASE_STUDY_BY_ID_URL } from '../shared/models/url';
 
 @Injectable({
   providedIn: 'root'
