@@ -1,22 +1,14 @@
+<!--frontend/src/app/components/partials/header/header.component.html-->
 <header>
   <div class="container">
    <h1><a routerLink="/" class="logo">Visual Eye Simulation</a></h1>
     <nav>
       <ul>
         <li>
-         <h3> <a routerLink="/login">Login</a></h3>
+         <h3><app-auth-button></app-auth-button></h3>
         </li>
         <li class="menu-container">
-          <h3><a routerLink="/dashboard">Username</a></h3>
-          <div class="menu">
-            <h3><a routerLink="/profile">Profile</a></h3>
-            <h3><a>Logout</a></h3>
-          </div>
-        </li>
-        <li>
-          <h3><a routerLink="/cart-page">
-            Cart <span>3</span>
-          </a></h3>
+         <h3><app-user-profile></app-user-profile></h3>
         </li>
       </ul>
     </nav>

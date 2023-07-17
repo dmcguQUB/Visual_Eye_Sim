@@ -21,6 +21,11 @@ import { EyeMovementsTestComponent } from './components/pages/eye-movements-test
 import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
 import { NavbarComponent } from './components/partials/navbar/navbar.component';
 
+// Import the module from the SDK
+import { AuthModule } from '@auth0/auth0-angular';
+import { AuthButtonComponent } from './components/partials/buttons/auth-button.component';
+import { UserProfileComponent } from './components/partials/user-profile/user-profile.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +42,8 @@ import { NavbarComponent } from './components/partials/navbar/navbar.component';
     EyeMovementsTestComponent,
     DirectOphthalmoscopyTestComponent,
     NavbarComponent,
+    AuthButtonComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +51,16 @@ import { NavbarComponent } from './components/partials/navbar/navbar.component';
     HttpClientModule,
     MatMenuModule,
     BrowserAnimationsModule,
-    MatButtonModule
+    MatButtonModule,
+     // Import the module into the application, with configuration
+     AuthModule.forRoot({
+      domain: 'dev-7tjbr40gbhkjn2xi.us.auth0.com',
+      clientId: 'LJovVWHFkNXSiWncavMZt9quL665PEoM',
+      //allows Auth0 to redirect the user back to the specific URL after successfully authenticating.
+      authorizationParams: {
+        redirect_uri: window.location.origin
+      }
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
