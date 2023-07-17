@@ -19,7 +19,8 @@ export class UseCaseService {
   }
 
   //create a page for usecase when you click onto it. You only need a type of CaseStudy it is not an array type
-  getUseCaseById(useCaseId:number):Observable<CaseStudies>{
+  getUseCaseById(useCaseId:string):Observable<CaseStudies>{
+    console.log(useCaseId);
     //search use case by id 
     return this.http.get<CaseStudies>(CASE_STUDY_BY_ID_URL+useCaseId);
 

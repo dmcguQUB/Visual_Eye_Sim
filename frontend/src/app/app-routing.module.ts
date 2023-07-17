@@ -18,11 +18,11 @@ const routes: Routes = [
   {path: '',component:HomeComponent},
   {path: 'case-study/:useCaseId', component: CaseStudyPageComponent},
   { path: 'case-study-detail/:useCaseId', component: CaseStudyDetailComponent },
-  { path: 'pupil-reflexes-test/:id', component: PupilReflexesTestComponent },
-  { path: 'visual-fields-test/:id', component: VisualFieldsTestComponent }, // adding route to the routes array
-  { path: 'visual-acuity-test/:id', component: VisualAcuityTestComponent }, 
-  { path: 'eye-movements-test/:id', component: EyeMovementsTestComponent },
-  { path: 'direct-ophthalmoscopy-test/:id', component: DirectOphthalmoscopyTestComponent },
+  { path: 'pupil-reflexes-test/:useCaseId', component: PupilReflexesTestComponent },
+  { path: 'visual-fields-test/:useCaseId', component: VisualFieldsTestComponent }, // adding route to the routes array
+  { path: 'visual-acuity-test/:useCaseId', component: VisualAcuityTestComponent }, 
+  { path: 'eye-movements-test/:useCaseId', component: EyeMovementsTestComponent },
+  { path: 'direct-ophthalmoscopy-test/:useCaseId', component: DirectOphthalmoscopyTestComponent },
   {path:"welcome", component:WelcomeComponent},
   {path:"question", component:QuestionComponent}
 ];

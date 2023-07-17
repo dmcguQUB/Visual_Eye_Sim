@@ -56,6 +56,8 @@ export const findAll = async (): Promise<CaseStudy[]> => Object.values(caseStudi
 
 //find
 export const find = async (id: number): Promise<CaseStudy> => {
+  console.log(caseStudies); // Log the whole array to check if it's defined and what's in it
+
   return caseStudies.find(caseStudy => caseStudy.id === id);
 };
 

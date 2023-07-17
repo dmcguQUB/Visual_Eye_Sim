@@ -1,51 +1,33 @@
-//server.ts
-// import dotenv from 'dotenv';
-// dotenv.config();
-// import path from 'path';
+//import dotenv to access
+import dotenv from "dotenv";
+dotenv.config({path: '../.env'}); // call function
+
 import express from "express";
 import cors from "cors";
-// import foodRouter from './routers/food.router';
-import { sample_case_studies } from './data';
+import router from "./routers/case_studies.router";
+import { dbConnect } from "./configs/database.config"; //import DB configs 
 
-// import userRouter from './routers/user.router';
-// import orderRouter from './routers/order.router';
-// import { dbConnect } from './configs/database.config';
-// dbConnect();
+console.log(process.env.MONGO_URI)
+//call the DB connection function
+dbConnect(); // call function
 
 //call express
 const app = express();
 app.use(express.json());
 
-//need to use cors to allow same host htto address
+//need to use cors to allow same host http address
 app.use(cors({
     //both are sent
     credentials:true,
     origin:["http://localhost:4200"]
 }));
 
-app.get("/api/case_studies",(req,res)=>{
-    res.send(sample_case_studies);
-})
+//use router for calling api
+app.use("/api/case_studies",router)
 
-app.get("/api/case_studies/:useCaseId",(req,res)=>{
-const useCaseId = req.params.useCaseId;
-const case_studies = sample_case_studies.find(caseStudy => caseStudy.id == useCaseId);
-res.send(case_studies);
-})
-
-
-// app.use("/api/foods", foodRouter);
-// app.use("/api/users", userRouter);
-// app.use("/api/orders", orderRouter);
-
-// app.use(express.static('public'));
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname,'public', 'index.html'))
-// })
-
-//define the port
-const port = 5001;
+//define the port using env file
+const port = process.env.PORT;
 //pass the port to function
 app.listen(port, () => {
     console.log("Website served on http://localhost:" + port);
-})
+});
