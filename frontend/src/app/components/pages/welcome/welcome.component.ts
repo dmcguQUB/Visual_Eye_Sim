@@ -1,5 +1,6 @@
-import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@auth0/auth0-angular';//to get user info
 
 @Component({
   selector: 'app-welcome',
@@ -7,19 +8,19 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
+  //create user object
+  user: any;
 
-  @ViewChild('name') nameKey!: ElementRef;
-  constructor(private router: Router, private route: ActivatedRoute){}
+  constructor(private router: Router, private route: ActivatedRoute, public auth: AuthService){}
 
   ngOnInit(): void {
-    
+    this.auth.user$.subscribe(user => {
+      this.user = user;//subscribe to the user to populate their name in test
+      localStorage.setItem("name", this.user.nickname); // store user's nickname in local storage
+    });
   }
 
-  //using Viewchild and local storage to store name when you start the quiz
   startQuiz(){
-    localStorage.setItem("name", this.nameKey.nativeElement.value);
-  
+    this.router.navigate(['/question']); // navigate to the quiz when Start button is clicked
   }
-
-
 }

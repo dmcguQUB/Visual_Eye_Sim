@@ -25,6 +25,7 @@ import { NavbarComponent } from './components/partials/navbar/navbar.component';
 import { AuthModule } from '@auth0/auth0-angular';
 import { AuthButtonComponent } from './components/partials/buttons/auth-button.component';
 import { UserProfileComponent } from './components/partials/user-profile/user-profile.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { UserProfileComponent } from './components/partials/user-profile/user-pr
         redirect_uri: window.location.origin
       }
     }),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

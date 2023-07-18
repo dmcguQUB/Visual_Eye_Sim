@@ -1,3 +1,4 @@
+///Users/dallanmcguckian/Desktop/Visual Eye Studio/Actual project/Visual_Eye_Sim/Visual_Eye_Sim/frontend/src/app/components/pages/question/question.component.ts
 import { Component, OnInit } from '@angular/core';
 import { interval } from 'rxjs';
 import { QuestionService } from 'src/app/services/question.service';
