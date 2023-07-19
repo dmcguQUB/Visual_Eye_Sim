@@ -2,7 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { UseCaseService } from 'src/app/services/usecases.service';
-import { CaseStudies } from 'src/app/shared/models/casestudies';
+import { CaseStudies } from 'src/app/models/casestudies';
 
 @Component({
   selector: 'app-navbar',

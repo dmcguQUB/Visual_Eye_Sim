@@ -12,6 +12,15 @@ import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-oph
 import { QuestionComponent } from './components/pages/question/question.component';
 import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 
+//autho required modules
+import { AuthGuard } from '@auth0/auth0-angular';
+import { ProfileModule } from './components/pages/auth0/profile/profile.module';
+import { PublicModule } from './components/pages/auth0/public/public.module';
+import { ProtectedModule } from './components/pages/auth0/protected/protected.module';
+import { AdminModule } from './components/pages/auth0/admin/admin.module';
+import { CallbackModule } from './components/pages/auth0/callback/callback.module';
+import { NotFoundModule } from './components/pages/auth0/not-found/not-found.module';
+
 
 const routes: Routes = [
   //home route
@@ -24,7 +33,53 @@ const routes: Routes = [
   { path: 'eye-movements-test/:useCaseId', component: EyeMovementsTestComponent },
   { path: 'direct-ophthalmoscopy-test/:useCaseId', component: DirectOphthalmoscopyTestComponent },
   {path:"welcome", component:WelcomeComponent},
-  {path:"question", component:QuestionComponent}
+  {path:"question", component:QuestionComponent},
+  //import callback module
+  {
+    path: 'auth0',
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('./components/pages/auth0/auth0-home/auth0-home.module').then((m) => m.Auth0HomeModule),
+  },
+  {
+    path: 'profile',
+    loadChildren: () =>
+      import('./components/pages/auth0/profile/profile.module').then((m) => m.ProfileModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'public',
+    loadChildren: () =>
+      import('./components/pages/auth0/public/public.module').then((m) => m.PublicModule),
+  },
+  {
+    path: 'protected',
+    loadChildren: () =>
+      import('./components/pages/auth0/protected/protected.module').then(
+        (m) => m.ProtectedModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./components/pages/auth0/admin/admin.module').then((m) => m.AdminModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'callback',
+    loadChildren: () =>
+      import('./components/pages/auth0/callback/callback.module').then(
+        (m) => m.CallbackModule
+      ),
+  },
+  {
+    path: '**',
+    loadChildren: () =>
+      import('./components/pages/auth0/not-found/not-found.module').then(
+        (m) => m.NotFoundModule
+      ),
+  },
 ];
 
 @NgModule({

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { CaseStudies } from 'src/app/shared/models/casestudies';
+import { CaseStudies } from 'src/app/models/casestudies';
 
 @Component({
   selector: 'app-pupil-reflexes-test',

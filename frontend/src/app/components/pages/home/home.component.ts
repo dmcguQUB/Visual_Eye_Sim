@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UseCaseService } from 'src/app/services/usecases.service';
-import { CaseStudies } from 'src/app/shared/models/casestudies';
+import { CaseStudies } from 'src/app/models/casestudies';
 
 @Component({
   selector: 'app-home',

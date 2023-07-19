@@ -1,7 +1,7 @@
 //case-study-detail.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CaseStudies } from 'src/app/shared/models/casestudies';
+import { CaseStudies } from 'src/app/models/casestudies';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 

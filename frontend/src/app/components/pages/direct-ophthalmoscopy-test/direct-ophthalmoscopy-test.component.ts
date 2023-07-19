@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { CaseStudies } from 'src/app/shared/models/casestudies'; // Assuming the model is placed here
+import { CaseStudies } from 'src/app/models/casestudies'; // Assuming the model is placed here
 
 @Component({
   selector: 'app-direct-ophthalmoscopy-test',

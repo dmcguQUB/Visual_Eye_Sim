@@ -1,7 +1,7 @@
 //frontend/src/data.ts
 
 //import case study model
-import {CaseStudies} from './app/shared/models/casestudies';
+import {CaseStudies} from './app/models/casestudies';
 
 //export constant
 export const sample_case_studies: CaseStudies[] =[
