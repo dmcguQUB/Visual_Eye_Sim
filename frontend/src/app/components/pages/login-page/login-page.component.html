@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="details">
+    <app-title title="Login"></app-title>
+
+    <!--Create form group and call submit method-->
+    <form [formGroup]="loginForm" (ngSubmit)="submit()">
+
+    <!--what form will be showed for the email-->
+    <text-input
+    [control]="fc['email']"
+    [showErrorsWhen]="isSubmitted"
+    type="email"
+    label="Email">
+  </text-input>
+
+  <!--password bar-->
+  <text-input
+  [control]="fc['password']"
+  [showErrorsWhen]="isSubmitted"
+  type="password"
+  label="Password">
+</text-input>
+
+<!--Create submit button callled login-->
+    <default-button text="Login"></default-button>
+    <div class="register">
+      New user? &nbsp;
+      <a routerLink="/register" [queryParams]="{returnUrl : returnUrl}">
+        Register here
+      </a>
+    </div>
+    </form>
+  </div>
+</div>

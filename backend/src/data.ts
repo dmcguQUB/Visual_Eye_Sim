@@ -36,3 +36,21 @@ export const sample_case_studies: any[] =[
     familyHistory: 'Mother had cateracts. Father had lazy eye.'
   },
 ]
+
+
+export const sample_users: any[] = [
+  {
+    name: "John Doe",
+    email: "john@gmail.com",
+    password: "12345",
+    address: "Toronto On",
+    isAdmin: true,
+  },
+  {
+    name: "Jane Doe",
+    email: "Jane@gmail.com",
+    password: "12345",
+    address: "Shanghai",
+    isAdmin: false,
+  },
+];

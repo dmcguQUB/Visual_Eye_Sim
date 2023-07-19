@@ -1,14 +1,20 @@
-<!--frontend/src/app/components/partials/header/header.component.html-->
+
 <header>
   <div class="container">
-   <h1><a routerLink="/" class="logo">Visual Eye Simulation</a></h1>
+    <a routerLink="/" class="logo">VSE</a>
     <nav>
       <ul>
-        <li>
-         <h3><app-auth-button></app-auth-button></h3>
+        <!--If the user is not logged in just show login-->
+        <li *ngIf="!isAuth">
+          <a routerLink="/login">Login</a>
         </li>
-        <li class="menu-container">
-         <h3><app-user-profile></app-user-profile></h3>
+        <!--If the user is logged in show all services-->
+        <li *ngIf="isAuth" class="menu-container">
+          <a routerLink="/dashboard">{{user.name}}</a>
+          <div class="menu">
+            <a routerLink="/profile">Profile</a>
+            <a (click)="logout()">Logout</a>
+          </div>
         </li>
       </ul>
     </nav>

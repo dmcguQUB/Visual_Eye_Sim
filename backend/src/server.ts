@@ -1,29 +1,30 @@
-//import dotenv to access
-import dotenv from "dotenv";
-dotenv.config({path: '../.env'}); // call function
+//backend/src/server.ts
 
+import dotenv from 'dotenv';
+dotenv.config(); // access to the ENV file calling this method
+import path from 'path';
 import express from "express";
 import cors from "cors";
-import router from "./routers/case_studies.router";
-import { dbConnect } from "./configs/database.config"; //import DB configs 
+import caseStudiesRouter from "./routers/case_studies.router";
+import userRouter from './routers/user.router';
+import { dbConnect } from './configs/database.config';//import database config
+dbConnect();
 
-console.log(process.env.MONGO_URI)
-//call the DB connection function
-dbConnect(); // call function
-
-//call express
 const app = express();
 app.use(express.json());
-
-//need to use cors to allow same host http address
 app.use(cors({
-    //both are sent
     credentials:true,
     origin:["http://localhost:4200"]
 }));
 
-//use router for calling api
-app.use("/api/case_studies",router)
+//call case study and user routers
+app.use("/api/case_studies",caseStudiesRouter)
+app.use("/api/users", userRouter);
+
+app.use(express.static('public'));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname,'public', 'index.html'))
+})
 
 //define the port using env file
 const port = process.env.PORT;

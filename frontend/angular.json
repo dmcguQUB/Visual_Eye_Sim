@@ -27,10 +27,11 @@
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
-              "src/assets/pupil-reflexes-test.js"//import script to run JS script for pupil relexes test
+              "src/assets/pupil-reflexes-test.js"
             ]
           },
           "configurations": {

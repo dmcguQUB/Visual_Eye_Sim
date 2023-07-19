@@ -1,21 +1,18 @@
 header{
   position: relative;
-  background: #f8f9fa;
+  background: white;
   padding: 0;
-  border-bottom: 1px solid #ced4da;
+  border-bottom: 1px solid #e72929;
 }
 
 a{
-  color: #6c757d;
-  text-decoration: none; 
+  color: #af1313;
 }
 
 a:hover{
-  background: #e9ecef;
-  color: #495057;
+  background:#e72929;
+  color: white;
   cursor: pointer;
-  border-radius: 15px; /* Adjust this value to your liking */
-
 }
 
 .container{
@@ -23,16 +20,10 @@ a:hover{
   display: flex;
   justify-content: space-between;
 }
-h1 {
-margin-top: 20px;
-margin-right: 20px;
-}
 
 a.logo{
   font-weight: bold;
   padding: 1rem;
-  color: #9c88ff; /* lilac color */
-  text-decoration: none; 
 }
 
 ul{
@@ -47,7 +38,7 @@ ul a{
 }
 
 a span{
-  background: #9c88ff; /* lilac color */
+  background: #ff4d4d;
   color: white;
   padding: 0.1rem 0.45rem;
   border-radius: 100rem;
@@ -61,13 +52,12 @@ a span{
 .menu{
   position:absolute;
   z-index:1;
-  background:#f8f9fa;
+  background:whitesmoke;
   display: none;
 }
 
 .menu-container:hover .menu{
   display: block;
-  border-radius: 15px; /* Adjust this value to your liking */
 }
 
 .menu a{

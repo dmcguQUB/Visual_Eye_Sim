@@ -11,6 +11,7 @@ import { EyeMovementsTestComponent } from './components/pages/eye-movements-test
 import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
 import { QuestionComponent } from './components/pages/question/question.component';
 import { WelcomeComponent } from './components/pages/welcome/welcome.component';
+import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 
 
 const routes: Routes = [
@@ -23,8 +24,10 @@ const routes: Routes = [
   { path: 'visual-acuity-test/:useCaseId', component: VisualAcuityTestComponent }, 
   { path: 'eye-movements-test/:useCaseId', component: EyeMovementsTestComponent },
   { path: 'direct-ophthalmoscopy-test/:useCaseId', component: DirectOphthalmoscopyTestComponent },
-  {path:"welcome", component:WelcomeComponent},
-  {path:"question", component:QuestionComponent}
+  {path:'welcome', component:WelcomeComponent},
+  {path:'question', component:QuestionComponent},
+  { path: 'login', component: LoginPageComponent },
+
 ];
 
 @NgModule({

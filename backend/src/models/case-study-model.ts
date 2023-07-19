@@ -27,7 +27,7 @@ export const CaseStudySchema = new Schema<CaseStudy>(
     familyHistory: {type: String, required:true},
   },{
     toJSON:{
-      virtuals:true
+      virtuals:true 
     },
     toObject:{
       virtuals:true
@@ -36,5 +36,5 @@ export const CaseStudySchema = new Schema<CaseStudy>(
   }
 );
 
-
+//create the model, that will take the model fo casestudy and send to Mongoose
 export const CaseStudyModel = model<CaseStudy>('caseStudy', CaseStudySchema)
