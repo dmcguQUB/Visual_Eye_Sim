@@ -25,4 +25,5 @@ export const UserSchema = new Schema<User>({
     }
 });
 
+//create model in database
 export const UserModel = model<User>('user', UserSchema);

@@ -12,7 +12,7 @@ import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-oph
 import { QuestionComponent } from './components/pages/question/question.component';
 import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
-
+import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 
 const routes: Routes = [
   //home route
@@ -27,6 +27,8 @@ const routes: Routes = [
   {path:'welcome', component:WelcomeComponent},
   {path:'question', component:QuestionComponent},
   { path: 'login', component: LoginPageComponent },
+  { path: 'register', component: RegisterPageComponent },
+
 
 ];
 

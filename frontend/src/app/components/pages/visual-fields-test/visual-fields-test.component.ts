@@ -17,7 +17,7 @@ export class VisualFieldsTestComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     // Call the method to add the script file for the Visual Fields Test
-    this.addScriptToElement("./assets/visual-fields-test.js");
+    this.addScriptToElement("http://localhost:5001/assets/visual-fields-test.js");
   }
 
   addScriptToElement(src: string): HTMLScriptElement {

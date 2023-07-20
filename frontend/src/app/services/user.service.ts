@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { USER_LOGIN_URL,USER_REGISTER_URL  } from '../shared/models/constants/url';
+import { USER_LOGIN_URL,USER_REGISTER_URL  } from '../shared/constants/url';
 import { IUserLogin } from '../shared/interfaces/IUserLogin';
 import { IUserRegister } from '../shared/interfaces/IUserRegister';
 import { User } from '../shared/models/User'; 
@@ -51,21 +51,26 @@ export class UserService {
     );
   }
 
+  //creating user service here 
   register(userRegiser:IUserRegister): Observable<User>{
+    //create HTTP request passing in the user register URL and userRegister paramater
+    //pipe and tap used to show message when message successful or not
     return this.http.post<User>(USER_REGISTER_URL, userRegiser).pipe(
       tap({
         //Inject user
         next: (user) => {
 
+          //set the user in local storage
           this.setUserToLocalStorage(user);
           //set the subject
           this.userSubject.next(user);
-          //sucessful login
+          //sucessful login message using toastr Service
           this.toastrService.success(
             `Welcome to the Visual Eye Simulation ${user.name}`,
             'Register Successful'
           )
         },
+        //if error provide a message of register fail
         error: (errorResponse) => {
           this.toastrService.error(errorResponse.error,
             'Register Failed')

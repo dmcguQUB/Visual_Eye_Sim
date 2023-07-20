@@ -21,8 +21,8 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit {
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    // Call the method to add the script file for the Eye Movements Test
-    this.addScriptToElement("./assets/eye-movements-test.js");
+    // Call the method to add the script file for the Eye Movements Test. This is now served from the backend to prevent the user from seeing the test
+    this.addScriptToElement("http://localhost:5001/assets/eye-movements-test.js");
   }
 
   addScriptToElement(src: string): HTMLScriptElement {

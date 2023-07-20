@@ -19,8 +19,8 @@ export class VisualAcuityTestComponent implements OnInit, AfterViewInit {
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    // Call the method to add the script file for the Visual Acuity Test
-    this.addScriptToElement("./assets/visual-acuity-test.js");
+    // Call the method to add the script file for the Visual Acuity Test. Served from backend
+    this.addScriptToElement("http://localhost:5001/assets/visual-acuity-test.js");
   }
 
   addScriptToElement(src: string): HTMLScriptElement {

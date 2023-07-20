@@ -1,18 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+//import interceptor 
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MatMenuModule } from '@angular/material/menu';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { ToastrModule } from 'ngx-toastr';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 import { QuestionComponent } from './components/pages/question/question.component';
 import { HeaderComponent } from './components/partials/header/header.component';
-import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ChangeBgDirective } from './change-bg.directive';
 import { HomeComponent } from './components/pages/home/home.component';
 import { CaseStudyPageComponent } from './components/pages/case-study-page/case-study-page.component';
-import { MatMenuModule } from '@angular/material/menu';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
 import { CaseStudyDetailComponent } from './components/pages/case-study-detail/case-study-detail.component';
 import { PupilReflexesTestComponent } from './components/pages/pupil-reflexes-test/pupil-reflexes-test.component';
 import { VisualFieldsTestComponent } from './components/pages/visual-fields-test/visual-fields-test.component';
@@ -20,7 +25,6 @@ import { VisualAcuityTestComponent } from './components/pages/visual-acuity-test
 import { EyeMovementsTestComponent } from './components/pages/eye-movements-test/eye-movements-test.component';
 import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
 import { NavbarComponent } from './components/partials/navbar/navbar.component';
-import { ToastrModule } from 'ngx-toastr';
 import { LoadingComponent } from './components/partials/loading/loading.component';
 import { LoadingInterceptor } from './shared/interceptors/loading.interceptor';
 import { TitleComponent } from './components/partials/title/title.component';
@@ -30,14 +34,13 @@ import { TitleComponent } from './components/partials/title/title.component';
 import { AuthModule } from '@auth0/auth0-angular';
 import { AuthButtonComponent } from './components/partials/buttons/auth-button.component';
 import { UserProfileComponent } from './components/partials/user-profile/user-profile.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
-import { TextInputComponent } from './components/partials/text-input/text-input.component'; 
 import { InputContainerComponent } from './components/partials/input-container/input-container.component'; 
 import { DefaultButtonComponent } from './components/partials/default-button/default-button.component';
 import { InputValidationComponent } from './components/partials/input-validation/input-validation.component'; 
-import { CommonModule } from '@angular/common';
+import { TextInputComponent } from './components/partials/text-input/text-input.component'; 
+import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 
 @NgModule({
   declarations: [
@@ -64,11 +67,8 @@ import { CommonModule } from '@angular/common';
     InputContainerComponent,
     DefaultButtonComponent,
     InputValidationComponent,
-    InputContainerComponent,
-    TextInputComponent,
-    InputValidationComponent,
     LoadingComponent,
-    DefaultButtonComponent
+    RegisterPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -96,6 +96,7 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule, // import for login forms
     CommonModule,
   ],
+  //need to set providers which adds interceptor 
   providers: [
     {provide:HTTP_INTERCEPTORS, useClass:AuthInterceptor, multi: true },
     {provide:HTTP_INTERCEPTORS, useClass:LoadingInterceptor, multi: true }

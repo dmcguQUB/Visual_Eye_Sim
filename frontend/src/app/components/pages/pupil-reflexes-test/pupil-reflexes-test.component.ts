@@ -30,6 +30,6 @@ export class PupilReflexesTestComponent implements OnInit, AfterViewInit {
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    this.addScriptToElement("./assets/pupil-reflexes-test.js");
+    this.addScriptToElement("http://localhost:5001/assets/pupil-reflexes-test.js");
   }
 }

@@ -1,3 +1,4 @@
+//frontend/src/app/components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component.ts
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -20,8 +21,8 @@ export class DirectOphthalmoscopyTestComponent implements OnInit, AfterViewInit 
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    // Call the method to add the script file for the Direct Ophthalmoscopy Test
-    this.addScriptToElement("./assets/direct-ophthalmoscopy-test.js");
+    // Call the method to add the script file for the Direct Ophthalmoscopy Test. This is served from the backend
+    this.addScriptToElement("http://localhost:5001/assets/direct-ophthalmoscopy-test.js");
   }
 
   addScriptToElement(src: string): HTMLScriptElement {

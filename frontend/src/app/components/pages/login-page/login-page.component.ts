@@ -31,7 +31,7 @@ export class LoginPageComponent implements OnInit {
       password:['', Validators.required]
     });
 
-    //returned URL is the same as snapshot (e.g. most recent no need to subscribe) query params is eveything after "?"
+    //returned URL is the same as snapshot (e.g. most recent no need to subscribe) query params is eveything after
     this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'];
   }
 

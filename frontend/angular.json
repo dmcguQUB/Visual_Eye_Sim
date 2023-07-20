@@ -31,7 +31,6 @@
               "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
-              "src/assets/pupil-reflexes-test.js"
             ]
           },
           "configurations": {

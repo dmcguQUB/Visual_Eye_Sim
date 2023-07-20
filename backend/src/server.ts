@@ -21,6 +21,10 @@ app.use(cors({
 app.use("/api/case_studies",caseStudiesRouter)
 app.use("/api/users", userRouter);
 
+
+//serving the eye tests from the backend
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
 app.use(express.static('public'));
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname,'public', 'index.html'))

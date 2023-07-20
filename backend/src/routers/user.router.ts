@@ -35,13 +35,15 @@ router.post(
     const { email, password } = req.body;
     console.log("Received login request for email:", email);
 
+    //find user email within databsase
     const user = await UserModel.findOne({ email });
-
+// check if user email and password is correct using bycrypt
     if (user) {
       console.log("Found user in database");
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
       console.log("Password match:", isPasswordCorrect);
 
+      //if correct passwork provide token for authorisation
       if (isPasswordCorrect) {
         res.send(generateTokenReponse(user));
       } else {
@@ -54,28 +56,36 @@ router.post(
   })
 );
 
-
+//register api
 router.post(
   "/register",
   expressAsyncHandler(async (req, res) => {
+    //constants we want to get from register form
     const { name, email, password, address } = req.body;
+    //need to check if there is already a user with the email
     const user = await UserModel.findOne({ email });
     if (user) {
+      //if user in database we want to send a custom error message
       res.status(HTTP_BAD_REQUEST).send("User is already exist, please login!");
+      //return out of the function
       return;
     }
 
+    //actual register part of code
+    //encrypt the password using bcrypt and salt
     const encryptedPassword = await bcrypt.hash(password, 10);
 
+    //create new user from the form data typed by user
     const newUser: User = {
       id: "",
       name,
-      email: email.toLowerCase(),
-      password: encryptedPassword,
+      email: email.toLowerCase(), //lowercase to ensure uniform
+      password: encryptedPassword, //set password to encrypted
       address,
       isAdmin: false,
     };
 
+    //create new constant dbUser which will wait the creation of new user from the UserModel into db
     const dbUser = await UserModel.create(newUser);
     res.send(generateTokenReponse(dbUser));
   })
