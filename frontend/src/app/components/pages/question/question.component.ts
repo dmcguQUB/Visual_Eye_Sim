@@ -1,7 +1,8 @@
 ///Users/dallanmcguckian/Desktop/Visual Eye Studio/Actual project/Visual_Eye_Sim/Visual_Eye_Sim/frontend/src/app/components/pages/question/question.component.ts
 import { Component, OnInit } from '@angular/core';
 import { interval } from 'rxjs';
-import { QuestionService } from 'src/app/services/question.service';
+import { QuestionService } from 'src/app/services/questions.service';
+import { Question } from 'src/app/shared/models/question';
 
 
 @Component({
@@ -11,7 +12,7 @@ import { QuestionService } from 'src/app/services/question.service';
 })
 export class QuestionComponent implements OnInit {
   public name: string = '';
-  public questionList: any = [];
+  public questionList: Question[] = []; // now type question as get from backend
   public currentQuestion: number = 0;
   public points: number = 0;
   counter = 60;
@@ -29,10 +30,10 @@ export class QuestionComponent implements OnInit {
     this.startCounter();//start counter
   }
 
-  //method to get all questions from JSON questions file
-  getAllQuestions() {
-    this.questionsService.getQuestionJson().subscribe((res) => {
-      this.questionList = res.questions;
+   //method to get all questions from service
+   getAllQuestions() {
+    this.questionsService.getAllQuestions().subscribe((res) => {
+      this.questionList = res;
     });
   }
 

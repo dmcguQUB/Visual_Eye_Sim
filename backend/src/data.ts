@@ -54,3 +54,53 @@ export const sample_users: any[] = [
     isAdmin: false,
   },
 ];
+
+export const sample_questions: any[] = [
+  {
+    questionText: "Case Study 1 - Question 1",
+    options: [
+      { text: "Option 1", correct: true },
+      { text: "Option 2", correct: false },
+      { text: "Option 3", correct: false },
+      { text: "Option 4", correct: false },
+    ],
+    explanation: "Explanation for Case Study 1 - Question 1",
+    caseStudyId: "1",
+  },
+  {
+    questionText: "Case Study 1 - Question 2",
+    options: [
+      { text: "Option 1", correct: false },
+      { text: "Option 2", correct: true },
+      { text: "Option 3", correct: false },
+      { text: "Option 4", correct: false },
+    ],
+    explanation: "Explanation for Case Study 1 - Question 2",
+    caseStudyId: "1",
+  },
+  // ... More questions for Case Study 1
+  {
+    questionText: "Case Study 2 - Question 1",
+    options: [
+      { text: "Option 1", correct: false },
+      { text: "Option 2", correct: false },
+      { text: "Option 3", correct: true },
+      { text: "Option 4", correct: false },
+    ],
+    explanation: "Explanation for Case Study 2 - Question 1",
+    caseStudyId: "2",
+  },
+  {
+    questionText: "Case Study 2 - Question 2",
+    options: [
+      { text: "Option 1", correct: false },
+      { text: "Option 2", correct: false },
+      { text: "Option 3", correct: false },
+      { text: "Option 4", correct: true },
+    ],
+    explanation: "Explanation for Case Study 2 - Question 2",
+    caseStudyId: "2",
+  },
+  // ... More questions for Case Study 2
+  // And so on for more case studies
+];

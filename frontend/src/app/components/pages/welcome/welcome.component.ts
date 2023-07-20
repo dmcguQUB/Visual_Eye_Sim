@@ -14,10 +14,8 @@ export class WelcomeComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, public auth: AuthService){}
 
   ngOnInit(): void {
-    this.auth.user$.subscribe(user => {
-      this.user = user;//subscribe to the user to populate their name in test
-      localStorage.setItem("name", this.user.nickname); // store user's nickname in local storage
-    });
+   
+  
   }
 
   startQuiz(){

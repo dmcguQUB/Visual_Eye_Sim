@@ -7,6 +7,7 @@ import express from "express";
 import cors from "cors";
 import caseStudiesRouter from "./routers/case_studies.router";
 import userRouter from './routers/user.router';
+import questionsRouter from './routers/questions.router'
 import { dbConnect } from './configs/database.config';//import database config
 dbConnect();
 
@@ -20,6 +21,8 @@ app.use(cors({
 //call case study and user routers
 app.use("/api/case_studies",caseStudiesRouter)
 app.use("/api/users", userRouter);
+app.use("/api/questions",questionsRouter);
+
 
 
 //serving the eye tests from the backend
