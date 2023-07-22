@@ -24,8 +24,8 @@ const routes: Routes = [
   { path: 'visual-acuity-test/:useCaseId', component: VisualAcuityTestComponent }, 
   { path: 'eye-movements-test/:useCaseId', component: EyeMovementsTestComponent },
   { path: 'direct-ophthalmoscopy-test/:useCaseId', component: DirectOphthalmoscopyTestComponent },
-  {path:'welcome', component:WelcomeComponent},
-  {path:'question', component:QuestionComponent},
+  { path: 'welcome/:useCaseId', component: WelcomeComponent },
+  { path: 'question/:useCaseId', component: QuestionComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'register', component: RegisterPageComponent },
 

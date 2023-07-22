@@ -26,6 +26,9 @@ export class NavbarComponent {
         });
       }
     });
+    
   }
+
+  
   @ViewChild(MatMenuTrigger) menu!: MatMenuTrigger;
 }

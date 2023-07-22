@@ -13,4 +13,4 @@ export const USER_REGISTER_URL = BASE_URL + '/api/users/register';
 //url for all questions
 export const QUESTIONS_URL= BASE_URL + '/api/questions';
 //url for all questions bu case study id
-export const QUESTION_BY_ID_URL= QUESTIONS_URL + '/';
+export const QUESTION_BY_ID_URL= QUESTIONS_URL + '/case_study/';

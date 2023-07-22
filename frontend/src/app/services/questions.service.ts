@@ -5,11 +5,10 @@ import { Question } from '../shared/models/question'; // Assuming you have defin
 import { QUESTIONS_URL, QUESTION_BY_ID_URL } from '../shared/constants/url';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class QuestionService {
-
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // get all questions array. Using observable to throw error if there is an issue
   getAllQuestions(): Observable<Question[]> {
@@ -18,9 +17,9 @@ export class QuestionService {
   }
 
   // create a page for question when you click onto it. You only need a type of Quiz it is not an array type
-  getQuestionById(questionId:string):Observable<Question>{
-    console.log(questionId);
-    // search question by id 
-    return this.http.get<Question>(QUESTION_BY_ID_URL+questionId);
+  getQuestionsByCaseStudyId(caseStudyId: string): Observable<Question[]> {
+    console.log('this is case study ID from backend' + caseStudyId);
+    // search question by id
+    return this.http.get<Question[]>(QUESTION_BY_ID_URL + caseStudyId);
   }
 }

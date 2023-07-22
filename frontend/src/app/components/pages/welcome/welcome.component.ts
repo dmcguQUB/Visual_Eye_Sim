@@ -10,15 +10,16 @@ import { AuthService } from '@auth0/auth0-angular';//to get user info
 export class WelcomeComponent implements OnInit {
   //create user object
   user: any;
+  useCaseId:any;
 
   constructor(private router: Router, private route: ActivatedRoute, public auth: AuthService){}
 
   ngOnInit(): void {
-   
+    this.useCaseId = this.route.snapshot.paramMap.get('useCaseId');
   
   }
 
-  startQuiz(){
-    this.router.navigate(['/question']); // navigate to the quiz when Start button is clicked
+  startQuiz() {
+    this.router.navigate(['/question', this.useCaseId]);
   }
 }

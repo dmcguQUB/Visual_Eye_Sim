@@ -26,14 +26,15 @@ router.get(
   })
 );
 
-router.get(
-  "/:id",
+ //method to get questions for specific case study
+ router.get(
+  "/case_study/:id",
   expressAsyncHandler(async (req, res) => {
-    const question = await QuizModel.findById(req.params.id);
-    if (question) {
-      res.send(question);
+    const questions = await QuizModel.find({caseStudyId: req.params.id});
+    if (questions) {
+      res.send(questions);
     } else {
-      res.status(404).send({ message: 'Question not found' });
+      res.status(404).send({ message: 'Questions not found for case study' });
     }
   })
 );
