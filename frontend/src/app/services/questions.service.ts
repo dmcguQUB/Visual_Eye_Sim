@@ -1,8 +1,10 @@
+//frontend/src/app/services/questions.service.ts
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Question } from '../shared/models/question'; // Assuming you have defined the Quiz model
-import { QUESTIONS_URL, QUESTION_BY_ID_URL } from '../shared/constants/url';
+import { QUESTIONS_URL, QUESTION_BY_ID_URL, USER_SCORES_URL } from '../shared/constants/url';
+import { UserScore } from '../shared/models/UserScore';
 
 @Injectable({
   providedIn: 'root',
@@ -22,4 +24,10 @@ export class QuestionService {
     // search question by id
     return this.http.get<Question[]>(QUESTION_BY_ID_URL + caseStudyId);
   }
+
+// post a user's score in the backend passing userScore object
+postUserScore(userScore: any): Observable<any> {
+  return this.http.post<UserScore>(USER_SCORES_URL, userScore);
+}
+
 }

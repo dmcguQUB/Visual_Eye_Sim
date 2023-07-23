@@ -11,12 +11,17 @@ export class WelcomeComponent implements OnInit {
   //create user object
   user: any;
   useCaseId:any;
+  loading: boolean = true; // Added loading property
 
   constructor(private router: Router, private route: ActivatedRoute, public auth: AuthService){}
 
   ngOnInit(): void {
     this.useCaseId = this.route.snapshot.paramMap.get('useCaseId');
   
+    // Simulate loading data
+    setTimeout(() => {
+      this.loading = false; // After data is 'loaded', set loading to false
+    }, 2000); 
   }
 
   startQuiz() {

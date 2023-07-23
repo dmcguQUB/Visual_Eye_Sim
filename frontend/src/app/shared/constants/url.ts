@@ -14,3 +14,7 @@ export const USER_REGISTER_URL = BASE_URL + '/api/users/register';
 export const QUESTIONS_URL= BASE_URL + '/api/questions';
 //url for all questions bu case study id
 export const QUESTION_BY_ID_URL= QUESTIONS_URL + '/case_study/';
+
+
+//url for posting user scores to the database 
+export const USER_SCORES_URL = BASE_URL + '/api/userscores/';

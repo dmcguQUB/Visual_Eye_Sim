@@ -9,6 +9,7 @@ import caseStudiesRouter from "./routers/case_studies.router";
 import userRouter from './routers/user.router';
 import questionsRouter from './routers/questions.router'
 import { dbConnect } from './configs/database.config';//import database config
+import userScoresRouter from './routers/userScores.router';
 dbConnect();
 
 const app = express();
@@ -22,6 +23,8 @@ app.use(cors({
 app.use("/api/case_studies",caseStudiesRouter)
 app.use("/api/users", userRouter);
 app.use("/api/questions",questionsRouter);
+app.use("/api/userscores",userScoresRouter);
+
 
 
 

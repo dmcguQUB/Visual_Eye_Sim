@@ -77,7 +77,6 @@ router.post(
 
     //create new user from the form data typed by user
     const newUser: User = {
-      id: "",
       name,
       email: email.toLowerCase(), //lowercase to ensure uniform
       password: encryptedPassword, //set password to encrypted
@@ -97,7 +96,7 @@ const generateTokenReponse = (user: User) => {
   const token = jwt.sign(
     {
       //want to encode the user.id, email and if admin
-      id: user.id,
+      _id: user._id, // Use _id here
       email: user.email,
       isAdmin: user.isAdmin,
     },
@@ -110,7 +109,7 @@ const generateTokenReponse = (user: User) => {
 
   //return all these values including token
   return {
-    id: user.id,
+    _id: user._id, // Use _id here
     email: user.email,
     name: user.name,
     address: user.address,

@@ -7,6 +7,7 @@ export class Question {
   options!: Option[];
   explanation!: string;
   caseStudyId!: string;
+  
 
   // Initialize in case an empty value is found within the search
   constructor() {

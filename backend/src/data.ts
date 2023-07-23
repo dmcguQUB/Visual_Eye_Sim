@@ -104,3 +104,20 @@ export const sample_questions: any[] = [
   // ... More questions for Case Study 2
   // And so on for more case studies
 ];
+
+// backend/src/data.ts
+
+export const sample_user_scores: any[] = [
+  {
+    userId: "64b83c2db2ec5e03be43b139", // assuming John Doe's ID is 1
+    caseStudyId: "64b55374f856931e2ae20b20",
+    score: 8,
+    answers: [
+      { questionId: "64b947a5f704861cb51260ae", userAnswer: "Option 1", correct: true },
+      { questionId: "64b947a5f704861cb51260b3", userAnswer: "Option 2", correct: false },
+      // more answers...
+    ],
+    testTakenAt: new Date(),
+  },
+  // more user scores...
+];
