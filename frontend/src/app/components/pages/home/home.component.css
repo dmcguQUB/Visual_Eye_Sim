@@ -1,4 +1,38 @@
-ul.card-list {
+.hero {
+  background-image: url('https://images.unsplash.com/photo-1619252584172-a83a949b6efd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1548&q=80');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #9c88ff;
+
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  text-align: center;
+  color: #9c88ff;
+}
+
+.hero img {
+  max-height: 200px;
+  margin-top: 1rem;
+}
+
+/* Styling for the case study cards */
+.card-list {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -6,18 +40,17 @@ ul.card-list {
   padding: 0;
 }
 
-li.card-item {
+.card-item {
   flex: 1 0 33.3333%;
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
-a.card-link {
+.card-link {
   height: 22.5rem;
   width: 20rem;
-  border: 1px solid black;  /* Added this line */
+  border: 1px solid black;
   border-radius: 1rem;
   margin: 0.5rem;
   display: flex;
@@ -25,15 +58,14 @@ a.card-link {
   overflow: hidden;
   color: #9c88ff;
   text-decoration: none;
-
 }
 
-a.card-link:hover {
+.card-link:hover {
   opacity: 0.9;
   cursor: pointer;
 }
 
-a.card-link img {
+.card-link img {
   object-fit: cover;
   height: 12rem;
 }
@@ -59,8 +91,8 @@ a.card-link img {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #9c88ff; /* Update the background color to red */
-  color: white; /* Set the text color to white */
+  background-color: #9c88ff;
+  color: white;
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 0.25rem;
@@ -69,7 +101,6 @@ a.card-link img {
 }
 
 .btn-primary:hover {
-  background-color: #495057; /* Update the background color on hover */
+  background-color: #495057;
   cursor: pointer;
 }
-

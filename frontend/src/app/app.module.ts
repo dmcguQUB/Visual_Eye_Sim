@@ -41,6 +41,7 @@ import { DefaultButtonComponent } from './components/partials/default-button/def
 import { InputValidationComponent } from './components/partials/input-validation/input-validation.component'; 
 import { TextInputComponent } from './components/partials/text-input/text-input.component'; 
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
+import { FooterComponent } from './components/partials/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { RegisterPageComponent } from './components/pages/register-page/register
     InputValidationComponent,
     LoadingComponent,
     RegisterPageComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

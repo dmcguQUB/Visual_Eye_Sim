@@ -1,21 +1,36 @@
-<!--home.component.html-->
-<!--Homepage to show all the case studies you can select-->
-<h2 class="text-center">Case Studies</h2>
-<p class="text-center">Select which case study to investigate first</p>
+<div class="hero">
+  <h1>Welcome to the QUB Virtual Eye Clinic</h1>
+  <p>
+    A 3D simulation for practicing clinical skills. Learn patient assessment steps and gain insights for real clinical settings. Enjoy improving your abilities with us!
+  </p>
+  <img src="https://www.britishirishchamber.com/wp-content/uploads/2018/08/Queens-University-Belfast-logo-1.jpg" alt="QUB Virtual Eye Clinic">
+</div>
 
-<!--Card to populate the page with case studies-->
-<ul class="card-list">
-  <li *ngFor="let caseStudy of case_studies" class="card-item">
-    <a routerLink="/case-study-detail/{{caseStudy._id}}" class="card-link">
-      <div class="card">
-        <img class="card-img-top" [src]="caseStudy.imageUrl" [alt]="caseStudy.name">
-        <div class="card-body">
-          <h5 class="card-title">{{caseStudy.name}}</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a routerLink="/case-study-detail/{{caseStudy._id}}" class="btn btn-primary">Investigate</a>
+<div *ngIf="isLoggedIn; else notLoggedInMessage">
+  <!-- Card to populate the page with case studies -->
+  <h2 class="text-center">Case Studies</h2>
+  <p class="text-center">Select which case study to investigate first</p>
+  <ul class="card-list">
+    <li *ngFor="let caseStudy of case_studies" class="card-item">
+      <a routerLink="/case-study-detail/{{caseStudy._id}}" class="card-link">
+        <div class="card">
+          <img class="card-img-top" [src]="caseStudy.imageUrl" [alt]="caseStudy.name">
+          <div class="card-body">
+            <h5 class="card-title">{{caseStudy.name}}</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a routerLink="/case-study-detail/{{caseStudy._id}}" class="btn btn-primary">Investigate</a>
+          </div>
         </div>
-      </div>
-    </a>
-  </li>
-</ul>
+      </a>
+    </li>
+  </ul>
+</div>
 
+<ng-template #notLoggedInMessage>
+  <div class="text-center">
+    <p>To access the features of the website and get started looking at case studies, you need to login.</p>
+    <a routerLink="/login">
+      <default-button text="Login" bgColor="#9c88ff"></default-button>
+    </a>
+  </div>
+</ng-template>

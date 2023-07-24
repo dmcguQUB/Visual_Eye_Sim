@@ -1,0 +1,64 @@
+/* Footer styles */
+footer {
+  background-color: white;
+  padding: 30px 0;
+  border-top: 1px solid #9c88ff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+footer a {
+  color: #9c88ff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  background: #9c88ff;
+  color: black;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+footer .container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  text-align: center;
+}
+
+footer h5 {
+  color: #9c88ff;
+  font-weight: bold;
+}
+
+footer ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+footer ul li {
+  margin-bottom: 10px;
+}
+
+footer span {
+  color: #9c88ff;
+}
+
+footer .btn-primary {
+  background-color: #9c88ff;
+  color: white;
+  border-color: #9c88ff;
+}
+
+footer .btn-primary:hover {
+  background-color: white;
+  color: #9c88ff;
+  border-color: #9c88ff;
+  box-shadow: none;
+  transform: translateY(-2px);
+}
+
+footer .form-control {
+  color: #000;
+}
