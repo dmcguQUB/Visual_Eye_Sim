@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
+import { ButtonStateService } from 'src/app/services/buttonState.service';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 
@@ -10,10 +11,13 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+//vars
+isButtonClicked: boolean = false;
+
 
   caseStudy: CaseStudies = new CaseStudies(); // Set to a default value
 
-  constructor(private activatedRoute: ActivatedRoute, private useCaseService: UseCaseService) { }
+  constructor(private activatedRoute: ActivatedRoute, private useCaseService: UseCaseService,private buttonStateService: ButtonStateService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -27,6 +31,9 @@ export class NavbarComponent {
       }
     });
     
+    //change button so user goes to examinations stage when they are finished with intro
+    this.buttonStateService.currentButtonState.subscribe(state => this.isButtonClicked = state);
+
   }
 
   

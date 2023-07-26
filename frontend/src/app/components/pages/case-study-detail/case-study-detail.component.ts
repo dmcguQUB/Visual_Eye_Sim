@@ -5,6 +5,7 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { DOCUMENT } from '@angular/common';
+import { ButtonStateService } from 'src/app/services/buttonState.service';
 
 
 @Component({
@@ -16,6 +17,8 @@ export class CaseStudyDetailComponent implements OnInit {
 
   //this is a method to return an array of case studies
   caseStudy: CaseStudies = new CaseStudies();
+  isButtonClicked: boolean = false;
+
 
   //botpress 
   botpressScript!: HTMLScriptElement;
@@ -25,6 +28,7 @@ export class CaseStudyDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private useCaseService: UseCaseService,
     private renderer2: Renderer2,
+    private buttonStateService: ButtonStateService,
     @Inject(DOCUMENT) private _document: Document
   ) {}
 
@@ -76,6 +80,11 @@ export class CaseStudyDetailComponent implements OnInit {
     if (this.botpressScript) {
       this.renderer2.removeChild(this._document.body, this.botpressScript);
     }
+  }
+//button to check if the user has finsihed with the first stage to unlock further investiagation features
+  handleClick(): void {
+    this.buttonStateService.changeButtonState(true);
+    // code to enable the rest of the activities goes here
   }
   
   

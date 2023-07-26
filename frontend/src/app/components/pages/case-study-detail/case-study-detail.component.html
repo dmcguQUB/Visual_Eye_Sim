@@ -19,6 +19,18 @@
     </div>
     
   </div>
+
+  <!--instructions for this stage-->
+  <div class="case-study-instructions">
+    <h2>Instructions:</h2>
+    <p>Read the background of the patient for this case study. Use the chat icon in the bottom right of the page to ask them appropriate questions in order to gather as much detail as possible. Click the button below when you are finished speaking to the patient.</p>
+    <default-button 
+      [type]="'button'" 
+      [text]="'Confirm Finished'" 
+      [bgColor]="'#9c88ff'"
+      (onClick)="handleClick()"
+    ></default-button>
+  </div>
 </div>
 
 
