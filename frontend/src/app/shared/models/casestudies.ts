@@ -2,6 +2,7 @@
 //frontend/src/app/shared/models/casestudies.ts 
 export class CaseStudies {
   _id!:string;
+  caseStudyNumber!:number;
   name!:string;
   imageUrl!: string;
   age!: string;
@@ -14,6 +15,7 @@ export class CaseStudies {
   //intialise incase a empty value is found within the search
   constructor() {
     this._id = '',
+    this.caseStudyNumber=-1,
     this.name = '';
     this.imageUrl ='';
     this.age = '';

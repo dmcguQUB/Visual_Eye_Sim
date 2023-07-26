@@ -13,10 +13,10 @@
     </thead>
     <tbody>
       <tr *ngFor="let userScore of userScores">
-        <!-- Use the getCaseStudyInfo method to display user-friendly Case Study information -->
-        <td>{{ getCaseStudyInfo(userScore.caseStudyId).number }}</td>
-        <td>{{ getCaseStudyInfo(userScore.caseStudyId).subject }}</td>
-        <td>{{ userScore.score }}</td>
+        <!-- Use the safe navigation operator to handle undefined caseStudy object -->
+        <td>{{ userScore.caseStudy?.caseStudyNumber }}</td>
+        <td>{{ userScore.caseStudy?.name }}</td>
+        <td>{{ userScore.score }} / </td>
         <td>{{ userScore.testTakenAt | date: 'medium' }}</td>
         <td>
           <button (click)="showDetails(userScore)">Show Details</button>
@@ -27,29 +27,41 @@
   <div *ngIf="loading">Loading...</div>
 </div>
 
-
 <!-- Add a section to show detailed information about the user score -->
 <div class="container mt-5" *ngIf="selectedUserScore">
   <h2>User Score Details</h2>
-  <p>Case Study ID: {{ selectedUserScore.caseStudyId }}</p>
+  <p>Case Study Number: {{ selectedUserScore.caseStudy?.caseStudyNumber }}</p>
   <p>Score: {{ selectedUserScore.score }}</p>
   <p>Test Taken At: {{ selectedUserScore.testTakenAt | date: 'medium' }}</p>
+
 
   <!-- Add a table to display granular information about each question -->
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th>Question ID</th>
+        <th>Question</th>
         <th>User Answer</th>
         <th>Correct</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let answer of selectedUserScore.answers">
-        <td>{{ answer.questionId }}</td>
-        <td>{{ answer.userAnswer }}</td>
-        <td>{{ answer.correct ? 'Yes' : 'No' }}</td>
-      </tr>
+      <ng-container *ngIf="selectedUserScore.questions">
+        <tr *ngFor="let question of selectedUserScore.questions">
+          <td>{{ question.questionText }}</td>
+          <td>
+            <!-- Find the corresponding user answer for this question -->
+            <ng-container *ngIf="selectedUserScore.answers">
+              {{ getAnswerForQuestion(question._id)?.userAnswer }}
+            </ng-container>
+          </td>
+          <td>
+            <!-- Find if the user answer is correct for this question -->
+            <ng-container *ngIf="selectedUserScore.answers">
+              {{ getAnswerForQuestion(question._id)?.correct ? 'Yes' : 'No' }}
+            </ng-container>
+          </td>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
 </div>
