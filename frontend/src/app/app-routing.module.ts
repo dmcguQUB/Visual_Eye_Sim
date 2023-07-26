@@ -13,6 +13,7 @@ import { QuestionComponent } from './components/pages/question/question.componen
 import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
+import { ScoresComponent } from './components/pages/scores/scores.component';
 
 const routes: Routes = [
   //home route
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'question/:useCaseId', component: QuestionComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'register', component: RegisterPageComponent },
+  { path: 'scores', component: ScoresComponent },
 
 
 ];

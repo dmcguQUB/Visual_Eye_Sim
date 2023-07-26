@@ -42,6 +42,7 @@ import { InputValidationComponent } from './components/partials/input-validation
 import { TextInputComponent } from './components/partials/text-input/text-input.component'; 
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { FooterComponent } from './components/partials/footer/footer.component';
+import { ScoresComponent } from './components/pages/scores/scores.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { FooterComponent } from './components/partials/footer/footer.component';
     LoadingComponent,
     RegisterPageComponent,
     FooterComponent,
+    ScoresComponent
   ],
   imports: [
     BrowserModule,

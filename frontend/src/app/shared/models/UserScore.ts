@@ -1,3 +1,4 @@
+//frontend/src/app/shared/models/UserScore.ts
 //model for userScore object
 export interface UserAnswer {
   questionId: string;

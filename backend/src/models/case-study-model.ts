@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 
 export interface CaseStudy{
-  id:string;
+  caseStudyNumber:number;
   name:string;
   imageUrl: string;
   age: string;
@@ -16,7 +16,7 @@ export interface CaseStudy{
 //setting schema for mongoDB 
 export const CaseStudySchema = new Schema<CaseStudy>(
   {
-    id: {type: String, required:true, unique: true},
+    caseStudyNumber:{type: Number, required:true, unique:true},
     name: {type: String, required:true},
     imageUrl: {type: String, required:true},
     age: {type: String, required:true},

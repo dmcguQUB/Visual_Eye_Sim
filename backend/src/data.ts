@@ -3,7 +3,7 @@
 export const sample_case_studies: any[] =[
 
   {
-    id:'1',
+    caseStudyNumber:1,
     name: 'Lizzy Bard',
     imageUrl: 'assets/patient-1.jpg',
     age: '70',
@@ -14,7 +14,7 @@ export const sample_case_studies: any[] =[
     familyHistory: 'Mother had cateracts. Father had lazy eye.'
   },
   {
-    id:'2',
+    caseStudyNumber:2,
     name: 'Beth Tate',
     imageUrl: 'assets/patient-2.jpg',
     age: '70',
@@ -25,7 +25,7 @@ export const sample_case_studies: any[] =[
     familyHistory: 'Mother had cateracts. Father had lazy eye.'
   },
   {
-    id:'3',
+    caseStudyNumber:3,
     name: 'Frank Howard',
     imageUrl: 'assets/patient-3.jpg',
     age: '70',
