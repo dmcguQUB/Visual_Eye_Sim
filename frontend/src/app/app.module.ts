@@ -17,7 +17,6 @@ import { QuestionComponent } from './components/pages/question/question.componen
 import { HeaderComponent } from './components/partials/header/header.component';
 import { ChangeBgDirective } from './change-bg.directive';
 import { HomeComponent } from './components/pages/home/home.component';
-import { CaseStudyPageComponent } from './components/pages/case-study-page/case-study-page.component';
 import { CaseStudyDetailComponent } from './components/pages/case-study-detail/case-study-detail.component';
 import { PupilReflexesTestComponent } from './components/pages/pupil-reflexes-test/pupil-reflexes-test.component';
 import { VisualFieldsTestComponent } from './components/pages/visual-fields-test/visual-fields-test.component';
@@ -52,7 +51,6 @@ import { ScoresComponent } from './components/pages/scores/scores.component';
     HeaderComponent,
     ChangeBgDirective,
     HomeComponent,
-    CaseStudyPageComponent,
     CaseStudyDetailComponent,
     PupilReflexesTestComponent,
     VisualFieldsTestComponent,

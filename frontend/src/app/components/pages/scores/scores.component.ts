@@ -27,6 +27,14 @@ export class ScoresComponent implements OnInit {
     questions: [], // Initialize the questions property
   };
   loading: boolean = true;
+    // Add this new property to control the visibility of the detailed information section
+    showDetailsSection: boolean = false;
+    totalNumberOfQuestions: number =0; // get total number of question used to calculate percentage
+    scorePerQuestion:number=10;//assign questions per question
+    totalScorePerTest:number=0;//number of points available per question used to calculate percentage correct
+     // Declare the variable i to be used in the template
+  i: number = 0;
+
 
   constructor(
     private userScoreService: UserScoreService,
@@ -37,6 +45,7 @@ export class ScoresComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUserScores();
+    
   }
 
   fetchUserScores() {
@@ -51,6 +60,7 @@ export class ScoresComponent implements OnInit {
 
           // Fetch case study details for each user score
           this.fetchCaseStudyDetails();
+          this.fetchQuestionDetails();
         },
         (error) => {
           console.error('Error fetching user scores:', error);
@@ -67,6 +77,7 @@ export class ScoresComponent implements OnInit {
   showDetails(selectedUserScore: UserScore) {
     this.selectedUserScore = selectedUserScore;
     this.selectedUserScore.questions = []; // Initialize the questions property
+    this.showDetailsSection = true; // Show the detailed information section
     this.fetchQuestionDetails();
   }
 
@@ -99,6 +110,12 @@ export class ScoresComponent implements OnInit {
       (questions) => {
         // Update the selectedUserScore with the fetched questions
         this.selectedUserScore.questions = questions;
+        //assign the total number of questions from questions length
+        this.totalNumberOfQuestions= this.selectedUserScore.questions.length;
+
+        //calculate the number of available points
+        this.totalScorePerTest = this.totalNumberOfQuestions * this.scorePerQuestion;
+
       },
       (error) => {
         console.error('Error fetching questions:', error);
@@ -116,4 +133,20 @@ export class ScoresComponent implements OnInit {
       (answer) => answer.questionId === questionId
     );
   }
+
+//get the number of questions per userScore
+  getNumberOfQuestions(userScore: UserScore): number {
+    if (!userScore || !userScore.questions) {
+      return 0;
+    }
+    return userScore.questions.length;
+  }
+
+  //find correct answer 
+  getCorrectAnswer(question: Question): string {
+    const correctOption = question.options.find((option) => option.correct);
+    return correctOption ? correctOption.text : 'N/A';
+  }
+  
+  
 }

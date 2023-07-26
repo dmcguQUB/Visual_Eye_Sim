@@ -1,5 +1,5 @@
 <div class="navbar navbar-default">
-  <h1 class="case-study-header"><a routerLink="/case-study/{{caseStudy._id}}">{{caseStudy.name}}</a></h1>
+  <h1 class="case-study-header"><a routerLink="/case-study-detail/{{caseStudy._id}}">{{caseStudy.name}}</a></h1>
   <div class="navbar-inner">
     <ul class="nav navbar-nav">
       <li class="active"><a routerLink="/case-study-detail/{{caseStudy._id}}">Background Info</a></li>
@@ -14,7 +14,6 @@
           <li><a routerLink="/eye-movements-test/{{caseStudy._id}}">Eye Movements Test</a></li>        
           <li><a routerLink="/direct-ophthalmoscopy-test/{{caseStudy._id}}">Direct Ophthalmoscopy</a></li> 
           <li><a routerLink="/welcome/{{caseStudy._id}}">Test Yourself</a></li> 
-          <li>Examination Summary</li>
         </ul>
       </li>
       <li><a href="#">Investigation</a></li>
