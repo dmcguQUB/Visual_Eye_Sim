@@ -8,9 +8,8 @@
         <a class="dropdown-toggle"  *ngIf="isButtonClicked">Examinations</a>
         <ul class="dropdown-menu">
           <!--Links to the tests-->
-          <li><a routerLink="/case-study-detail/:useCaseId">Speak to {{caseStudy.name}}</a></li>
           <li><a routerLink="/pupil-reflexes-test/{{caseStudy._id}}">Pupil Reflexes Test</a></li>
-          <li><a routerLink="/visual-fields-test/{{caseStudy._id}}">Visual Fields Test By Confrontation</a></li>       
+          <li><a routerLink="/visual-fields-test-left/{{caseStudy._id}}">Visual Fields Test By Confrontation</a></li>       
           <li><a routerLink="/visual-acuity-test/{{caseStudy._id}}">Visual Acuity Test</a></li>  
           <li><a routerLink="/eye-movements-test/{{caseStudy._id}}">Eye Movements Test</a></li>        
           <li><a routerLink="/direct-ophthalmoscopy-test/{{caseStudy._id}}">Direct Ophthalmoscopy</a></li> 

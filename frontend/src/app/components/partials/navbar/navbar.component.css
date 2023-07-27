@@ -103,3 +103,14 @@
   background: #e9ecef;
   color: #495057;
 }
+
+@media screen and (max-width: 600px) {
+  .navbar{
+    position: static;
+    width: 100%;
+    flex-direction: row; /* stack navbar items horizontally */
+    flex-wrap: wrap; /* allow navbar items to wrap onto the next line */
+    justify-content: center; /* center navbar items horizontally */
+    align-items: center; /* center navbar items vertically */
+  }
+}

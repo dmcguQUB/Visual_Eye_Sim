@@ -19,7 +19,7 @@ import { ChangeBgDirective } from './change-bg.directive';
 import { HomeComponent } from './components/pages/home/home.component';
 import { CaseStudyDetailComponent } from './components/pages/case-study-detail/case-study-detail.component';
 import { PupilReflexesTestComponent } from './components/pages/pupil-reflexes-test/pupil-reflexes-test.component';
-import { VisualFieldsTestComponent } from './components/pages/visual-fields-test/visual-fields-test.component';
+import { VisualFieldsTestLeftComponent } from './components/pages/visual-fields-test-left/visual-fields-test-left.component';
 import { VisualAcuityTestComponent } from './components/pages/visual-acuity-test/visual-acuity-test.component';
 import { EyeMovementsTestComponent } from './components/pages/eye-movements-test/eye-movements-test.component';
 import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
@@ -42,6 +42,8 @@ import { TextInputComponent } from './components/partials/text-input/text-input.
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { FooterComponent } from './components/partials/footer/footer.component';
 import { ScoresComponent } from './components/pages/scores/scores.component';
+import { AdminPageComponent } from './components/pages/admin-page/admin-page.component';
+import { VisualFieldsTestRightComponent } from './components/pages/visual-fields-test-right/visual-fields-test-right.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { ScoresComponent } from './components/pages/scores/scores.component';
     HomeComponent,
     CaseStudyDetailComponent,
     PupilReflexesTestComponent,
-    VisualFieldsTestComponent,
+    VisualFieldsTestLeftComponent,
+    VisualFieldsTestRightComponent,
     VisualAcuityTestComponent,
     EyeMovementsTestComponent,
     DirectOphthalmoscopyTestComponent,
@@ -70,7 +73,8 @@ import { ScoresComponent } from './components/pages/scores/scores.component';
     LoadingComponent,
     RegisterPageComponent,
     FooterComponent,
-    ScoresComponent
+    ScoresComponent,
+    AdminPageComponent
   ],
   imports: [
     BrowserModule,

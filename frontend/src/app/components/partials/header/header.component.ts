@@ -31,4 +31,9 @@ export class HeaderComponent implements OnInit {
   get isAuth(){
     return this.user.token;
   }
+
+  //check if ther user is admin
+  get isAdmin(){
+    return this.user.isAdmin;
+  }
 }

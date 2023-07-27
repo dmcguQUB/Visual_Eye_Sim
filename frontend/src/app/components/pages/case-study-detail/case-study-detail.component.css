@@ -39,3 +39,16 @@
 .name {
   font-size: 1.5em;
 }
+
+
+@media screen and (max-width: 600px) {
+  .parent-container {
+    flex-direction: column;
+  }
+  
+  .app-navbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

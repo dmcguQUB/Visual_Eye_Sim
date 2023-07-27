@@ -1,0 +1,95 @@
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
+import { Renderer2, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UseCaseService } from 'src/app/services/usecases.service';
+import { CaseStudies } from 'src/app/shared/models/casestudies';
+
+@Component({
+  selector: 'app-visual-fields-test-right',
+  templateUrl: './visual-fields-test-right.component.html',
+  styleUrls: ['./visual-fields-test-right.component.css'],
+})
+export class VisualFieldsTestRightComponent implements OnInit, AfterViewInit {
+  @ViewChild('myCanvas', { static: true })
+  canvas!: ElementRef<HTMLCanvasElement>;
+
+  //create hand image var
+  handImage: any;
+  //image to determine which eye it is 
+  thisEye: string = 'Right';
+  otherEye: string = 'Left';
+  caseStudy = new CaseStudies;
+
+  constructor(
+    private renderer2: Renderer2,
+    private activatedRoute:ActivatedRoute,
+    private router: Router,
+    private useCaseService: UseCaseService,  // Inject UseCaseService
+    @Inject(DOCUMENT) private _document: Document
+  ) {}
+
+  ngOnInit(): void {
+    //load image as soon as it is created
+    this.handImage = new Image();
+    this.handImage.src = 'assets/Right-hand.png';
+  
+    // Fetch the caseStudy
+    this.activatedRoute.params.subscribe(params => {
+      console.log(params)
+      if (params['useCaseId']) {
+        this.useCaseService.getUseCaseById(params['useCaseId']).subscribe(serverCaseStudy => {
+          this.caseStudy = serverCaseStudy;
+        }, error => {
+          console.log('An error occurred:', error); // Log any errors for debugging
+        });
+      }
+    });
+  }
+  
+
+  ngAfterViewInit(): void {
+    // Call the method to add the script file for the Visual Fields Test
+    this.addScriptToElement(
+      'http://localhost:5001/assets/visual-fields-test-right.js'
+    );
+  }
+
+  addScriptToElement(src: string): HTMLScriptElement {
+    // Create a new script element
+    const script = this.renderer2.createElement('script');
+
+    // Set the script properties
+    script.type = 'text/javascript';
+    script.src = src;
+    script.async = true;
+    script.defer = true;
+
+    // Append the script to the document body
+    this.renderer2.appendChild(this._document.body, script);
+
+    return script;
+  }
+
+  //determine the eye it is so can change the text in button dynamically
+  // Update your handleClick() method
+handleClick(): void {
+  this.thisEye = this.thisEye === 'Left' ? 'Right' : 'Left';
+  
+  if(this.thisEye === 'Left') {
+    // No navigation specified for 'Left' eye
+  } else {
+    this.activatedRoute.params.subscribe(params => {
+      if (params['useCaseId']) {
+        this.router.navigate([`/visual-fields-test-left/${params['useCaseId']}`]);
+      }
+    });
+  }
+}
+}

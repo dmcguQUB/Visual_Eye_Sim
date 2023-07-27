@@ -1,0 +1,149 @@
+/* General button styles */
+.button {
+  position: absolute;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #45a049;
+}
+
+/* Container for canvas and buttons */
+#canvasContainer {
+  position: relative;
+  height: 50%; /* This should match your canvas height */
+  width: 80%;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Top left button for visual eye field */
+#topLeftButton {
+  top: 20px;
+  left: 20px;
+}
+
+/* Top right button for visual eye field */
+#topRightButton {
+  top: 20px;
+  right: 20px;
+}
+
+/* Bottom left button for visual eye field */
+#bottomLeftButton {
+  bottom: 20px;
+  left: 20px;
+}
+
+/* Bottom right button for visual eye field */
+#bottomRightButton {
+  bottom: 20px;
+  right: 20px;
+}
+
+/* Canvas styles */
+canvas {
+  background: #eee;
+  display: block;
+  margin: 0 auto;
+}
+
+#Hand {
+  display: block; 
+  position: absolute; 
+  top: 40px; 
+  left: 0; 
+  z-index: 90;
+  margin-left: 10%;
+  width: 50%;
+  height: 70%;
+}
+
+
+#myCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Parent container styles */
+.parent-container {
+  display: flex;
+  flex-direction: row; /* Changed to row to layout elements horizontally */
+  align-items: flex-start; /* Aligns items to the top */
+  height: 100vh; /* Added to make it fullscreen */
+}
+
+.eye-movements-container {
+  flex-grow: 1; /* Makes the eye movements container take up remaining space */
+  display: flex; /* Needed to layout title and canvas vertically */
+  flex-direction: column; /* Layouts title and canvas vertically */
+  align-items: center; /* Centers title and canvas */
+}
+
+/* Title styles */
+.title {
+  text-align: center;
+}
+
+.case-study-instructions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Case Study Instructions */
+.case-study-instructions h2 {
+  margin-bottom: 20px;
+}
+
+.case-study-instructions p {
+  margin-bottom: 40px;
+}
+
+.default-button {
+  background-color: #9c88ff;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.default-button:hover {
+  background-color: #7158e2;
+  color: white;
+}
+
+/* Message Styles */
+.bi {
+  color: #4CAF50; /* Same as the button color */
+  margin-right: 10px; /* Add some space between the icon and the text */
+}
+
+#message {
+  display: inline-block; /* To align it with the svg */
+  vertical-align: middle; /* To align it vertically with the svg */
+  font-size: 18px; /* Reduce the font size */
+  color: #333; /* Change the color to a dark grey */
+}
+
+/* Message Container Styles */
+div {
+  padding: 20px; /* Add some padding around the message */
+  background-color: #f9f9f9; /* Change the background to a light grey */
+  border-radius: 5px; /* Add some border radius to round the corners */
+  margin-bottom: 20px; /* Add some space below the message */
+}

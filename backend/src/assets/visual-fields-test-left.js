@@ -153,6 +153,7 @@ function animation() {
     } else if (eye.pupil.radius > eye.pupil.targetRadius) {
       eye.pupil.radius -= 0.004;
     }
+    
 
     // Draw rectangles
     rectangles.forEach(drawRectangle);
