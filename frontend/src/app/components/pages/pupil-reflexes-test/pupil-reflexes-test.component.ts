@@ -14,6 +14,9 @@ export class PupilReflexesTestComponent implements OnInit, AfterViewInit {
   @ViewChild('myCanvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;  
 
+  private scriptElement: HTMLScriptElement | null = null; // Add a property to store a reference to the script element
+
+
   constructor(private renderer2: Renderer2, @Inject(DOCUMENT) private _document:Document) { }
 
   
@@ -25,11 +28,23 @@ export class PupilReflexesTestComponent implements OnInit, AfterViewInit {
     script.async = true;
     script.defer = true;
     this.renderer2.appendChild(this._document.body, script);
+    this.scriptElement = script; // Store a reference to the script element
     return script;
   }
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.addScriptToElement("http://localhost:5001/assets/pupil-reflexes-test.js");
+  }
+
+  //destory the script after navigating to stop bugs while navigating across pages
+  ngOnDestroy(): void {
+
+
+    console.log("the ngOnDetroy is being called")
+    // When the component is destroyed, remove the script element
+    if (this.scriptElement) {
+      this.renderer2.removeChild(this._document.body, this.scriptElement);
+    }
   }
 }

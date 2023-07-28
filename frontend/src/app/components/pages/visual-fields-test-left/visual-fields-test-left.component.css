@@ -16,6 +16,10 @@
 
 /* Container for canvas and buttons */
 #canvasContainer {
+ min-height: 600px;
+  min-width: 500px;
+  max-height: 800px;
+  max-width: 600px;
   position: relative;
   height: 50%; /* This should match your canvas height */
   width: 80%;
@@ -26,26 +30,34 @@
 
 /* Top left button for visual eye field */
 #topLeftButton {
-  top: 20px;
-  left: 20px;
+  top: 5%;  /* Adjust these percentage values to position your buttons as needed */
+  left: 5%;
+  width: 10%;  /* Adjust these percentage values to size your buttons as needed */
+  height: 10%;
 }
 
-/* Top right button for visual eye field */
+/* Top right button for visual eye field. Adding percentages to make it responsive */
 #topRightButton {
-  top: 20px;
-  right: 20px;
+  top: 5%;  /* Adjust these percentage values to position your buttons as needed */
+  left: 88%;
+  width: 10%;  /* Adjust these percentage values to size your buttons as needed */
+  height: 10%;
 }
 
 /* Bottom left button for visual eye field */
 #bottomLeftButton {
-  bottom: 20px;
-  left: 20px;
+  top: 88%;  /* Adjust these percentage values to position your buttons as needed */
+  left: 5%;
+  width: 10%;  /* Adjust these percentage values to size your buttons as needed */
+  height: 10%;
 }
 
 /* Bottom right button for visual eye field */
 #bottomRightButton {
-  bottom: 20px;
-  right: 20px;
+  top: 88%;  /* Adjust these percentage values to position your buttons as needed */
+  left: 88%;
+  width: 10%;  /* Adjust these percentage values to size your buttons as needed */
+  height: 10%;
 }
 
 /* Canvas styles */
@@ -106,7 +118,7 @@ canvas {
 }
 
 .case-study-instructions p {
-  margin-bottom: 40px;
+  margin-bottom: 5%;
 }
 
 .default-button {
@@ -146,4 +158,22 @@ div {
   background-color: #f9f9f9; /* Change the background to a light grey */
   border-radius: 5px; /* Add some border radius to round the corners */
   margin-bottom: 20px; /* Add some space below the message */
+}
+
+.message-container{
+margin-top: 5%;
+}
+.full-container {
+  /* rest of your styles */
+  flex-wrap: wrap;
+}
+
+@media (max-height: 600px) {
+  #bottomLeftButton {
+    top: 60%; /* Adjust as needed */
+  }
+
+  #bottomRightButton {
+    top: 60%; /* Adjust as needed */
+  }
 }

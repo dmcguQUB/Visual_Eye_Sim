@@ -1,3 +1,4 @@
+
 import {
   Component,
   OnInit,
@@ -19,6 +20,9 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
 export class VisualFieldsTestLeftComponent implements OnInit, AfterViewInit {
   @ViewChild('myCanvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;
+
+      // Store a reference to the script element
+      private script!: HTMLScriptElement;
 
   //create hand image var
   handImage: any;
@@ -73,7 +77,7 @@ export class VisualFieldsTestLeftComponent implements OnInit, AfterViewInit {
 
     // Append the script to the document body
     this.renderer2.appendChild(this._document.body, script);
-
+    this.script = script; // Store the script reference
     return script;
   }
 
@@ -91,5 +95,14 @@ handleClick(): void {
       }
     });
   }
+}
+ngOnDestroy(): void {  // <-- Add OnDestroy lifecycle hook
+  // Remove the script when the component is destroyed
+
+
+  console.log("the ngOnDetroy is being called")
+
+  this.renderer2.removeChild(this._document.body, this.script);
+  
 }
 }

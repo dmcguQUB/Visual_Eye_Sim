@@ -5,6 +5,7 @@ import { sample_user_scores } from "../data";
 import { UserScoreModel } from "../models/userscores";
 import authMid from "../middlewares/auth.mid";
 import { RequestWithUser } from '../models/user.model'; // Update this path if needed
+import mongoose from 'mongoose'; // Make sure mongoose is imported
 
 //create new router calling router method
 const router = Router();
@@ -88,6 +89,35 @@ router.post(
     }
   })
 );
+
+
+//get the total number of correct and incorrect answers by case study id.
+router.get(
+  "/case-study/:caseStudyId",
+  expressAsyncHandler(async (req, res) => {
+    const caseStudyId = req.params.caseStudyId;
+    console.log(caseStudyId);
+    const aggregation = await UserScoreModel.aggregate([
+      { $match: { caseStudyId } },
+      { $unwind: '$answers' },
+      {
+        $group: {
+          _id: '$answers.correct',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    
+    const result = {
+      correct: aggregation.find((a) => a._id === true)?.count || 0,
+      incorrect: aggregation.find((a) => a._id === false)?.count || 0,
+    };
+    
+    res.send(result);
+  })
+);
+
+
 
 
 
