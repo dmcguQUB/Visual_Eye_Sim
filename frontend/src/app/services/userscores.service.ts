@@ -18,9 +18,22 @@ export class UserScoreService {
   }
 
   //fetch global scores for admin to see all the correct and incorrect answers by case study for all users
-  getCorrectAndIncorrectAnswers(caseStudyId: string): Observable<{correct: number, incorrect: number}> {
+  getCorrectAndIncorrectAnswers(
+    caseStudyId: string
+  ): Observable<{ correct: number; incorrect: number }> {
     const url = `${USER_SCORES_URL}/case-study/${caseStudyId}`;
-    return this.http.get<{correct: number, incorrect: number}>(url);
+    return this.http.get<{ correct: number; incorrect: number }>(url);
   }
-  
+
+  // fetch average scores over time for a specific case study
+  getAverageScoresOverTimePerCaseStudy(
+    caseStudyId: string
+  ): Observable<
+    Array<{ date: string; averageScore: number; userCount: number }>
+  > {
+    const url = `${USER_SCORES_URL}/case-study/${caseStudyId}/average-score-over-time`;
+    return this.http.get<
+      Array<{ date: string; averageScore: number; userCount: number }>
+    >(url);
+  }
 }

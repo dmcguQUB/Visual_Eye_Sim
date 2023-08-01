@@ -112,12 +112,92 @@ router.get(
       correct: aggregation.find((a) => a._id === true)?.count || 0,
       incorrect: aggregation.find((a) => a._id === false)?.count || 0,
     };
-    
     res.send(result);
   })
 );
 
+//MIGHT NOT NEED (might be duplicate of what already have)
+//get the average score of users for each case study
+router.get(
+  "/case-study/:caseStudyId/average-score",
+  expressAsyncHandler(async (req, res) => {
+    const caseStudyId = req.params.caseStudyId;
 
+    const aggregation = await UserScoreModel.aggregate([
+      { $match: { caseStudyId } },
+      { $unwind: '$answers' },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: 1 },
+          correct: { $sum: { $cond: ['$answers.correct', 1, 0] } }
+        },
+      },
+    ]);
+
+    const result = aggregation[0];
+    console.log("Result is : "+result);
+
+    if (!result) {
+      res.status(404).send({ message: 'Case study not found or no answers given yet.' });
+      return;
+    }
+
+    console.log("Result is : "+result);
+
+    const averageScore = (result.correct / result.total) * 100; // this will be a percentage
+
+    console.log("Result correct is : "+result.correct);
+    console.log("Result total is : "+result.total);
+
+
+    //this is a percentage
+    res.send({ averageScore });
+  })
+);
+
+//check how the average scores change over time
+router.get(
+  "/case-study/:caseStudyId/average-score-over-time",
+  expressAsyncHandler(async (req, res) => {
+    const caseStudyId = req.params.caseStudyId;
+
+    const aggregation = await UserScoreModel.aggregate([
+      { $match: { caseStudyId } },
+      { $unwind: '$answers' },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" },
+          },
+          total: { $sum: 1 },
+          correct: { $sum: { $cond: ['$answers.correct', 1, 0] } },
+          uniqueUsers: { $addToSet: "$userId" }
+        },
+      },
+      {
+        $project: {
+          date: {
+            $dateFromParts: {
+              'year': '$_id.year', 'month': '$_id.month', 'day': '$_id.day'
+            }
+          },
+          averageScore: { $multiply: [ { $divide: ['$correct', '$total'] }, 100 ] },
+          userCount: { $size: "$uniqueUsers" }
+        }
+      }
+    ]);
+
+    if (!aggregation.length) {
+      res.status(404).send({ message: 'Case study not found or no answers given yet.' });
+      return;
+    }
+
+    res.send(aggregation);
+  })
+);
 
 
 

@@ -90,6 +90,25 @@ router.post(
   })
 );
 
+//get information required for user registrations data
+router.get('/user-registrations', async (req, res) => {
+  try {
+    const results = await UserModel.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+    res.json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
+
 //create token response for the user
 const generateTokenReponse = (user: User) => {
   //process of creating token is called signing

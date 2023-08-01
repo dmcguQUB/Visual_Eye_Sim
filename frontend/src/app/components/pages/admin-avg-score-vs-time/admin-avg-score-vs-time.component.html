@@ -9,16 +9,29 @@
             <a class="nav-link active" href="/admin">User Scores per </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="/admin-avg-score-vs-time">Average Scores and User Count Over Time for Selected Case Study
+            <a class="nav-link active" href="/admin-avg-score-vs-time"
+              >Average Scores and User Count Over Time for Selected Case Study
             </a>
           </li>
         </ul>
       </div>
     </nav>
 
+    <div>
+      <select
+        [(ngModel)]="selectedCaseStudy"
+        (change)="onCaseStudyChange(selectedCaseStudy)"
+      >
+        <option *ngFor="let caseStudy of caseStudies" [ngValue]="caseStudy">
+          {{ caseStudy.name }}
+        </option>
+      </select>
+    </div>
     <!-- Main Content -->
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-      <h1>Graph to show the percent of correct and incorrect answers for all users per case study</h1>
+      <h1>
+        Average Scores and User Count Over Time for Selected Case Study
+      </h1>
       <div class="chart-container">
         <canvas id="MyChart">{{ chart }}</canvas>
       </div>

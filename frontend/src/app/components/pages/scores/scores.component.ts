@@ -6,6 +6,9 @@ import { UserScoreService } from 'src/app/services/userscores.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 import { Question } from 'src/app/shared/models/question';
 import { UserScore, UserAnswer } from 'src/app/shared/models/UserScore';
+import { Chart, ChartConfiguration, PieController, Title, Tooltip, ArcElement, CategoryScale } from 'chart.js';
+
+Chart.register(PieController, Title, Tooltip, ArcElement, CategoryScale);
 
 @Component({
   selector: 'app-scores',
@@ -34,6 +37,7 @@ export class ScoresComponent implements OnInit {
     totalScorePerTest:number=0;//number of points available per question used to calculate percentage correct
      // Declare the variable i to be used in the template
   i: number = 0;
+  scoreChart?: Chart;//for chart
 
 
   constructor(
@@ -73,13 +77,15 @@ export class ScoresComponent implements OnInit {
     }
   }
 
-  // Method to show more details about a specific user score
-  showDetails(selectedUserScore: UserScore) {
-    this.selectedUserScore = selectedUserScore;
-    this.selectedUserScore.questions = []; // Initialize the questions property
-    this.showDetailsSection = true; // Show the detailed information section
-    this.fetchQuestionDetails();
-  }
+// Method to show more details about a specific user score
+async showDetails(selectedUserScore: UserScore) {
+  this.selectedUserScore = selectedUserScore;
+  this.selectedUserScore.questions = []; // Initialize the questions property
+  this.showDetailsSection = true; // Show the detailed information section
+  await this.fetchQuestionDetails();
+  this.createScoreChart(); // Create the pie chart
+}
+
 
   fetchCaseStudyDetails() {
     // Iterate through userScores and fetch case study details for each user score
@@ -98,14 +104,17 @@ export class ScoresComponent implements OnInit {
   
 
   // get the question details for a specific question ID
-  // Update the fetchQuestionDetails() method
-  fetchQuestionDetails() {
+// Change fetchQuestionDetails to return a Promise
+fetchQuestionDetails(): Promise<any> {
+  return new Promise((resolve, reject) => {
     if (!this.selectedUserScore) {
       console.error('No user score is selected.');
+      reject('No user score is selected.');
       return;
     }
 
     const caseStudyId = this.selectedUserScore.caseStudyId;
+    console.log("case study number"+caseStudyId);
     this.questionService.getQuestionsByCaseStudyId(caseStudyId).subscribe(
       (questions) => {
         // Update the selectedUserScore with the fetched questions
@@ -116,12 +125,16 @@ export class ScoresComponent implements OnInit {
         //calculate the number of available points
         this.totalScorePerTest = this.totalNumberOfQuestions * this.scorePerQuestion;
 
+        resolve(questions);
       },
       (error) => {
         console.error('Error fetching questions:', error);
+        reject(error);
       }
     );
-  }
+  });
+}
+
 
   // Helper method to find the user answer for a specific question
   getAnswerForQuestion(questionId: string): UserAnswer | undefined {
@@ -148,5 +161,41 @@ export class ScoresComponent implements OnInit {
     return correctOption ? correctOption.text : 'N/A';
   }
   
+   // Method for creating pie chart
+  createScoreChart() {
+    // Destroy the existing chart if it exists to ensure that a new chart is created each time
+    if (this.scoreChart) {
+      this.scoreChart.destroy();
+    }
+
+    const totalScore = this.getNumberOfQuestions(this.selectedUserScore) * this.scorePerQuestion;
+    const score = this.selectedUserScore.score;
+    const correctPercentage = (score/totalScore)*100;
+    const incorrectScore = totalScore - score;
+    const incorrectPercentage = (incorrectScore/totalScore)*100;
+
+
+    const config: ChartConfiguration = {
+      type: 'pie',
+      data: {
+        labels: ['Correct %', 'Incorrect %'],
+        datasets: [
+          {
+            data: [correctPercentage, incorrectPercentage],
+            backgroundColor: ['green', 'red'],
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: 'Score Distribution'
+          }
+        }
+      },
+    };
+    this.scoreChart = new Chart('scoreChart', config);
+  }
   
 }

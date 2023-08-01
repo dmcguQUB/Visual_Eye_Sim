@@ -32,43 +32,51 @@ export class AdminPageComponent implements OnInit {
     private questionService: QuestionService
   ) {}
 
-  ngOnInit(): void {
-    this.useCaseService.getAll().subscribe((caseStudies: CaseStudies[]) => {
-      this.caseStudies = caseStudies;
-      this.labels = this.caseStudies.map(
-        (caseStudy) => `${caseStudy.caseStudyNumber} - ${caseStudy.name}`
-      );
-  
-      // Initialize empty arrays to store the correct and incorrect answer counts
-      this.correctCounts = [];
-      this.incorrectCounts = [];
-  
-      // For each case study, get the user scores
-      for (let caseStudy of this.caseStudies) {
-        this.userScoreService.getCorrectAndIncorrectAnswers(caseStudy._id).subscribe((result) => {
-          // Assuming that the result has a structure like this: { correct: number, incorrect: number }
-          this.correctCounts.push(result.correct);
-          this.incorrectCounts.push(result.incorrect);
-  
-          // Check if we've received all the responses we need
-          if (this.correctCounts.length === this.caseStudies.length) {
-            // All data has been fetched, now we can create the chart
-            this.createChart();
-          }
-        });
-      }
+ngOnInit(): void {
+  this.useCaseService.getAll().subscribe((caseStudies: CaseStudies[]) => {
+    this.caseStudies = caseStudies;
+    this.labels = this.caseStudies.map(
+      (caseStudy) => `${caseStudy.caseStudyNumber} - ${caseStudy.name}`
+    );
+
+    // Initialize empty arrays to store the correct and incorrect answer counts
+    this.correctCounts = Array(this.caseStudies.length).fill(0);
+    this.incorrectCounts = Array(this.caseStudies.length).fill(0);
+
+    // Create an array to hold promises
+    let promises = <any>[];
+
+    // For each case study, get the user scores
+    this.caseStudies.forEach((caseStudy, index) => {
+      let promise = this.userScoreService.getCorrectAndIncorrectAnswers(caseStudy._id).toPromise();
+      promises.push(promise);
+      promise.then((result:any) => {
+        // Assuming that the result has a structure like this: { correct: number, incorrect: number }
+        this.correctCounts[index] = result.correct;
+        this.incorrectCounts[index] = result.incorrect;
+      });
     });
-  }
+
+    // Wait for all promises to resolve before creating the chart
+    Promise.all(promises).then(() => {
+      this.createChart();
+    });
+  });
+}
+
+
 
   createChart() {
     // Create an array to hold the correct and incorrect data for each case study
-    let correctData = [];
-    let incorrectData = [];
+    let correctDataPercentages = [];
+    let incorrectDataPercentages = [];
   
     // Populate the data arrays
     for (let i = 0; i < this.caseStudies.length; i++) {
-      correctData.push(this.correctCounts[i]);
-      incorrectData.push(this.incorrectCounts[i]);
+      let total = this.correctCounts[i] + this.incorrectCounts[i];
+
+      correctDataPercentages.push((this.correctCounts[i] / total) * 100);
+      incorrectDataPercentages.push((this.incorrectCounts[i] / total) * 100);
     }
   
     this.chart = new Chart('MyChart', {
@@ -78,21 +86,33 @@ export class AdminPageComponent implements OnInit {
         datasets: [
           {
             label: 'Correct',
-            data: correctData,
+            data: correctDataPercentages,
             backgroundColor: 'limegreen', 
           },
           {
             label: 'Incorrect',
-            data: incorrectData,
+            data: incorrectDataPercentages,
             backgroundColor: 'red', 
           },
         ]
       },
       options: {
         aspectRatio: 2.5,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              // Include a % sign in the ticks
+              callback: function(value) {
+                return value + '%';
+              }
+            }
+          }
+        }
       },
     });
   }
+
   
   
 }

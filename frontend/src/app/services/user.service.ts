@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { USER_LOGIN_URL,USER_REGISTER_URL  } from '../shared/constants/url';
+import { USER_LOGIN_URL,USER_REGISTER_URL, USER_REGISTRATION_OVER_TIME  } from '../shared/constants/url';
 import { IUserLogin } from '../shared/interfaces/IUserLogin';
 import { IUserRegister } from '../shared/interfaces/IUserRegister';
 import { User } from '../shared/models/User'; 
@@ -102,6 +102,9 @@ export class UserService {
     return new User();
   }
 
+   getRegistrationsOverTime(): Observable<any> {
+    return this.http.get(USER_REGISTRATION_OVER_TIME);
+  }
 
 
 }

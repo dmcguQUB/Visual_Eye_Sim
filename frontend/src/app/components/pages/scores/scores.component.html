@@ -44,6 +44,11 @@
   </p>
   <p>Test Taken At: {{ selectedUserScore.testTakenAt | date : "medium" }}</p>
 
+    <!-- Add the chart container -->
+    <div style="height: 400px;">
+      <canvas id='scoreChart'></canvas>
+    </div>
+
   <!-- Add a table to display granular information about each question -->
   <table class="table table-bordered">
     <thead>

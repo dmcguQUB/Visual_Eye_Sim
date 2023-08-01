@@ -1,3 +1,4 @@
+//AuthInterceptor: This file creates an HTTP interceptor that intercepts outgoing HTTP requests and adds the user's token to the request headers if the user is logged in. This is how you authenticate requests to your backend.
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,
