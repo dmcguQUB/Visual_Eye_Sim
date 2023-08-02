@@ -1,40 +1,27 @@
 <div class="container-fluid">
   <div class="row">
     <!-- Sidebar -->
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-      <!-- Navigation Items -->
-      <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active" href="/admin">User Scores per </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="/admin-avg-score-vs-time"
-              >Average Scores and User Count Over Time for Selected Case Study
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <div>
-      <select
-        [(ngModel)]="selectedCaseStudy"
-        (change)="onCaseStudyChange(selectedCaseStudy)"
-      >
-        <option *ngFor="let caseStudy of caseStudies" [ngValue]="caseStudy">
-          {{ caseStudy.name }}
-        </option>
-      </select>
+    <div class="col-md-2">
+      <admin-navbar></admin-navbar>
     </div>
-    <!-- Main Content -->
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-      <h1>
-        Average Scores and User Count Over Time for Selected Case Study
-      </h1>
-      <div class="chart-container">
-        <canvas id="MyChart">{{ chart }}</canvas>
+
+    <div class="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <!-- Dropdown Selector -->
+      <div>
+        <select [(ngModel)]="selectedCaseStudy" (change)="onCaseStudyChange(selectedCaseStudy)">
+          <option *ngFor="let caseStudy of caseStudies" [ngValue]="caseStudy">
+            {{ caseStudy.name }}
+          </option>
+        </select>
       </div>
-    </main>
+
+      <!-- Main Content -->
+      <main role="main">
+        <h1>Average Scores and User Count Over Time for Selected Case Study</h1>
+        <div class="chart-container">
+          <canvas id="MyChart">{{ chart }}</canvas>
+        </div>
+      </main>
+    </div>
   </div>
 </div>

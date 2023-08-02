@@ -97,6 +97,8 @@ ngOnInit(): void {
         ]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         aspectRatio: 2.5,
         scales: {
           y: {

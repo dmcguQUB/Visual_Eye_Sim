@@ -47,6 +47,8 @@ import { VisualFieldsTestRightComponent } from './components/pages/visual-fields
 import { NavbarAdminComponent } from './components/partials/navbar-admin/navbar-admin.component';
 import { AdminAvgScoreVsTimeComponent } from './components/pages/admin-avg-score-vs-time/admin-avg-score-vs-time.component';
 import { AdminRegistrationsOverTimeComponent } from './components/pages/admin-registrations-over-time/admin-registrations-over-time.component';
+import { AdminNavbarComponent } from './components/partials/admin-navbar/admin-navbar.component';
+import { PatientConvoComponent } from './components/partials/patient-convo/patient-convo.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +83,8 @@ import { AdminRegistrationsOverTimeComponent } from './components/pages/admin-re
     NavbarAdminComponent,
     AdminAvgScoreVsTimeComponent,
     AdminRegistrationsOverTimeComponent,
+    AdminNavbarComponent,
+    PatientConvoComponent,
   ],
   imports: [
     BrowserModule,

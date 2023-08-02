@@ -1,3 +1,8 @@
+//required to clean script to prevent bugs while navigating
+declare global {
+  interface Window { cleanup: () => void; }
+}
+
 
 import {
   Component,
@@ -98,7 +103,10 @@ handleClick(): void {
 }
 ngOnDestroy(): void {  // <-- Add OnDestroy lifecycle hook
   // Remove the script when the component is destroyed
-
+  // Call cleanup function from visual-fields-test-left.js
+  if (window['cleanup']) {
+    window['cleanup']();
+  }
 
   console.log("the ngOnDetroy is being called")
 

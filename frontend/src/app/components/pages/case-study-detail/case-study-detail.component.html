@@ -3,7 +3,7 @@
   <app-navbar></app-navbar>
   
   <!-- Right Container -->
-  <div class="right-container">
+  <div class="right-container text-center">
     <!-- case-study-detail.component.html -->
     <div class="case-study-details">
       <img class="case-study-image" [src]="caseStudy.imageUrl" [alt]="caseStudy.name" />
@@ -21,9 +21,11 @@
   </div>
 
   <!--instructions for this stage-->
-  <div class="case-study-instructions">
+  <div class="case-study-instructions text-center">
     <h2>Instructions:</h2>
-    <p>Read the background of the patient for this case study. Use the chat icon in the bottom right of the page to ask them appropriate questions in order to gather as much detail as possible. Click the button below when you are finished speaking to the patient.</p>
+    <p>Read the <strong>background</strong> of the patient for this case study. Use the <strong>icon in the bottom right of the page</strong> to ask them appropriate questions in order to gather as much detail as possible. Please remember that some information the patient says may not be useful. 
+    </p>
+    <p>Click the button below when you are finished speaking to the patient. Later you will conduct eye test examinations, investigations and provide diagnosis.</p>
     <default-button 
       [type]="'button'" 
       [text]="'Confirm Finished'" 

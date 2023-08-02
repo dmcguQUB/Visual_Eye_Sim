@@ -1,8 +1,5 @@
-//frontend/src/app/components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component.ts
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
-import { Renderer2, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import { CaseStudies } from 'src/app/shared/models/casestudies'; // Assuming the model is placed here
+import { CaseStudies } from 'src/app/shared/models/casestudies'; 
 
 @Component({
   selector: 'app-direct-ophthalmoscopy-test',
@@ -10,34 +7,33 @@ import { CaseStudies } from 'src/app/shared/models/casestudies'; // Assuming the
   styleUrls: ['./direct-ophthalmoscopy-test.component.css']
 })
 export class DirectOphthalmoscopyTestComponent implements OnInit, AfterViewInit {
-  // Obtain a reference to the canvas element
-  @ViewChild('myCanvas', { static: true })
-  canvas!: ElementRef<HTMLCanvasElement>;  
+  @ViewChild('maskSvg', { static: true })
+  maskSvg!: ElementRef<SVGElement>;
+
+  @ViewChild('maskCircle', { static: true })
+  maskCircle!: ElementRef<SVGCircleElement>;  
 
   @Input() caseStudy!: CaseStudies;
 
-  constructor(private renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document) { }
+  constructor() { }
 
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    // Call the method to add the script file for the Direct Ophthalmoscopy Test. This is served from the backend
-    this.addScriptToElement("http://localhost:5001/assets/direct-ophthalmoscopy-test.js");
+    this.updateCirclePosition = this.updateCirclePosition.bind(this);
+    document.addEventListener('mousemove', this.updateCirclePosition);
   }
 
-  addScriptToElement(src: string): HTMLScriptElement {
-    // Create a new script element
-    const script = this.renderer2.createElement('script');
+  updateCirclePosition(e: MouseEvent): void {
+    // Get the bounding rectangle of the SVG.
+    const svgRect = this.maskSvg.nativeElement.getBoundingClientRect();
 
-    // Set the script properties
-    script.type = 'text/javascript';
-    script.src = src;
-    script.async = true;
-    script.defer = true;
+    // Calculate the mouse position relative to the SVG.
+    const x = e.clientX - svgRect.left;
+    const y = e.clientY - svgRect.top;
 
-    // Append the script to the document body
-    this.renderer2.appendChild(this._document.body, script);
-
-    return script;
+    // Update the circle's position.
+    this.maskCircle.nativeElement.setAttribute('cx', `${x}px`);
+    this.maskCircle.nativeElement.setAttribute('cy', `${y}px`);
   }
 }

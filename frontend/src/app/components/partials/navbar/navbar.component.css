@@ -105,12 +105,16 @@
 }
 
 @media screen and (max-width: 600px) {
-  .navbar{
+  .navbar {
     position: static;
     width: 100%;
-    flex-direction: row; /* stack navbar items horizontally */
-    flex-wrap: wrap; /* allow navbar items to wrap onto the next line */
-    justify-content: center; /* center navbar items horizontally */
+    flex-direction: column; /* stack navbar items vertically */
     align-items: center; /* center navbar items vertically */
   }
+
+  .dropdown-menu {
+    left: 0;
+    top: 100%;
+  }
 }
+

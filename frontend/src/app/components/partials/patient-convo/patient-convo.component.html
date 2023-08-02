@@ -1,0 +1,7 @@
+<!-- chat.component.html -->
+<div id="chat-container">
+  <div *ngFor="let message of messages">
+    <p *ngIf="message.role === 'patient'"><strong>Patient:</strong> {{ message.text }}</p>
+    <p *ngIf="message.role === 'user'"><strong>You:</strong> {{ message.text }}</p>
+  </div>
+</div>

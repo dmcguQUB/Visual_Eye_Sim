@@ -1,5 +1,25 @@
-#divChart{
-  display: block;
-  width: 400px;
-  height: 400px;
+.container-fluid {
+  padding: 0;
+}
+
+.sidebar-container,
+.main-content-container {
+  width: 100%;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) { /* 'md' breakpoint in Bootstrap */
+  .sidebar-container {
+      width: 20%;
+      min-width: 200px;
+      max-height: 100vh;
+  }
+
+  .main-content-container {
+      width: 80%;
+  }
+}
+
+.chart-container {
+  height: 40vh; /* or any other percentage */
 }

@@ -1,6 +1,7 @@
 /* Parent Container allows for a row layout */
 .parent-container {
   display: flex;
+  
 }
 
 /* Navbar Styles */
@@ -10,11 +11,14 @@
 
 /* Right Container allows for a column layout */
 .right-container {
+  margin-left: 10%;
+  align-items: center; /* Center align items horizontally */
+  justify-content: center; /* Center align items vertically */
   display: flex;
   flex-direction: column;
   width: 75%; /* Adjust width according to your needs */
   padding: 2em;
-  background-color: #f9f9f9;
+  background-color: white;
 }
 
 .case-study-details {
