@@ -233,16 +233,28 @@ export class VisualFieldsTestRightComponent implements OnInit, AfterViewInit {
       this.activatedRoute.params.subscribe((params) => {
         if (params['useCaseId']) {
           this.router.navigate([
-            `/visual-fields-test-right/${params['useCaseId']}`,
+            `/visual-fields-test-left/${params['useCaseId']}`,
           ]);
         }
       });
     }
   }
+  //button and messages
+  private buttonMessages: { [id: string]: string } = {
+    topLeftButton: "Your hand's movement is visible, but it's somewhat fuzzy.",
+    topRightButton: "I notice your hand moving, but it's kind of blurry.",
+    bottomLeftButton: "Your hand is moving, but it looks pretty fuzzy.",
+    bottomRightButton: "I can see your hand moving, but it's a bit blurry."
+  };
+  
   handleButtonClick(buttonId: string): void {
-    this.buttonMessage = buttonId + ' clicked!';}
-
-
+    if (this.buttonMessages[buttonId]) {
+      this.buttonMessage = this.buttonMessages[buttonId];
+    } else {
+      // Optional: default message for unhandled button IDs
+      this.buttonMessage = 'Unrecognized button clicked!';
+    }
+  }
   ngOnDestroy(): void {
     // <-- Add OnDestroy lifecycle hook
     // Remove the script when the component is destroyed

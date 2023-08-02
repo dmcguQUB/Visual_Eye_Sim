@@ -244,8 +244,25 @@ export class VisualFieldsTestLeftComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
+  //button and messages
+  private buttonMessages: { [id: string]: string } = {
+    topLeftButton: "I can notice your hand shifting around.",
+    topRightButton: "I'm able to see your hand's motion.",
+    bottomLeftButton: "Your hand is moving; I can see it.",
+    bottomRightButton: "I'm catching sight of your hand moving."
+};
+
+  
   handleButtonClick(buttonId: string): void {
-    this.buttonMessage = buttonId + ' clicked!';}
+    if (this.buttonMessages[buttonId]) {
+      this.buttonMessage = this.buttonMessages[buttonId];
+    } else {
+      // Optional: default message for unhandled button IDs
+      this.buttonMessage = 'Unrecognized button clicked!';
+    }
+  }
+  
 
 
   ngOnDestroy(): void {

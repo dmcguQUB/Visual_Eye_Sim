@@ -1,14 +1,15 @@
 <div class="container-fluid">
   <div class="row">
     <!-- Sidebar -->
-    <div class="col-md-2">
+    <div class="sidebar-container d-flex flex-column">
       <admin-navbar></admin-navbar>
     </div>
 
     <div class="col-md-9 ml-sm-auto col-lg-10 px-4">
       <!-- Dropdown Selector -->
       <div>
-        <select [(ngModel)]="selectedCaseStudy" (change)="onCaseStudyChange(selectedCaseStudy)">
+        <p>Please select the case study you want to view from the dropdown:</p>
+        <select [(ngModel)]="selectedCaseStudy" (change)="onCaseStudyChange(selectedCaseStudy)" class="custom-select">
           <option *ngFor="let caseStudy of caseStudies" [ngValue]="caseStudy">
             {{ caseStudy.name }}
           </option>
@@ -16,7 +17,7 @@
       </div>
 
       <!-- Main Content -->
-      <main role="main">
+      <main role="main" *ngIf="selectedCaseStudy">
         <h1>Average Scores and User Count Over Time for Selected Case Study</h1>
         <div class="chart-container">
           <canvas id="MyChart">{{ chart }}</canvas>
