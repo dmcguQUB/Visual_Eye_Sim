@@ -1,22 +1,20 @@
 import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
   AfterViewInit,
+  Component,
+  ElementRef,
+  Renderer2,
+  ViewChild,
 } from '@angular/core';
-import { Renderer2, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 
 @Component({
-  selector: 'app-visual-fields-test-right',
-  templateUrl: './visual-fields-test-right.component.html',
-  styleUrls: ['./visual-fields-test-right.component.css'],
+  selector: 'app-test-visual-fields-test',
+  templateUrl: './test-visual-fields-test.component.html',
+  styleUrls: ['./test-visual-fields-test.component.css'],
 })
-export class VisualFieldsTestRightComponent implements OnInit, AfterViewInit {
+export class TestVisualFieldsTestComponent implements AfterViewInit {
   @ViewChild('myCanvas') myCanvas!: ElementRef<HTMLCanvasElement>;
   private ctx!: CanvasRenderingContext2D;
 
@@ -27,8 +25,8 @@ export class VisualFieldsTestRightComponent implements OnInit, AfterViewInit {
   //create hand image var
   handImage: any;
   //image to determine which eye it is
-  thisEye: string = 'Right';
-  otherEye: string = 'Left';
+  thisEye: string = 'Left';
+  otherEye: string = 'Right';
   caseStudy = new CaseStudies();
     // Add new property for the message
     buttonMessage: string = '';

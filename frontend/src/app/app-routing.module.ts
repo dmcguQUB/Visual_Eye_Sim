@@ -19,6 +19,7 @@ import { AdminAvgScoreVsTimeComponent } from './components/pages/admin-avg-score
 import { AdminRegistrationsOverTimeComponent } from './components/pages/admin-registrations-over-time/admin-registrations-over-time.component';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { AdminGuard } from './auth/guards/admin.guard';
+import { TestVisualFieldsTestComponent } from './components/pages/test-visual-fields-test/test-visual-fields-test.component';
 
 const routes: Routes = [
   //home route
@@ -52,6 +53,10 @@ const routes: Routes = [
     path: 'eye-movements-test/:useCaseId',
     component: EyeMovementsTestComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'test',
+    component: TestVisualFieldsTestComponent,
   },
   {
     path: 'direct-ophthalmoscopy-test/:useCaseId',

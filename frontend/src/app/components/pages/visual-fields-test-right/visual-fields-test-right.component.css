@@ -16,12 +16,12 @@
 
 /* Container for canvas and buttons */
 #canvasContainer {
-  min-height: 600px;
+ min-height: 600px;
   min-width: 500px;
   max-height: 800px;
   max-width: 600px;
   position: relative;
-  height: 50%; 
+  height: 50%; /* This should match your canvas height */
   width: 80%;
   margin-bottom: 40px;
   display: flex;
@@ -31,7 +31,7 @@
 /* Top left button for visual eye field */
 #topLeftButton {
   top: 5%;  /* Adjust these percentage values to position your buttons as needed */
-  left: 5%;
+  left: 3%;
   width: 10%;  /* Adjust these percentage values to size your buttons as needed */
   height: 10%;
 }
@@ -39,7 +39,7 @@
 /* Top right button for visual eye field. Adding percentages to make it responsive */
 #topRightButton {
   top: 5%;  /* Adjust these percentage values to position your buttons as needed */
-  left: 88%;
+  left: 90%;
   width: 10%;  /* Adjust these percentage values to size your buttons as needed */
   height: 10%;
 }
@@ -47,7 +47,7 @@
 /* Bottom left button for visual eye field */
 #bottomLeftButton {
   top: 88%;  /* Adjust these percentage values to position your buttons as needed */
-  left: 5%;
+  left: 3%;
   width: 10%;  /* Adjust these percentage values to size your buttons as needed */
   height: 10%;
 }
@@ -55,7 +55,7 @@
 /* Bottom right button for visual eye field */
 #bottomRightButton {
   top: 88%;  /* Adjust these percentage values to position your buttons as needed */
-  left: 88%;
+  left: 90%;
   width: 10%;  /* Adjust these percentage values to size your buttons as needed */
   height: 10%;
 }
@@ -66,7 +66,6 @@ canvas {
   display: block;
   margin: 0 auto;
 }
-
 #Hand {
   display: block; 
   position: absolute; 
@@ -76,6 +75,8 @@ canvas {
   margin-left: 40%;
   width: 50%;
   height: 70%;
+  pointer-events: none;  /* key property */
+
 }
 
 #myCanvas {
@@ -113,11 +114,11 @@ canvas {
 
 /* Case Study Instructions */
 .case-study-instructions h2 {
-  margin-bottom: 5%;
+  margin-bottom: 20px;
 }
 
 .case-study-instructions p {
-  margin-bottom: 40px;
+  margin-bottom: 5%;
 }
 
 .default-button {
@@ -158,6 +159,7 @@ div {
   border-radius: 5px; /* Add some border radius to round the corners */
   margin-bottom: 20px; /* Add some space below the message */
 }
+
 .message-container{
 margin-top: 5%;
 }
