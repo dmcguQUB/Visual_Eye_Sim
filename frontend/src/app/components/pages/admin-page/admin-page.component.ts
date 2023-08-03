@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { QuestionService } from 'src/app/services/questions.service';
 import { UseCaseService } from 'src/app/services/usecases.service';
-import { UserService } from 'src/app/services/user.service';
 import { UserScoreService } from 'src/app/services/userscores.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 import { UserScore } from 'src/app/shared/models/UserScore';
@@ -14,87 +12,86 @@ Chart.register(...registerables);
   styleUrls: ['./admin-page.component.css'],
 })
 export class AdminPageComponent implements OnInit {
-  //create var to hold graph info
   public chart: any;
-
-  //create variables to hold the casestudy information for the X axis labels
-  caseStudies: CaseStudies[] = []; // add a property to hold your case studies
+  caseStudies: CaseStudies[] = [];
   labels: string[] = [];
-  userScores: UserScore[]=[];
-  correctCounts: number[] = [];    
-  incorrectCounts: number[] = [];  
+  userScores: UserScore[] = [];
+  correctCounts: number[] = [];
+  incorrectCounts: number[] = [];
+  originalUserScores: UserScore[] = [];
+  dateRange: number = 1; // Default to 1 day
+  testsCount: number[] = [];  // Add this line
 
-  //get constructor to retrieve necessary data
+
   constructor(
     private userScoreService: UserScoreService,
-    private userService: UserService,
-    private useCaseService: UseCaseService,
-    private questionService: QuestionService
+    private useCaseService: UseCaseService
   ) {}
 
-ngOnInit(): void {
-  this.useCaseService.getAll().subscribe((caseStudies: CaseStudies[]) => {
-    this.caseStudies = caseStudies;
-    this.labels = this.caseStudies.map(
-      (caseStudy) => `${caseStudy.caseStudyNumber} - ${caseStudy.name}`
-    );
+  ngOnInit(): void {
+    this.useCaseService.getAll().subscribe((caseStudies: CaseStudies[]) => {
+      this.caseStudies = caseStudies;
+      this.labels = this.caseStudies.map(
+        (caseStudy) => `${caseStudy.caseStudyNumber} - ${caseStudy.name}`
+      );
 
-    // Initialize empty arrays to store the correct and incorrect answer counts
-    this.correctCounts = Array(this.caseStudies.length).fill(0);
-    this.incorrectCounts = Array(this.caseStudies.length).fill(0);
+      this.correctCounts = Array(this.caseStudies.length).fill(0);
+      this.incorrectCounts = Array(this.caseStudies.length).fill(0);
 
-    // Create an array to hold promises
-    let promises = <any>[];
+      let promises = <any>[];
 
-    // For each case study, get the user scores
-    this.caseStudies.forEach((caseStudy, index) => {
-      let promise = this.userScoreService.getCorrectAndIncorrectAnswers(caseStudy._id).toPromise();
-      promises.push(promise);
-      promise.then((result:any) => {
-        // Assuming that the result has a structure like this: { correct: number, incorrect: number }
-        this.correctCounts[index] = result.correct;
-        this.incorrectCounts[index] = result.incorrect;
+      this.caseStudies.forEach((caseStudy, index) => {
+        let promise = this.userScoreService
+          .getCorrectAndIncorrectAnswers(caseStudy._id)
+          .toPromise();
+        promises.push(promise);
+        promise.then((result: any) => {
+          this.correctCounts[index] = result.correct;
+          this.incorrectCounts[index] = result.incorrect;
+        });
+      });
+      
+
+      this.userScoreService.getAllUserScores().subscribe((userScores) => {
+        this.originalUserScores = userScores;
+        this.userScores = [...this.originalUserScores];
+        this.calculateCounts(); // Add this line
+        this.calculateAverages(); // Add this line
+
+        Promise.all(promises).then(() => {
+          this.createChart();
+        });
       });
     });
-
-    // Wait for all promises to resolve before creating the chart
-    Promise.all(promises).then(() => {
-      this.createChart();
-    });
-  });
-}
-
-
+  }
 
   createChart() {
-    // Create an array to hold the correct and incorrect data for each case study
     let correctDataPercentages = [];
     let incorrectDataPercentages = [];
-  
-    // Populate the data arrays
+
     for (let i = 0; i < this.caseStudies.length; i++) {
       let total = this.correctCounts[i] + this.incorrectCounts[i];
 
       correctDataPercentages.push((this.correctCounts[i] / total) * 100);
       incorrectDataPercentages.push((this.incorrectCounts[i] / total) * 100);
     }
-  
+
     this.chart = new Chart('MyChart', {
       type: 'bar',
       data: {
-        labels: this.labels, // this will be the names of the case studies
+        labels: this.labels,
         datasets: [
           {
             label: 'Correct',
             data: correctDataPercentages,
-            backgroundColor: 'limegreen', 
+            backgroundColor: 'limegreen',
           },
           {
             label: 'Incorrect',
             data: incorrectDataPercentages,
-            backgroundColor: 'red', 
+            backgroundColor: 'red',
           },
-        ]
+        ],
       },
       options: {
         responsive: true,
@@ -104,17 +101,89 @@ ngOnInit(): void {
           y: {
             beginAtZero: true,
             ticks: {
-              // Include a % sign in the ticks
-              callback: function(value) {
+              callback: function (value) {
                 return value + '%';
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
     });
   }
 
+  dateRangeChanged(days: number) {
+    this.dateRange = days;
+    let endDate = new Date(); // today
+    let startDate = new Date();
+    startDate.setDate(endDate.getDate() - this.dateRange); // X days ago
+
+    this.userScores = this.originalUserScores.filter((userScore) => {
+      let testDate = new Date(userScore.testTakenAt);
+      return testDate >= startDate && testDate <= endDate;
+    });
+
+    this.calculateCounts();
+    this.chart.destroy();
+    this.createChart();
+    this.calculateAverages(); // Add this line
+  }
+
+  calculateCounts() {
+    this.correctCounts = Array(this.caseStudies.length).fill(0);
+    this.incorrectCounts = Array(this.caseStudies.length).fill(0);
+    this.testsCount = Array(this.caseStudies.length).fill(0); // Add this line
+
+    this.userScores.forEach((userScore) => {
+      let caseStudyIndex = this.caseStudies.findIndex(
+        (caseStudy) => caseStudy._id === userScore.caseStudyId
+      );
+      if (caseStudyIndex !== -1) {
+        this.testsCount[caseStudyIndex]++; // Increment the tests count
+        userScore.answers.forEach((answer) => {
+          if (answer.correct) {
+            this.correctCounts[caseStudyIndex]++;
+          } else {
+            this.incorrectCounts[caseStudyIndex]++;
+          }
+        });
+      }
+    });
+  }
+
+
+  //calculate the averages for the table
+  calculateAverages() {
+    let sumCorrectPercentages = 0;
+    let sumIncorrectPercentages = 0;
+    let count = 0; // count of case studies with tests
   
+    for (let i = 0; i < this.correctCounts.length; i++) {
+      const totalAnswers = this.correctCounts[i] + this.incorrectCounts[i];
+  
+      if (totalAnswers !== 0) { // if there are tests for the case study
+        const correctPercentage = this.correctCounts[i] / totalAnswers * 100;
+        const incorrectPercentage = this.incorrectCounts[i] / totalAnswers * 100;
+  
+        sumCorrectPercentages += correctPercentage;
+        sumIncorrectPercentages += incorrectPercentage;
+        count++;
+      }
+    }
+  
+    // Calculate averages based on the count of case studies with tests
+    const avgCorrect = sumCorrectPercentages / count;
+    const avgIncorrect = sumIncorrectPercentages / count;
+  
+    return {
+      avgCorrect: avgCorrect.toFixed(2),
+      avgIncorrect: avgIncorrect.toFixed(2)
+    };
+  }
+  
+  
+  
+  totalTests() {
+    return this.testsCount.reduce((acc, cur) => acc + cur, 0);
+  }
   
 }

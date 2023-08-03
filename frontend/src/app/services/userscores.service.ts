@@ -11,6 +11,11 @@ import { UserScore } from '../shared/models/UserScore';
 export class UserScoreService {
   constructor(private http: HttpClient) {}
 
+  getAllUserScores(): Observable<UserScore[]> {
+    return this.http.get<UserScore[]>(`${USER_SCORES_URL}`);
+  }
+  
+
   // Fetch user scores by user ID
   getUserScores(userId: string): Observable<UserScore[]> {
     const url = `${USER_SCORES_URL}/user/${userId}`;
