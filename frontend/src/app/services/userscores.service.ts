@@ -41,4 +41,17 @@ export class UserScoreService {
       Array<{ date: string; averageScore: number; userCount: number }>
     >(url);
   }
+
+
+  getCorrectAndIncorrectAnswersWithDates(
+    caseStudyId: string,
+    startDate: string,
+    endDate: string
+  ): Observable<{ correct: number; incorrect: number }> {
+    const url = `${USER_SCORES_URL}/case-study/${caseStudyId}/answers-in-dates`;
+    return this.http.get<{ correct: number; incorrect: number }>(url, {
+      params: { startDate, endDate }
+    });
+  }
+  
 }

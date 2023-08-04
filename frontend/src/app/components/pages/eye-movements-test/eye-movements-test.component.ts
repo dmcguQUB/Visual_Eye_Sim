@@ -21,6 +21,8 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit {
   @ViewChild('myCanvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;
   ctx!: CanvasRenderingContext2D | null;
+  backgroundImg = new Image();
+
   eyes: Eye[] = [
     {
       eyeball: { x: 200, y: 200, radius: 50 },
@@ -32,18 +34,26 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit {
     },
   ];
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.backgroundImg.src = 'assets/woman close up.png'; // adjust this path accordingly
+  }
 
   ngAfterViewInit(): void {
     this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.draw();
+    this.backgroundImg.onload = () => {
+      this.draw();
+    };
   }
 
   draw(): void {
-    this.eyes.forEach((eye) => {
-      this.drawEye(eye);
-      this.drawPupil(eye.pupil);
-    });
+    if (this.ctx) {
+      this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      this.ctx.drawImage(this.backgroundImg, 0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+      this.eyes.forEach((eye) => {
+        this.drawEye(eye);
+        this.drawPupil(eye.pupil);
+      });
+    }
   }
 
   drawEye(eye: Eye): void {
@@ -74,45 +84,7 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit {
   }
 
   mouseMoveHandler(e: MouseEvent): void {
-    // get the X and Y coordinates of the mouse
-    var mouseX = e.clientX - this.canvas.nativeElement.offsetLeft;
-    var mouseY = e.clientY - this.canvas.nativeElement.offsetTop;
-
-    // Get the center point between the eyes
-    var centerX = (this.eyes[0].eyeball.x + this.eyes[1].eyeball.x) / 2;
-
-    for (let i = 0; i < this.eyes.length; i++) {
-      let eye = this.eyes[i];
-
-      // Calculate the direction of the mouse from the center of the eyeball
-      let dirX = mouseX - eye.eyeball.x;
-      let dirY = mouseY - eye.eyeball.y;
-
-      // Calculate the distance of the mouse from the center of the eyeball
-      let distance = Math.sqrt(dirX * dirX + dirY * dirY);
-
-      // Normalize the direction
-      let dirNormX = dirX / distance;
-      let dirNormY = dirY / distance;
-
-      // Calculate the max distance the pupil can move inside the eyeball
-      let maxPupilDistance = eye.eyeball.radius - eye.pupil.radius;
-
-      // Calculate the effective distance the pupil should move (it can't move beyond the eyeball)
-      let effectivePupilDistance = Math.min(distance, maxPupilDistance);
-
-      // Check if the mouse X is within the boundaries (center of both eyes)
-      if (mouseX > this.eyes[0].eyeball.x && mouseX < this.eyes[1].eyeball.x) {
-        // If so, keep the pupil centered in the X direction
-        eye.pupil.x = eye.eyeball.x;
-      } else {
-        // Otherwise, allow the pupil to move
-        eye.pupil.x = eye.eyeball.x + dirNormX * effectivePupilDistance;
-      }
-
-      // Move the pupil in Y direction
-      eye.pupil.y = eye.eyeball.y + dirNormY * effectivePupilDistance;
-    }
+    // existing code here ...
 
     // Clear the previous drawing
     if (this.ctx) {
@@ -122,5 +94,4 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit {
     // Draw the eyes and pupils
     this.draw();
   }
-
 }

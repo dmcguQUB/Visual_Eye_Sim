@@ -15,17 +15,32 @@ export class AdminAvgScoreVsTimeComponent implements OnInit {
   public chart: any;
   caseStudies: CaseStudies[] = [];
   selectedCaseStudy: CaseStudies | null = null;
+  allResults: any[] = []; // This will hold the unfiltered results
+
+  //required for the table below
+  averageScores: number[] = [];
+  correctCounts: number[] = [];
+  incorrectCounts: number[] = [];
+  testsCount: number[] = [];
+  dateRange: number = 0; // stores the number of days in the selected date range
+  labels?: any[];  // use appropriate type instead of 'any'
 
   constructor(
     private userScoreService: UserScoreService,
     private useCaseService: UseCaseService
   ) {}
-
   // Initialization method called when the component is loaded
   async ngOnInit(): Promise<void> {
     // Retrieve all case studies from the UseCaseService using await to handle the asynchronous nature
     const caseStudies = await this.useCaseService.getAll().toPromise();
     this.caseStudies = caseStudies ? caseStudies : [];
+
+    // If there are case studies, select the first one by default
+    if (this.caseStudies.length > 0) {
+      this.selectedCaseStudy = this.caseStudies[0];
+      // Load chart data for the selected case study
+      this.loadChartData(this.selectedCaseStudy._id);
+    }
   }
 
   // Event handler for the case study selection change
@@ -38,26 +53,116 @@ export class AdminAvgScoreVsTimeComponent implements OnInit {
     }
   }
 
-  // Method to load chart data based on the selected case study
   async loadChartData(caseStudyId: string) {
     // Retrieve the average scores over time for the selected case study from the UserScoreService using await to handle the asynchronous nature
     const results = await this.userScoreService
       .getAverageScoresOverTimePerCaseStudy(caseStudyId)
       .toPromise();
-
-    if (results) {
+  
+    const answerCounts = await this.userScoreService
+      .getCorrectAndIncorrectAnswers(caseStudyId)
+      .toPromise();
+  
+    if (results && answerCounts) { // Check if both results and answerCounts are defined
+      // Store the complete data set in allResults
+      this.allResults = results;
+      
       // Extract the necessary data from the results
       const labels = results.map((result) => {
         const date = new Date(result.date);
-        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+          2,
+          '0'
+        )}-${String(date.getDate()).padStart(2, '0')}`;
       });
-
-      const averages = results.map((result) => result.averageScore);
-      const userCounts = results.map((result) => result.userCount);
-
+  
+      this.averageScores = results.map((result) => result.averageScore);
+      this.correctCounts = Array(results.length).fill(answerCounts.correct);  // Fill with the correct count fetched
+      this.incorrectCounts = Array(results.length).fill(answerCounts.incorrect); // Fill with the incorrect count fetched
+      this.testsCount = results.map((result) => result.userCount);
+  
       // Create the chart using the extracted data
-      this.createChart(labels, averages, userCounts);
+      this.createChart(labels, this.averageScores, this.testsCount);
     }
+  }
+  
+  
+  
+
+  updateChartWithResults(results: any[]) {
+    const labels = results.map((result) => {
+      const date = new Date(result.date);
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+        2,
+        '0'
+      )}-${String(date.getDate()).padStart(2, '0')}`;
+    });
+
+    const averages = results.map((result) => result.averageScore);
+    const userCounts = results.map((result) => result.userCount);
+
+    this.createChart(labels, averages, userCounts);
+  }
+
+  dateRangeChanged(days: number) {
+    // Create a date object representing the start date of the range
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    // Filter the results based on the selected date range
+    const filteredResults = this.allResults.filter((result) => {
+      const resultDate = new Date(result.date);
+      return resultDate >= startDate;
+    });
+
+    
+    // update properties with filtered results
+    this.averageScores = filteredResults.map((result) => result.averageScore);
+    this.correctCounts = filteredResults.map((result) => result.correctCount);
+    this.incorrectCounts = filteredResults.map(
+      (result) => result.incorrectCount
+    );
+    this.testsCount = filteredResults.map((result) => result.userCount);
+
+    this.updateChartWithResults(filteredResults);
+    this.dateRange = days; // update the dateRange property
+  }
+
+  //calculate averages required for table
+calculateAverages() {
+  let avgCorrect = 0;
+  let avgIncorrect = 0;
+
+  if (this.correctCounts && this.correctCounts.length) {
+    let totalAnswers = this.correctCounts.reduce((a, b) => a + b, 0) + this.incorrectCounts.reduce((a, b) => a + b, 0);
+    if (totalAnswers != 0) {
+      avgCorrect = (this.correctCounts.reduce((a, b) => a + b, 0) / totalAnswers) * 100;
+    }
+  }
+
+  if (this.incorrectCounts && this.incorrectCounts.length) {
+    let totalAnswers = this.correctCounts.reduce((a, b) => a + b, 0) + this.incorrectCounts.reduce((a, b) => a + b, 0);
+    if (totalAnswers != 0) {
+      avgIncorrect = (this.incorrectCounts.reduce((a, b) => a + b, 0) / totalAnswers) * 100;
+    }
+  }
+
+  return {
+    avgCorrect: avgCorrect.toFixed(2),
+    avgIncorrect: avgIncorrect.toFixed(2),
+  };
+}
+
+  
+
+  //get average scores
+  getAverageScore() {
+    return this.averageScores.reduce((a, b) => a + b, 0) / this.averageScores.length;
+}
+
+  //calculate number of tests for table
+  totalTests() {
+    return this.testsCount.reduce((a, b) => a + b, 0);
   }
 
   // Method to create and update the chart with the provided data
