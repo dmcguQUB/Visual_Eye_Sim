@@ -1,0 +1,31 @@
+<!--frontend/src/app/components/pages/scores/scores.component.html-->
+<div class="full-container">
+  <div class="parent-container">
+    <app-navbar-userscore></app-navbar-userscore>
+
+    <div>
+      <canvas #myChart></canvas>
+    </div>
+    
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Test Number</th>
+            <th>Date</th>
+            <th>Score</th>
+            <!-- Add additional columns as needed -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let score of userScores; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{score.testTakenAt | date}}</td>
+            <td>{{score.score}}</td>
+            <!-- Add additional data cells as needed -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

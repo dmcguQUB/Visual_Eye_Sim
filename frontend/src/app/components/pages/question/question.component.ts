@@ -133,7 +133,7 @@ answer(currentQuestionNumber: number, option: any) {
      this.resetCounter();
      this.getProgressPercent();
    }, 1000);
-   this.points =0; // if they are incorrect they get 0
+   this.points +=0; // if they are incorrect they get 0
  }
 }
 
@@ -147,7 +147,7 @@ answer(currentQuestionNumber: number, option: any) {
         if (this.counter === 0) {
           this.currentQuestion++; // go to next question
           this.counter = 60; //reset to 60 seconds
-          this.points -= 10; // remove 10 points
+          this.points = 0; // remove 10 points
         }
       });
 

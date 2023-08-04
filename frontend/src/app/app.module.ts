@@ -23,7 +23,7 @@ import { VisualFieldsTestLeftComponent } from './components/pages/visual-fields-
 import { VisualAcuityTestComponent } from './components/pages/visual-acuity-test/visual-acuity-test.component';
 import { EyeMovementsTestComponent } from './components/pages/eye-movements-test/eye-movements-test.component';
 import { DirectOphthalmoscopyTestComponent } from './components/pages/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
-import { NavbarComponent } from './components/partials/navbar/navbar.component';
+import { NavbarComponent } from './components/partials/navbar-case-study/navbar.component';
 import { LoadingComponent } from './components/partials/loading/loading.component';
 import { LoadingInterceptor } from './shared/interceptors/loading.interceptor';
 import { TitleComponent } from './components/partials/title/title.component';
@@ -50,6 +50,8 @@ import { AdminRegistrationsOverTimeComponent } from './components/pages/admin-re
 import { AdminNavbarComponent } from './components/partials/admin-navbar/admin-navbar.component';
 import { PatientConvoComponent } from './components/partials/patient-convo/patient-convo.component';
 import { TestVisualFieldsTestComponent } from './components/pages/test-visual-fields-test/test-visual-fields-test.component';
+import { NavbarUserscoreComponent } from './components/partials/navbar-userscore/navbar-userscore.component';
+import { UserscoreScoreOverTimeComponent } from './components/pages/userscore-score-over-time/userscore-score-over-time.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +89,9 @@ import { TestVisualFieldsTestComponent } from './components/pages/test-visual-fi
     AdminNavbarComponent,
     PatientConvoComponent,
     VisualAcuityTestComponent,
-    TestVisualFieldsTestComponent
+    TestVisualFieldsTestComponent,
+    NavbarUserscoreComponent,
+    UserscoreScoreOverTimeComponent,
   ],
   imports: [
     BrowserModule,

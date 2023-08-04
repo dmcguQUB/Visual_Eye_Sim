@@ -20,6 +20,7 @@ import { AdminRegistrationsOverTimeComponent } from './components/pages/admin-re
 import { AuthGuard } from './auth/guards/auth.guard';
 import { AdminGuard } from './auth/guards/admin.guard';
 import { TestVisualFieldsTestComponent } from './components/pages/test-visual-fields-test/test-visual-fields-test.component';
+import { UserscoreScoreOverTimeComponent } from './components/pages/userscore-score-over-time/userscore-score-over-time.component';
 
 const routes: Routes = [
   //home route
@@ -88,6 +89,11 @@ const routes: Routes = [
   {
     path: 'admin-registrations-over-time',
     component: AdminRegistrationsOverTimeComponent,
+    canActivate: [AuthGuard,AdminGuard],
+  },
+  {
+    path: 'userscore-score-over-time',
+    component: UserscoreScoreOverTimeComponent,
     canActivate: [AuthGuard,AdminGuard],
   },
 ];

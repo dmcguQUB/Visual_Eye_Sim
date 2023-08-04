@@ -1,5 +1,10 @@
 <!--frontend/src/app/components/pages/scores/scores.component.html-->
-<div class="container mt-5">
+<div class="full-container">
+  <div class="parent-container">
+<app-navbar-userscore></app-navbar-userscore>
+
+
+<div class="scores-container">
   <h2>User Scores</h2>
   <table class="table table-bordered" *ngIf="!loading">
     <thead>
@@ -91,4 +96,6 @@
       </ng-container>
     </tbody>
   </table>
+</div>
+</div>
 </div>
