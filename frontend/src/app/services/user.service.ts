@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { USER_LOGIN_URL,USER_REGISTER_URL, USER_REGISTRATION_OVER_TIME  } from '../shared/constants/url';
+import { USER_LOGIN_URL,USER_REGISTER_URL, USER_REGISTRATION_OVER_TIME, USER_URL  } from '../shared/constants/url';
 import { IUserLogin } from '../shared/interfaces/IUserLogin';
 import { IUserRegister } from '../shared/interfaces/IUserRegister';
 import { User } from '../shared/models/User'; 
@@ -26,6 +26,20 @@ export class UserService {
   public get currentUser():User{
     return this.userSubject.value;
   }
+
+//get user specific data
+  getUserData(): Observable<User> {
+  const userId = this.currentUser._id;
+  const url = USER_URL + `/${userId}`; // URL to fetch user data
+
+  return this.http.get<User>(url).pipe(
+    tap(user => {
+      // On success, update the user in local storage
+      this.setUserToLocalStorage(user);
+      this.userSubject.next(user);
+    })
+  );
+}
 
 
   login(userLogin:IUserLogin):Observable<User>{
@@ -80,6 +94,7 @@ export class UserService {
   }
 
 
+
   //logout function
   logout(){
     this.userSubject.next(new User());
@@ -87,6 +102,9 @@ export class UserService {
     window.location.reload();
   }
 
+  
+
+  
   //save the user  into the local storage
   private setUserToLocalStorage(user:User){
         //change the user into JSON using stringify
@@ -106,5 +124,53 @@ export class UserService {
     return this.http.get(USER_REGISTRATION_OVER_TIME);
   }
 
+
+  //update avatar information to be saved
+  updateAvatar(avatarUrl: string): Observable<User>{
+    const userId = this.currentUser._id;
+    const url = USER_URL+`/${userId}/avatar`; //URL to update avatar
+  
+    return this.http.patch<User>(url, { avatar: avatarUrl }).pipe(
+      tap({
+        next: (user) => {
+          // On success, update the user in local storage
+          this.setUserToLocalStorage(user);
+          this.userSubject.next(user);
+          this.toastrService.success(
+            `Avatar updated successfully!`,
+            'Avatar Update'
+          );
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Avatar Update Failed');
+        }
+      })
+    );
+  }
+
+
+  updateAddress(address: string): Observable<User> {
+    const userId = this.currentUser._id;
+    const url = USER_URL+`/${userId}/address`; // URL to update address
+  
+    return this.http.patch<User>(url, { address: address }).pipe(
+      tap({
+        next: (user) => {
+          // On success, update the user in local storage
+          this.setUserToLocalStorage(user);
+          this.userSubject.next(user);
+          this.toastrService.success(
+            `Address updated successfully!`,
+            'Address Update'
+          );
+        },
+        error: (errorResponse) => {
+          this.toastrService.error(errorResponse.error, 'Address Update Failed');
+        }
+      })
+    );
+  }
+  
+  
 
 }

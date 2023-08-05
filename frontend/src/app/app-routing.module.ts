@@ -21,6 +21,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { AdminGuard } from './auth/guards/admin.guard';
 import { TestVisualFieldsTestComponent } from './components/pages/test-visual-fields-test/test-visual-fields-test.component';
 import { UserscoreScoreOverTimeComponent } from './components/pages/userscore-score-over-time/userscore-score-over-time.component';
+import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 
 const routes: Routes = [
   //home route
@@ -94,7 +95,12 @@ const routes: Routes = [
   {
     path: 'userscore-score-over-time',
     component: UserscoreScoreOverTimeComponent,
-    canActivate: [AuthGuard,AdminGuard],
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'user-profile-page',
+    component: UserProfilePageComponent,
+    canActivate: [AuthGuard],
   },
 ];
 

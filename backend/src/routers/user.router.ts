@@ -90,6 +90,19 @@ router.post(
   })
 );
 
+router.get(
+  "/:id",
+  expressAsyncHandler(async (req, res) => {
+    const user = await UserModel.findById(req.params.id);
+    if (user) {
+      res.send(generateTokenReponse(user)); // This function already sends back the user data
+    } else {
+      res.status(HTTP_BAD_REQUEST).send("User not found!");
+    }
+  })
+);
+
+
 //get information required for user registrations data
 router.get('/user-registrations', async (req, res) => {
   try {
@@ -133,8 +146,60 @@ const generateTokenReponse = (user: User) => {
     name: user.name,
     address: user.address,
     isAdmin: user.isAdmin,
+    avatar: user.avatar,  
     token: token,
   };
 };
+
+//update the avatar information for user
+router.patch(
+  "/:id/avatar",
+  expressAsyncHandler(async (req, res) => {
+    const { avatar } = req.body;
+    const user = await UserModel.findById(req.params.id);
+
+    if (user) {
+      user.avatar = avatar;
+      await user.save();
+      res.send(generateTokenReponse(user));
+    } else {
+      res.status(HTTP_BAD_REQUEST).send("User not found!");
+    }
+  })
+);
+
+
+// Update user's name
+router.patch(
+  "/:id/name",
+  expressAsyncHandler(async (req, res) => {
+    const { name } = req.body;
+    const user = await UserModel.findById(req.params.id);
+    if (user) {
+      user.name = name;
+      await user.save();
+      res.send(generateTokenReponse(user));
+    } else {
+      res.status(HTTP_BAD_REQUEST).send("User not found!");
+    }
+  })
+);
+
+// Update user's address
+router.patch(
+  "/:id/address",
+  expressAsyncHandler(async (req, res) => {
+    const { address } = req.body;
+    const user = await UserModel.findById(req.params.id);
+    if (user) {
+      user.address = address;
+      await user.save();
+      res.send(generateTokenReponse(user));
+    } else {
+      res.status(HTTP_BAD_REQUEST).send("User not found!");
+    }
+  })
+);
+
 
 export default router;

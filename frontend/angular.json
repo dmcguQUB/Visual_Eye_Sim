@@ -92,9 +92,10 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/cooperjs/dist/cropper.css"
             ],
-            "scripts": []
+            "scripts": ["node_modules/cooperjs/dist/cropper.js"]
           }
         }
       }

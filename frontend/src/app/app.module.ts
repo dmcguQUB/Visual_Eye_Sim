@@ -5,9 +5,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -52,6 +54,9 @@ import { PatientConvoComponent } from './components/partials/patient-convo/patie
 import { TestVisualFieldsTestComponent } from './components/pages/test-visual-fields-test/test-visual-fields-test.component';
 import { NavbarUserscoreComponent } from './components/partials/navbar-userscore/navbar-userscore.component';
 import { UserscoreScoreOverTimeComponent } from './components/pages/userscore-score-over-time/userscore-score-over-time.component';
+import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
+import { AvatarComponent } from './components/partials/avatar/avatar.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -92,6 +97,8 @@ import { UserscoreScoreOverTimeComponent } from './components/pages/userscore-sc
     TestVisualFieldsTestComponent,
     NavbarUserscoreComponent,
     UserscoreScoreOverTimeComponent,
+    UserProfilePageComponent,
+    AvatarComponent,
   ],
   imports: [
     BrowserModule,
@@ -118,6 +125,9 @@ import { UserscoreScoreOverTimeComponent } from './components/pages/userscore-sc
     }),
     ReactiveFormsModule, // import for login forms
     CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDialogModule
   ],
   //need to set providers which adds interceptor 
   providers: [

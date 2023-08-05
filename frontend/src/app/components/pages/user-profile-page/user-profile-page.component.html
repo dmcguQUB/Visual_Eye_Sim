@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card mt-4">
+        <app-avatar></app-avatar>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <h3 class="card-title">Name</h3>
+            <p class="card-text">{{currentUser.name}}</p>
+          </div>
+          <button class="btn btn-primary">Edit</button>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <h3 class="card-title">Email</h3>
+            <p class="card-text">{{currentUser.email}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <h3 class="card-title">Address</h3>
+            <p class="card-text">{{currentUser.address}}</p>
+          </div>
+          <button class="btn btn-primary">Edit</button>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-body">
+          <h3 class="card-title">Admin Status</h3>
+          <p class="card-text">
+            <i class="fas" [ngClass]="{'fa-check': currentUser.isAdmin, 'fa-times': !currentUser.isAdmin}"></i>
+            {{currentUser.isAdmin ? 'Yes' : 'No'}}
+          </p>
+        </div>
+      </div>
+
+      <!-- User's activities -->
+      <div class="card card-outline-secondary my-4">
+        <div class="card-header">
+          Activities
+        </div>
+        <div class="card-body">
+          <!-- Add other activities -->
+        </div>
+      </div>
+      <!-- If you have more sections to add, you can add more cards as above -->
+    </div>
+  </div>
+</div>

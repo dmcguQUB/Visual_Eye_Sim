@@ -7,6 +7,7 @@ export const CASE_STUDIES_URL = BASE_URL + '/api/case_studies';
 export const CASE_STUDY_BY_ID_URL = CASE_STUDIES_URL + '/';
 
 //need to export constants for both user login and register from API in backend
+export const USER_URL = BASE_URL + '/api/users';
 export const USER_LOGIN_URL = BASE_URL + '/api/users/login';
 export const USER_REGISTER_URL = BASE_URL + '/api/users/register';
 export const USER_REGISTRATION_OVER_TIME = BASE_URL + '/api/users/user-registrations';

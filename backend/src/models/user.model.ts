@@ -4,12 +4,13 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 
 export interface User {
-    _id?: string;
+  _id?: string;
   email: string;
   password: string;
   name: string;
   address: string;
   isAdmin: boolean;
+  avatar?: string;  // Add this line
 }
 
 export interface RequestWithUser extends Request<ParamsDictionary, any, any, ParsedQs> {
@@ -22,19 +23,20 @@ export interface RequestWithUser extends Request<ParamsDictionary, any, any, Par
   
 //create schema
 export const UserSchema = new Schema<User>({
-    name: {type: String, required: true},
-    email: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-    address: {type: String, required: true},
-    isAdmin: {type: Boolean, required: true},
+  name: {type: String, required: true},
+  email: {type: String, required: true, unique: true},
+  password: {type: String, required: true},
+  address: {type: String, required: true},
+  isAdmin: {type: Boolean, required: true},
+  avatar: {type: String},  // Add this line
 }, {
-    timestamps: true,
-    toJSON:{
-        virtuals: true
-    },
-    toObject:{
-        virtuals: true
-    }
+  timestamps: true,
+  toJSON:{
+    virtuals: true
+  },
+  toObject:{
+    virtuals: true
+  }
 });
 
 
