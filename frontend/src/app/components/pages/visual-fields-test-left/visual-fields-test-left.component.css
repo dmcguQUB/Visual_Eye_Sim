@@ -1,4 +1,17 @@
-/* General button styles */
+/* General styles */
+.container {
+  display: flex;
+  padding: 20px;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+.center-text {
+  text-align: center;
+}
+
 .button {
   position: absolute;
   background-color: #4CAF50; /* Green */
@@ -14,113 +27,79 @@
   background-color: #45a049;
 }
 
-/* Container for canvas and buttons */
+/* Specific styles for buttons */
+.button-top-right {
+  top: 5%;
+  left: 90%;
+  width: 10%;
+  height: 10%;
+}
+
+.button-top-left {
+  top: 5%;
+  left: 3%;
+  width: 10%;
+  height: 10%;
+}
+
+.button-bottom-right {
+  top: 88%;
+  left: 90%;
+  width: 10%;
+  height: 10%;
+}
+
+.button-bottom-left {
+  top: 88%;
+  left: 3%;
+  width: 10%;
+  height: 10%;
+}
+
+@media (max-height: 600px) {
+  .button-bottom-right,
+  .button-bottom-left {
+    top: 60%;
+  }
+}
+
 #canvasContainer {
- min-height: 600px;
-  min-width: 500px;
-  max-height: 800px;
-  max-width: 600px;
   position: relative;
-  height: 50%; /* This should match your canvas height */
-  width: 80%;
-  margin-bottom: 40px;
   display: flex;
   justify-content: center;
-}
-
-/* Top left button for visual eye field */
-#topLeftButton {
-  top: 5%;  /* Adjust these percentage values to position your buttons as needed */
-  left: 3%;
-  width: 10%;  /* Adjust these percentage values to size your buttons as needed */
-  height: 10%;
-}
-
-/* Top right button for visual eye field. Adding percentages to make it responsive */
-#topRightButton {
-  top: 5%;  /* Adjust these percentage values to position your buttons as needed */
-  left: 90%;
-  width: 10%;  /* Adjust these percentage values to size your buttons as needed */
-  height: 10%;
-}
-
-/* Bottom left button for visual eye field */
-#bottomLeftButton {
-  top: 88%;  /* Adjust these percentage values to position your buttons as needed */
-  left: 3%;
-  width: 10%;  /* Adjust these percentage values to size your buttons as needed */
-  height: 10%;
-}
-
-/* Bottom right button for visual eye field */
-#bottomRightButton {
-  top: 88%;  /* Adjust these percentage values to position your buttons as needed */
-  left: 90%;
-  width: 10%;  /* Adjust these percentage values to size your buttons as needed */
-  height: 10%;
-}
-
-/* Canvas styles */
-canvas {
-  background: #eee;
-  display: block;
-  margin: 0 auto;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  max-height: 800px;
+  max-width: 600px;
+  min-height: 600px;
+  min-width: 500px;
+  margin-right: ;
 }
 
 #Hand {
-  display: block; 
-  position: absolute; 
-  top: 40px; 
-  left: 0; 
-  z-index: 90;
-  margin-left: 10%;
-  width: 50%;
-  height: 70%;
-  pointer-events: none;  /* key property */
-
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
-
 
 #myCanvas {
   width: 100%;
   height: 100%;
+  
 }
 
-/* Parent container styles */
-.parent-container {
-  display: flex;
-  flex-direction: row; /* Changed to row to layout elements horizontally */
-  align-items: flex-start; /* Aligns items to the top */
-  height: 100vh; /* Added to make it fullscreen */
-}
-
-.eye-movements-container {
-  flex-grow: 1; /* Makes the eye movements container take up remaining space */
-  display: flex; /* Needed to layout title and canvas vertically */
-  flex-direction: column; /* Layouts title and canvas vertically */
-  align-items: center; /* Centers title and canvas */
-}
-
-/* Title styles */
-.title {
-  text-align: center;
-}
-
-.case-study-instructions {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.message-container {
+  background-color: #f9f9f9;
   padding: 20px;
-}
-
-/* Case Study Instructions */
-.case-study-instructions h2 {
-  margin-bottom: 20px;
-}
-
-.case-study-instructions p {
-  margin-bottom: 5%;
+  border-radius: 5px;
+  margin-top: 5%;
+  color: #333;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .default-button {
@@ -141,41 +120,79 @@ canvas {
   color: white;
 }
 
-/* Message Styles */
-.bi {
-  color: #4CAF50; /* Same as the button color */
-  margin-right: 10px; /* Add some space between the icon and the text */
+.card-container {
+  background-color: rgb(238, 234, 234);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  padding: 20px;
+  color: #9c88ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-#message {
-  display: inline-block; /* To align it with the svg */
-  vertical-align: middle; /* To align it vertically with the svg */
-  font-size: 18px; /* Reduce the font size */
-  color: #333; /* Change the color to a dark grey */
+.parent-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+/* Button styles */
+#topLeftButton {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-/* Message Container Styles */
-div {
-  padding: 20px; /* Add some padding around the message */
-  background-color: #f9f9f9; /* Change the background to a light grey */
-  border-radius: 5px; /* Add some border radius to round the corners */
-  margin-bottom: 20px; /* Add some space below the message */
+#topRightButton {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
-.message-container{
-margin-top: 5%;
-}
-.full-container {
-  /* rest of your styles */
-  flex-wrap: wrap;
+#bottomLeftButton {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
-@media (max-height: 600px) {
-  #bottomLeftButton {
-    top: 60%; /* Adjust as needed */
-  }
+#bottomRightButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
 
-  #bottomRightButton {
-    top: 60%; /* Adjust as needed */
-  }
+.rectangle {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+}
+
+#topLeft {
+  top: 0;
+  left: 0;
+}
+
+#topRight {
+  top: 0;
+  right: 0;
+}
+
+#bottomLeft {
+  bottom: 0;
+  left: 0;
+}
+
+#bottomRight {
+  bottom: 0;
+  right: 0;
+}
+
+.hoverable {
+  background-color: rgba(0, 0, 255, 0.1);
+}
+
+.hoverable:hover {
+  background-color: rgba(255, 0, 0, 0.1);
 }

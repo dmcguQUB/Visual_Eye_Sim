@@ -26,17 +26,19 @@ export class VisualFieldsTestLeftComponent implements OnInit, AfterViewInit {
   private ctx!: CanvasRenderingContext2D;
 
   private face = { x: 0, y: 0, radiusX: 0, radiusY: 0, rotation: 0 };
-  private eyes: any[] = [];
+  private iriss: any[] = [];
   private rectangles: any[] = [];
 
-  //create hand image var
-  handImage: any;
-  //image to determine which eye it is
+
+  //image to determine which iris it is
   thisEye: string = 'Left';
   otherEye: string = 'Right';
   caseStudy = new CaseStudies();
     // Add new property for the message
     buttonMessage: string = '';
+    backgroundImg = new Image();
+    imageLoaded: boolean= false;
+    handImage = new Image();
 
 
   constructor(
@@ -46,9 +48,20 @@ export class VisualFieldsTestLeftComponent implements OnInit, AfterViewInit {
     private useCaseService: UseCaseService // Inject UseCaseService
   ) {}
 
+ 
+  // define separate flags for each image
+  backgroundImgLoaded: boolean = false;
+  handImageLoaded: boolean = false;
+
   ngOnInit(): void {
-    //load image as soon as it is created
-    this.handImage = new Image();
+    this.backgroundImg.onload = () => {
+      this.backgroundImgLoaded = true;
+    };
+    this.backgroundImg.src = 'assets/woman close up.png';
+
+    this.handImage.onload = () => {
+      this.handImageLoaded = true;
+    };
     this.handImage.src = 'assets/Left-hand.png';
 
     // Fetch the caseStudy
@@ -90,57 +103,28 @@ export class VisualFieldsTestLeftComponent implements OnInit, AfterViewInit {
         rotation: 0,
       };
 
-      this.eyes = [
+      this.iriss = [
         {
-          eyeball: { x: canvas.width / 2 - 100, y: 200, radius: 50 },
+          iris: { x: canvas.width / 2 - 110, y: 280, radius: 13 },
           pupil: {
             x: canvas.width / 2 - 100,
-            y: 200,
+            y: 280,
             radius: 20,
             targetRadius: 20,
           },
         },
         {
-          eyeball: { x: canvas.width / 2 + 100, y: 200, radius: 50 },
+          iris: { x: canvas.width / 2 + 110, y: 280, radius: 13 },
           pupil: {
-            x: canvas.width / 2 + 100,
-            y: 200,
-            radius: 20,
+            x: canvas.width / 2 + 110,
+            y: 280,
+            radius: 7,
             targetRadius: 20,
           },
         },
       ];
 
-      this.rectangles = [
-        {
-          x: 20,
-          y: 20,
-          width: canvas.width / 2,
-          height: canvas.height / 2,
-          fill: 'rgba(0, 0, 255, 0.5)',
-        },
-        {
-          x: canvas.width / 2 + 20,
-          y: 20,
-          width: canvas.width / 2,
-          height: canvas.height / 2,
-          fill: 'rgba(0, 0, 255, 0.5)',
-        },
-        {
-          x: 20,
-          y: canvas.height / 2 + 20,
-          width: canvas.width / 2,
-          height: canvas.height / 2,
-          fill: 'rgba(0, 0, 255, 0.5)',
-        },
-        {
-          x: canvas.width / 2 + 20,
-          y: canvas.height / 2 + 20,
-          width: canvas.width / 2,
-          height: canvas.height / 2,
-          fill: 'rgba(0, 0, 255, 0.5)',
-        },
-      ];
+   
 
       window.requestAnimationFrame(this.animation.bind(this));
     } else {
@@ -165,55 +149,42 @@ export class VisualFieldsTestLeftComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
   animation() {
-    this.ctx.clearRect(
-      0,
-      0,
-      this.myCanvas.nativeElement.width,
-      this.myCanvas.nativeElement.height
-    );
-
-    this.rectangles.forEach((rect) => this.drawRectangle(rect));
-    this.drawFace(this.face);
-    this.eyes.forEach((eye) => {
-      if (eye.pupil.radius < eye.pupil.targetRadius) {
-        eye.pupil.radius += 0.004;
-      } else if (eye.pupil.radius > eye.pupil.targetRadius) {
-        eye.pupil.radius -= 0.004;
-      }
-
-      this.drawEye(eye.eyeball);
-      this.drawPupil(eye.pupil);
-    });
-
-    window.requestAnimationFrame(this.animation.bind(this));
+    // check both flags
+    if (this.backgroundImgLoaded && this.handImageLoaded) {
+      this.ctx.clearRect(
+        0,
+        0,
+        this.myCanvas.nativeElement.width,
+        this.myCanvas.nativeElement.height
+      );
+      this.drawFace();
+      this.iriss.forEach(iris => {
+        this.drawIris(iris.iris);
+        this.drawPupil(iris.pupil);
+      });
+      this.drawHand();
+    } else {
+      window.requestAnimationFrame(this.animation.bind(this));
+    }
   }
 
-  drawRectangle(rect: any) {
-    this.ctx.fillStyle = rect.fill;
-    this.ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+  
+  
+  drawHand() {
+    this.ctx.drawImage(this.handImage, 100, 100); // set coordinates as per your requirement
   }
 
-  drawFace(face: any) {
+
+  drawFace() {
+    // Draw the image at the same coordinates as the face
+    this.ctx.drawImage(this.backgroundImg, this.face.x - this.face.radiusX, this.face.y - this.face.radiusY, this.face.radiusX * 2, this.face.radiusY * 2);
+  }
+
+  drawIris(iris: any) {
     this.ctx.beginPath();
-    this.ctx.ellipse(
-      face.x,
-      face.y,
-      face.radiusX,
-      face.radiusY,
-      face.rotation,
-      0,
-      Math.PI * 2
-    );
-    this.ctx.stroke();
-    this.ctx.closePath();
-  }
-
-  drawEye(eye: any) {
-    this.ctx.beginPath();
-    this.ctx.arc(eye.x, eye.y, eye.radius, 0, Math.PI * 2);
-    this.ctx.strokeStyle = 'rgba(0, 0, 0, 1)'; // black color
+    this.ctx.arc(iris.x, iris.y, iris.radius, 0, Math.PI * 2);
+    this.ctx.strokeStyle = 'green'; // black color
     this.ctx.stroke();
     this.ctx.closePath();
   }
@@ -227,14 +198,13 @@ export class VisualFieldsTestLeftComponent implements OnInit, AfterViewInit {
     this.ctx.closePath();
   }
 
-  //determine the eye it is so can change the text in button dynamically
+  //determine the iris it is so can change the text in button dynamically
   // Update your handleClick() method
+  
   handleClick(): void {
     this.thisEye = this.thisEye === 'Left' ? 'Right' : 'Left';
 
-    if (this.thisEye === 'Left') {
-      // No navigation specified for 'Left' eye
-    } else {
+    if (this.thisEye === 'Right') {
       this.activatedRoute.params.subscribe((params) => {
         if (params['useCaseId']) {
           this.router.navigate([
