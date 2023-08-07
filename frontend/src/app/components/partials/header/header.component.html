@@ -10,7 +10,10 @@
         </li>
         <!--If the user is logged in show all services-->
         <li *ngIf="isAuth" class="menu-container">
+          <div class="user-info">
           <a routerLink="/dashboard">{{user.name}}</a>
+          <img [src]="userProfilePicture ?? 'assets/Avatar/default.png'" alt="User avatar">
+        </div>
           <div class="menu">
             <a routerLink="/user-profile-page">Profile</a>
             <a routerLink="/scores">Scores</a>

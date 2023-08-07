@@ -1,0 +1,19 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  display: flex;
+  flex-direction: column; /* stacks children vertically */
+}
+
+main {
+  flex: 1 0 auto; /* this allows the main content to grow */
+}
+
+app-footer {
+  flex-shrink: 0; /* this prevents the footer from shrinking */
+}
+main {
+  overflow-y: auto; /* adds a scrollbar if the content is taller than its container */
+}

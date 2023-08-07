@@ -11,6 +11,7 @@ export class HeaderComponent implements OnInit {
 
   //now when we set a new user in login it will be set inside home component to populate the dahsboard
   user!:User;
+  userProfilePicture?:string;
   constructor(private userService:UserService) {
 // subscribe to user service 
     userService.userObservable.subscribe((newUser) => {
@@ -20,6 +21,10 @@ export class HeaderComponent implements OnInit {
    }
 
   ngOnInit(): void {
+   this.userService.getUserData().subscribe(user => {
+      this.user = user;
+      this.userProfilePicture = user.avatar; // replace `avatarUrl` with the actual key of the avatar url from the User model
+   })
   }
 
   //get access to logout service

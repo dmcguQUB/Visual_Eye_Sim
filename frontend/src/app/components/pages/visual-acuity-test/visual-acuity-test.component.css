@@ -14,6 +14,22 @@
     height: auto; /*Height set to auto to maintain the ratio of the image when zooming*/
   }
 
+  /* Card container styles */
+.card-container {
+  background-color: rgb(238, 234, 234);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  margin: 20px;
+  padding: 20px;
+  color: #9c88ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+
   
   /* Parent Container allow them to be on the same line */
   .parent-container {
@@ -99,3 +115,39 @@
   cursor: pointer;
 }
 
+
+
+.container-fluid {
+  display: flex;          /* Set the parent container as a flex container */
+}
+
+.layout-wrapper {
+  display: flex; 
+  height: 100vh;
+}
+
+app-navbar {
+  height: 100%;
+  border-right: 1px solid #ddd; /* Optional: for a separating line */
+  width: 25%; /* Adjust this to change the width of the navbar */
+}
+
+.main-content {
+  width: 75%; /* Adjust this in accordance to the width of the navbar */
+  justify-content: center;
+  align-items: center;
+
+}
+.card-container {
+  background-color: rgb(238, 234, 234);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  margin: 20px;
+  padding: 20px;
+  color: #9c88ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+}

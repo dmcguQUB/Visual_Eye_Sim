@@ -1,107 +1,112 @@
-<div class="parent-container container-fluid">
-  <!--navbar partial-->
-  <app-navbar></app-navbar>
+<div class="container-fluid">
+  <div class="layout-wrapper"> <!-- New container for the layout -->
+    <!--navbar partial-->
+    <app-navbar></app-navbar>
 
-  <!-- Visual Acuity Container -->
-  <div class="row">
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <div class="container visual-acuity-container mr-2">
-        <h1 class="title">Visual Acuity Test</h1>
-        <!--Canvas container start-->
-        <!--Show PNG image of snellen chart-->
-        <div id="canvasContainer">
-          <img
-            id="snellenChart"
-            #snellenChart
-            src="/assets/Snellen_chart (metric).png"
-          />
-        </div>
-        <!--Canvas container End-->
-
-
-        <!--Buttons to zoom in and out-->
-        <div class="d-flex justify-content-center">
-        <button class="btn btn-tert mt-2" style="margin-right: 20px;" (click)="zoom(1.1)">
-          Zoom In
-        </button>
-        <button class="btn btn-tert mt-2 ml-3" (click)="zoom(0.9)">
-          Zoom Out
-        </button>
+    <!-- Main Content -->
+    <div class="main-conten">
+          <!-- Instructions - Full Width -->
+    <div class=" card-container row mb-4 text-center">
+      <h1 class="title">Visual Acuity Test</h1>
+      <div class="col-12">
+        <h2>Instructions:</h2>
+        <p>Please start the conversation with the patient to understand more about their visual acuity reading the Snellen chart.</p>
       </div>
     </div>
-  </div>
 
+    <!-- Main Content - Split in Two Columns -->
+    <div class="row">
 
+      <!-- Left Side: Visual Acuity Test -->
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="container visual-acuity-container mr-2 text-center">
+          
+          <!-- Canvas container -->
+          <div id="cardcanvasContainer">
+            <img id="snellenChart" #snellenChart src="/assets/Snellen_chart (metric).png" />
+          </div>
+          
+          <!-- Buttons to zoom in and out -->
+          <div class="d-flex justify-content-center mt-2">
+            <button class="btn btn-tert mr-3" (click)="zoom(1.1)">Zoom In</button>
+            <button class="btn btn-tert" (click)="zoom(0.9)">Zoom Out</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side: Conversations/Questions -->
+      <div class="col-lg-6 col-md-12 col-sm-12 text-center justify-content-center" >
+        <!--Number 1 - patient and user convo-->
+        <div *ngIf="currentConvo === 1" class="container justify-content-center" id="convo-1">
+          <h2>Converstaion with patient</h2>
+          <div class="message-container">
+            <button class="btn btn-primary mt-2" (click)="onDisplayMessages(0)">Start Convo</button>
+            <app-patient-convo [messages]="displayedMessages"></app-patient-convo>
+          </div>
+          <div class="qa-section">
+            <h2>Questions and Answers</h2>
+            <div *ngFor="let qa of qas1; let i = index">
+              <h3>{{ qa.question }}</h3>
+              <select [(ngModel)]="answers[i]" class="form-control">
+                <option *ngFor="let answer of qa.answers">{{ answer }}</option>
+              </select>
+            </div>
+          </div>
+          <a class="btn btn-primary mt-2">Submit</a>
   
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <!--Number 1 - patient and user convo-->
-      <div *ngIf="currentConvo === 1" class="container justify-content-center" id="convo-1">
-        <h2>Converstaion with patient</h2>
-        <div class="message-container">
-          <button class="btn btn-primary mt-2" (click)="onDisplayMessages(0)">Start Convo</button>
-          <app-patient-convo [messages]="displayedMessages"></app-patient-convo>
+          <a class="btn btn-secondary mt-2" (click)="nextConvo();clearConvo();">Next</a>
         </div>
-        <div class="qa-section">
-          <h2>Questions and Answers</h2>
-          <div *ngFor="let qa of qas1; let i = index">
-            <h3>{{ qa.question }}</h3>
-            <select [(ngModel)]="answers[i]" class="form-control">
-              <option *ngFor="let answer of qa.answers">{{ answer }}</option>
-            </select>
+  
+  
+      <div >
+        <!--Second message container-->
+        <div *ngIf="currentConvo === 2" class="container justify-content-center" id="convo-2">
+          <h2>Converstaion with patient</h2>
+          <div class="message-container">
+            <button class="btn btn-primary mt-2" (click)="onDisplayMessages(1)">Start Convo</button>
+            <app-patient-convo [messages]="displayedMessages"></app-patient-convo>
           </div>
+          <div class="qa-section">
+            <h2>Questions and Answers</h2>
+            <div *ngFor="let qa of qas2; let i = index">
+              <h3>{{ qa.question }}</h3>
+              <select [(ngModel)]="answers[i]" class="form-control">
+                <option *ngFor="let answer of qa.answers">{{ answer }}</option>
+              </select>
+            </div>
+            <a class="btn btn-primary mt-2">Submit</a>
+          </div>
+          <!--Convo nanigator-->
+          <a class="btn btn-secondary mt-2" (click)="prevConvo();clearConvo();">Previous</a>
+          <a class="btn btn-secondary mt-2" (click)="nextConvo();clearConvo();">Next</a>
         </div>
-        <a class="btn btn-primary mt-2">Submit</a>
-
-        <a class="btn btn-secondary mt-2" (click)="nextConvo();clearConvo();">Next</a>
       </div>
-
-
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <!--Second message container-->
-      <div *ngIf="currentConvo === 2" class="container justify-content-center" id="convo-2">
-        <h2>Converstaion with patient</h2>
-        <div class="message-container">
-          <button class="btn btn-primary mt-2" (click)="onDisplayMessages(1)">Start Convo</button>
-          <app-patient-convo [messages]="displayedMessages"></app-patient-convo>
-        </div>
-        <div class="qa-section">
-          <h2>Questions and Answers</h2>
-          <div *ngFor="let qa of qas2; let i = index">
-            <h3>{{ qa.question }}</h3>
-            <select [(ngModel)]="answers[i]" class="form-control">
-              <option *ngFor="let answer of qa.answers">{{ answer }}</option>
-            </select>
+  
+      <div >
+        <!--Third conv with QA-->
+        <div *ngIf="currentConvo === 3" class="container" id="convo-3">
+          <h2>Converstaion with patient</h2>
+          <div class="message-container">
+            <button class="btn btn-primary mt-2" (click)="onDisplayMessages(2)">Start Convo</button>
+            <app-patient-convo [messages]="displayedMessages"></app-patient-convo>
           </div>
-          <a class="btn btn-primary mt-2">Submit</a>
-        </div>
-        <!--Convo nanigator-->
-        <a class="btn btn-secondary mt-2" (click)="prevConvo();clearConvo();">Previous</a>
-        <a class="btn btn-secondary mt-2" (click)="nextConvo();clearConvo();">Next</a>
-      </div>
-    </div>
-
-    <div class="col-lg-6 col-md-12 col-sm-12">
-      <!--Third conv with QA-->
-      <div *ngIf="currentConvo === 3" class="container" id="convo-3">
-        <h2>Converstaion with patient</h2>
-        <div class="message-container">
-          <button class="btn btn-primary mt-2" (click)="onDisplayMessages(2)">Start Convo</button>
-          <app-patient-convo [messages]="displayedMessages"></app-patient-convo>
-        </div>
-        <div class="qa-section">
-          <h2>Questions and Answers</h2>
-          <div *ngFor="let qa of qas3; let i = index">
-            <h3>{{ qa.question }}</h3>
-            <select [(ngModel)]="answers[i]" class="form-control">
-              <option *ngFor="let answer of qa.answers">{{ answer }}</option>
-            </select>
+          <div class="qa-section">
+            <h2>Questions and Answers</h2>
+            <div *ngFor="let qa of qas3; let i = index">
+              <h3>{{ qa.question }}</h3>
+              <select [(ngModel)]="answers[i]" class="form-control">
+                <option *ngFor="let answer of qa.answers">{{ answer }}</option>
+              </select>
+            </div>
+            <a class="btn btn-primary mt-2">Submit</a>
           </div>
-          <a class="btn btn-primary mt-2">Submit</a>
+  
+          <a class="btn btn-secondary mt-2" (click)="prevConvo(); clearConvo();">Previous</a>
         </div>
-
-        <a class="btn btn-secondary mt-2" (click)="prevConvo(); clearConvo();">Previous</a>
       </div>
     </div>
-  </div>
+    </div>
+
+  </div> <!-- End of main-content -->
+</div> <!-- End of layout-wrapper -->
 </div>
-

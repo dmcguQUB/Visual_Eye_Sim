@@ -1,27 +1,39 @@
-canvas {
-  background: #eee;
-  display: block;
-  margin: 0 auto;
+.full-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
 }
 
-/* Parent Container allow them to be on the same line */
 .parent-container {
   display: flex;
+  flex-direction: row;
+  height: 100vh;
 }
 
-/* Navbar Styles */
-.app-navbar {
-  width: 25%; /* Adjust width according to your needs */
+.d-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Pupil Reflexes Test Styles */
-.eye-movements-container {
-  width: 75%; /* Adjust width according to your needs */
-}
-
-.title {
+.text-center {
   text-align: center;
-  margin-left: 0px;
-  padding-left: 0px;
 }
 
+#canvasContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .card-container {
+    width: 90%;
+  }
+  .parent-container {
+    flex-direction: column;
+  }
+}

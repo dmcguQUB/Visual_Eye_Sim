@@ -28,6 +28,11 @@ export class AvatarComponent implements OnInit {
       this.currentUserAvatar = user.avatar || '';
     });
   }
+
+  confirmAvatar() {
+    this.selectAvatar(this.avatars[this.currentAvatarIndex]);
+    this.showAvatars = false;
+  }
   
 
 

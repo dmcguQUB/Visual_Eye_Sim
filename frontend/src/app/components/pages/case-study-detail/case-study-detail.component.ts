@@ -18,6 +18,7 @@ export class CaseStudyDetailComponent implements OnInit {
   //this is a method to return an array of case studies
   caseStudy: CaseStudies = new CaseStudies();
   isButtonClicked: boolean = false;
+  showButton: boolean = true;
 
 
   //botpress 
@@ -84,7 +85,7 @@ export class CaseStudyDetailComponent implements OnInit {
 //button to check if the user has finsihed with the first stage to unlock further investiagation features
   handleClick(): void {
     this.buttonStateService.changeButtonState(true);
-    // code to enable the rest of the activities goes here
+    this.showButton = false;  // Set the showButton variable to false when the button is clicked
   }
   
   

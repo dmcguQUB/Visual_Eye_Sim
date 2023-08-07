@@ -28,9 +28,8 @@ export class TestVisualFieldsTestComponent implements AfterViewInit {
   thisEye: string = 'Left';
   otherEye: string = 'Right';
   caseStudy = new CaseStudies();
-    // Add new property for the message
-    buttonMessage: string = '';
-
+  // Add new property for the message
+  buttonMessage: string = '';
 
   constructor(
     private renderer2: Renderer2,
@@ -238,8 +237,8 @@ export class TestVisualFieldsTestComponent implements AfterViewInit {
     }
   }
   handleButtonClick(buttonId: string): void {
-    this.buttonMessage = buttonId + ' clicked!';}
-
+    this.buttonMessage = buttonId + ' clicked!';
+  }
 
   ngOnDestroy(): void {
     // <-- Add OnDestroy lifecycle hook

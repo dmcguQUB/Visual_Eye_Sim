@@ -1,246 +1,39 @@
-//required to clean script to prevent bugs while navigating
-declare global {
-  interface Window { cleanup: () => void; }
-}
-
-
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
-} from '@angular/core';
-import { Renderer2 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UseCaseService } from 'src/app/services/usecases.service';
-import { CaseStudies } from 'src/app/shared/models/casestudies';
+import { Component, OnInit } from '@angular/core';
+import { VisualFieldsComponent } from '../visual-fields/visual-fields.component';
 
 @Component({
   selector: 'app-visual-fields-test-left',
   templateUrl: './visual-fields-test-left.component.html',
   styleUrls: ['./visual-fields-test-left.component.css'],
 })
-export class VisualFieldsTestLeftComponent implements OnInit, AfterViewInit {
-  @ViewChild('myCanvas') myCanvas!: ElementRef<HTMLCanvasElement>;
-  private ctx!: CanvasRenderingContext2D;
-
-  private face = { x: 0, y: 0, radiusX: 0, radiusY: 0, rotation: 0 };
-  private iriss: any[] = [];
-  private rectangles: any[] = [];
-
-
-  //image to determine which iris it is
-  thisEye: string = 'Left';
-  otherEye: string = 'Right';
-  caseStudy = new CaseStudies();
-    // Add new property for the message
-    buttonMessage: string = '';
-    backgroundImg = new Image();
-    imageLoaded: boolean= false;
-    handImage = new Image();
-
-
-  constructor(
-    private renderer2: Renderer2,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private useCaseService: UseCaseService // Inject UseCaseService
-  ) {}
-
- 
-  // define separate flags for each image
-  backgroundImgLoaded: boolean = false;
-  handImageLoaded: boolean = false;
-
-  ngOnInit(): void {
-    this.backgroundImg.onload = () => {
-      this.backgroundImgLoaded = true;
+export class VisualFieldsTestLeftComponent
+  extends VisualFieldsComponent
+  implements OnInit
+{
+  setHandImageSrc(): string {
+    return 'assets/Left-hand.png';
+  }
+  setButtonMessages(): { [id: string]: string } {
+    return {
+      topLeftButton: 'Yea I can see your hand',
+      topRightButton: 'Very clear I can see',
+      bottomLeftButton: 'Your hand is visible',
+      bottomRightButton: 'Yes I notice your hand',
     };
-    this.backgroundImg.src = 'assets/woman close up.png';
-
-    this.handImage.onload = () => {
-      this.handImageLoaded = true;
-    };
-    this.handImage.src = 'assets/Left-hand.png';
-
-    // Fetch the caseStudy
-    this.activatedRoute.params.subscribe((params) => {
-      console.log(params);
-      if (params['useCaseId']) {
-        this.useCaseService.getUseCaseById(params['useCaseId']).subscribe(
-          (serverCaseStudy) => {
-            this.caseStudy = serverCaseStudy;
-          },
-          (error) => {
-            console.log('An error occurred:', error); // Log any errors for debugging
-          }
-        );
-      }
-    });
   }
 
-  ngAfterViewInit() {
-    const canvas = this.myCanvas.nativeElement;
-    const context = canvas.getContext('2d');
-
-    if (context !== null) {
-      this.ctx = context;
-      canvas.width = canvas.clientWidth;
-      canvas.height = canvas.clientHeight;
-
-      canvas.addEventListener(
-        'mousemove',
-        this.mouseMoveHandler.bind(this),
-        false
-      );
-
-      this.face = {
-        x: canvas.width / 2,
-        y: 400,
-        radiusX: 300,
-        radiusY: 300,
-        rotation: 0,
-      };
-
-      this.iriss = [
-        {
-          iris: { x: canvas.width / 2 - 110, y: 280, radius: 13 },
-          pupil: {
-            x: canvas.width / 2 - 100,
-            y: 280,
-            radius: 20,
-            targetRadius: 20,
-          },
-        },
-        {
-          iris: { x: canvas.width / 2 + 110, y: 280, radius: 13 },
-          pupil: {
-            x: canvas.width / 2 + 110,
-            y: 280,
-            radius: 7,
-            targetRadius: 20,
-          },
-        },
-      ];
-
-   
-
-      window.requestAnimationFrame(this.animation.bind(this));
-    } else {
-      console.error('2D context not available');
-    }
+  //change position of the hand
+  override drawHand() {
+    this.ctx.drawImage(this.handImage, 80, 30); //<----need to change this for each
   }
 
-  mouseMoveHandler(event: MouseEvent) {
-    const rect = this.myCanvas.nativeElement.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-
-    this.rectangles.forEach((rect) => {
-      rect.fill = 'rgba(0, 0, 255, 0.5)';
-      if (
-        mouseX > rect.x &&
-        mouseX < rect.x + rect.width &&
-        mouseY > rect.y &&
-        mouseY < rect.y + rect.height
-      ) {
-        rect.fill = 'rgba(255, 0, 0, 0.5)';
-      }
-    });
-  }
-  animation() {
-    // check both flags
-    if (this.backgroundImgLoaded && this.handImageLoaded) {
-      this.ctx.clearRect(
-        0,
-        0,
-        this.myCanvas.nativeElement.width,
-        this.myCanvas.nativeElement.height
-      );
-      this.drawFace();
-      this.iriss.forEach(iris => {
-        this.drawIris(iris.iris);
-        this.drawPupil(iris.pupil);
-      });
-      this.drawHand();
-    } else {
-      window.requestAnimationFrame(this.animation.bind(this));
-    }
-  }
-
-  
-  
-  drawHand() {
-    this.ctx.drawImage(this.handImage, 100, 100); // set coordinates as per your requirement
-  }
+    //image to determine which eye it is
+    override thisEye: string = 'Left';
+    override otherEye: string = 'Right ';
 
 
-  drawFace() {
-    // Draw the image at the same coordinates as the face
-    this.ctx.drawImage(this.backgroundImg, this.face.x - this.face.radiusX, this.face.y - this.face.radiusY, this.face.radiusX * 2, this.face.radiusY * 2);
-  }
-
-  drawIris(iris: any) {
-    this.ctx.beginPath();
-    this.ctx.arc(iris.x, iris.y, iris.radius, 0, Math.PI * 2);
-    this.ctx.strokeStyle = 'green'; // black color
-    this.ctx.stroke();
-    this.ctx.closePath();
-  }
-
-  drawPupil(pupil: any) {
-    this.ctx.beginPath();
-    this.ctx.arc(pupil.x, pupil.y, pupil.radius, 0, Math.PI * 2);
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 1)'; // black color
-    this.ctx.fill(); // fill in pupil
-    this.ctx.stroke();
-    this.ctx.closePath();
-  }
-
-  //determine the iris it is so can change the text in button dynamically
-  // Update your handleClick() method
-  
-  handleClick(): void {
-    this.thisEye = this.thisEye === 'Left' ? 'Right' : 'Left';
-
-    if (this.thisEye === 'Right') {
-      this.activatedRoute.params.subscribe((params) => {
-        if (params['useCaseId']) {
-          this.router.navigate([
-            `/visual-fields-test-right/${params['useCaseId']}`,
-          ]);
-        }
-      });
-    }
-  }
-
-  //button and messages
-  private buttonMessages: { [id: string]: string } = {
-    topLeftButton: "I can notice your hand shifting around.",
-    topRightButton: "I'm able to see your hand's motion.",
-    bottomLeftButton: "Your hand is moving; I can see it.",
-    bottomRightButton: "I'm catching sight of your hand moving."
-};
-
-  
-  handleButtonClick(buttonId: string): void {
-    if (this.buttonMessages[buttonId]) {
-      this.buttonMessage = this.buttonMessages[buttonId];
-    } else {
-      // Optional: default message for unhandled button IDs
-      this.buttonMessage = 'Unrecognized button clicked!';
-    }
-  }
-  
-
-
-  ngOnDestroy(): void {
-    // <-- Add OnDestroy lifecycle hook
-    // Remove the script when the component is destroyed
-    // Call cleanup function from visual-fields-test-left.js
-    if (window['cleanup']) {
-      window['cleanup']();
-    }
+  override ngOnInit() {
+    super.ngOnInit();
+    
   }
 }

@@ -13,8 +13,11 @@
   </div>
 
   <div *ngIf="showAvatars">
-    <button (click)="previousAvatar()">Previous</button>
-    <img [src]="avatars[currentAvatarIndex]" (click)="selectAvatar(avatars[currentAvatarIndex])">
-    <button (click)="nextAvatar()">Next</button>
+    <img [src]="avatars[currentAvatarIndex]">
+    <div class="avatar-button-container">
+      <button class="btn btn-primary" (click)="previousAvatar()">Previous</button>
+      <button class="btn btn-primary" (click)="nextAvatar()">Next</button>
+      <button class="btn btn-primary" (click)="confirmAvatar()">Confirm</button>
+    </div>
   </div>
 </div>

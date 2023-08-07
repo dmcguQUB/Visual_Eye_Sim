@@ -1,32 +1,31 @@
 <div class="full-container">
   <div class="parent-container">
     <!--navbar partial-->
-    <app-navbar></app-navbar>
+    <div
+      class="d-flex align-items-center justify-content-left text-center"
+      style="height: 20vh"
+    >
+      <app-navbar></app-navbar>
+    </div>
     <!--Visual fields test-->
-    <div class="eye-movements-container">
-      <h1 class="title">Pupil Reflexes Test</h1>
+    <div class="card-container eye-movements-container">
+      <h1 class="card-container title">Pupil Reflexes Test</h1>
       <!--Instructions-->
-      <div class="case-study-instructions">
+      <div class="card-container case-study-instructions">
         <h2>Instructions:</h2>
         <p>
           Click the corner buttons to detect visual field defects. Switch eyes
           using the button below.
         </p>
-        <default-button
-          [type]="'button'"
-          [text]="'Switch to ' + otherEye + ' Eye'"
-          [bgColor]="'#9c88ff'"
-          (onClick)="handleClick()"
-        ></default-button>
+        <!--Canvas container-->
       </div>
-      <div id="canvasContainer">
+      <div class="card-container" id="canvasContainer">
         <canvas #myCanvas width="600" height="700"></canvas>
-        <img
-          id="Hand"
-          src="/assets/Right-hand.png"
-          style="display: none"
-          style="position: absolute; top: 40px; left: 0; z-index: 2"
-        />
+        <div class="rectangle hoverable" id="topLeft"></div>
+        <div class="rectangle hoverable" id="topRight"></div>
+        <div class="rectangle hoverable" id="bottomLeft"></div>
+        <div class="rectangle hoverable" id="bottomRight"></div>
+
         <button
           class="button"
           id="topLeftButton"
@@ -64,7 +63,7 @@
     class="d-flex align-items-center justify-content-center text-center"
     style="height: 20vh"
   >
-    <div class="d-flex align-items-center">
+    <div class="card-container d-flex align-items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="30"
@@ -81,14 +80,7 @@
       <!--Display button message-->
     </div>
   </div>
-
-  <!--Instructions-->
-  <div class="case-study-instructions">
-    <h2>Instructions:</h2>
-    <p>
-      Click the corner buttons to detect visual field defects. Switch eyes using
-      the button below.
-    </p>
+  <div class="card-container">
     <default-button
       [type]="'button'"
       [text]="'Switch to ' + otherEye + ' Eye'"
