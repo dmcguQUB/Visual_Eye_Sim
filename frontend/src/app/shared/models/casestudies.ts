@@ -11,6 +11,8 @@ export class CaseStudies {
   drugInfo!: string;
   socialInfo!: string;
   familyHistory!: string;
+  questionsCount?: number; // '?' denotes it's optional
+
 
   //intialise incase a empty value is found within the search
   constructor() {
@@ -25,5 +27,6 @@ export class CaseStudies {
   this.socialInfo='';
   this.familyHistory='';
   }
+  
 }
 

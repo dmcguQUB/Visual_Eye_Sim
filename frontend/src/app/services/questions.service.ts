@@ -1,7 +1,7 @@
 //frontend/src/app/services/questions.service.ts
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable,map } from 'rxjs';
 import { Question } from '../shared/models/question'; // Assuming you have defined the Quiz model
 import { QUESTIONS_URL, QUESTION_BY_ID_URL, USER_SCORES_URL } from '../shared/constants/url';
 import { UserScore } from '../shared/models/UserScore';
@@ -29,5 +29,14 @@ export class QuestionService {
 postUserScore(userScore: any): Observable<any> {
   return this.http.post<UserScore>(USER_SCORES_URL, userScore);
 }
+
+
+//calculate the number of questions per case study
+getTotalQuestionsForCaseStudy(caseStudyId: string): Observable<number> {
+  return this.getQuestionsByCaseStudyId(caseStudyId).pipe(
+    map((questions: Question[]) => questions.length)
+  );
+}
+
 
 }

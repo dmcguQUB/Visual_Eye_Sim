@@ -90,17 +90,6 @@ router.post(
   })
 );
 
-router.get(
-  "/:id",
-  expressAsyncHandler(async (req, res) => {
-    const user = await UserModel.findById(req.params.id);
-    if (user) {
-      res.send(generateTokenReponse(user)); // This function already sends back the user data
-    } else {
-      res.status(HTTP_BAD_REQUEST).send("User not found!");
-    }
-  })
-);
 
 
 //get information required for user registrations data
@@ -116,11 +105,24 @@ router.get('/user-registrations', async (req, res) => {
       { $sort: { _id: 1 } },
     ]);
     res.json(results);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Server Error');
+  } catch (error:any) {
+    console.error(error.message);
+    res.status(500).send('Server Error: ' + error.message);  
   }
 });
+
+
+router.get(
+  "/:id",
+  expressAsyncHandler(async (req, res) => {
+    const user = await UserModel.findById(req.params.id);
+    if (user) {
+      res.send(generateTokenReponse(user)); // This function already sends back the user data
+    } else {
+      res.status(HTTP_BAD_REQUEST).send("User not found!");
+    }
+  })
+);
 
 //create token response for the user
 const generateTokenReponse = (user: User) => {

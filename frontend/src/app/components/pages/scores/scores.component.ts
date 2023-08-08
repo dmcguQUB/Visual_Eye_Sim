@@ -64,7 +64,6 @@ export class ScoresComponent implements OnInit {
 
           // Fetch case study details for each user score
           this.fetchCaseStudyDetails();
-          this.fetchQuestionDetails();
         },
         (error) => {
           console.error('Error fetching user scores:', error);
@@ -82,7 +81,8 @@ async showDetails(selectedUserScore: UserScore) {
   this.selectedUserScore = selectedUserScore;
   this.selectedUserScore.questions = []; // Initialize the questions property
   this.showDetailsSection = true; // Show the detailed information section
-  await this.fetchQuestionDetails();
+  
+  await this.fetchQuestionDetails(); // Fetch questions after setting the selectedUserScore
   this.createScoreChart(); // Create the pie chart
 }
 

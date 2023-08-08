@@ -1,0 +1,75 @@
+.full-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.parent-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.d-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.scores-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.card-container {
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.scores-instructions {
+  background-color: #f9f9f9;
+}
+
+.scores-tables {
+  background-color: #fff;
+}
+.graph-container {
+  width: 100%;
+  height: 400px; /* Set this to whatever height you desire */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed; /* This makes the column widths to be more predictable */
+  overflow-x: auto; /* Allows horizontal scrolling if the table gets too wide */
+}
+
+td, th {
+  word-wrap: break-word; /* Breaks up words to prevent overflow */
+  overflow: hidden;
+  max-width: 200px; /* You can adjust this value */
+}
+.scores-container {
+  margin-bottom: 20px;
+}
+
+
+@media (max-width: 600px) {
+  .card-container {
+    width: 90%;
+  }
+  .parent-container {
+    flex-direction: column;
+  }
+}
