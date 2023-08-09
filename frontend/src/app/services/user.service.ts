@@ -170,5 +170,29 @@ export class UserService {
       })
     );
   }
+
+//update name service
+updateName(name: string): Observable<User> {
+  const userId = this.currentUser._id;
+  const url = USER_URL+`/${userId}/name`; // URL to update name
+
+  return this.http.patch<User>(url, { name: name }).pipe(
+    tap({
+      next: (user) => {
+        // On success, update the user in local storage
+        this.setUserToLocalStorage(user);
+        this.userSubject.next(user);
+        this.toastrService.success(
+          `Name updated successfully!`,
+          'Name Update'
+        );
+      },
+      error: (errorResponse) => {
+        this.toastrService.error(errorResponse.error, 'Name Update Failed');
+      }
+    })
+  );
+}
+
   
 }

@@ -6,15 +6,23 @@
         <app-avatar></app-avatar>
       </div>
 
-      <div class="card mt-4">
-        <div class="card-body justify-content-between align-items-center">
-          <div>
-            <h3 class="card-title">Name</h3>
-            <p class="card-text">{{currentUser.name}}</p>
-          </div>
-          <button class="btn btn-primary">Edit</button>
-        </div>
+     <!-- Name Section -->
+<div class="card mt-4">
+  <div class="card-body justify-content-between align-items-center">
+      <div>
+          <h3 class="card-title">Name</h3>
+          <!-- Check if in edit mode for name -->
+          <p *ngIf="!isNameEditMode" class="card-text">{{currentUser.name}}</p>
+          <input *ngIf="isNameEditMode" [(ngModel)]="tempName" class="form-control">
       </div>
+      <!-- Toggles based on edit mode -->
+      <button *ngIf="!isNameEditMode" class="btn btn-primary" (click)="toggleNameEditMode()">Edit</button>
+      <div *ngIf="isNameEditMode">
+          <button class="btn btn-success" (click)="saveName()">Save</button>
+          <button class="btn btn-danger" (click)="cancelNameEdit()">Cancel</button>
+      </div>
+  </div>
+</div>
 
       <div class="card mt-4">
         <div class="card-body justify-content-between align-items-center">
@@ -25,16 +33,23 @@
         </div>
       </div>
 
-      <div class="card mt-4">
-        <div class="card-body justify-content-between align-items-center">
-          <div>
-            <h3 class="card-title">Address</h3>
-            <p class="card-text">{{currentUser.address}}</p>
-          </div>
-          <button class="btn btn-primary">Edit</button>
-        </div>
+<!-- Address Section -->
+<div class="card mt-4">
+  <div class="card-body justify-content-between align-items-center">
+      <div>
+          <h3 class="card-title">Address</h3>
+          <!-- Check if in edit mode for address -->
+          <p *ngIf="!isAddressEditMode" class="card-text">{{currentUser.address}}</p>
+          <input *ngIf="isAddressEditMode" [(ngModel)]="tempAddress" class="form-control">
       </div>
-
+      <!-- Toggles based on edit mode -->
+      <button *ngIf="!isAddressEditMode" class="btn btn-primary" (click)="toggleAddressEditMode()">Edit</button>
+      <div *ngIf="isAddressEditMode">
+          <button class="btn btn-success" (click)="saveAddress()">Save</button>
+          <button class="btn btn-danger" (click)="cancelAddressEdit()">Cancel</button>
+      </div>
+  </div>
+</div>
       <div class="card mt-4">
         <div class="card-body">
           <h3 class="card-title">Admin Status</h3>
