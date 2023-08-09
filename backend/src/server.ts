@@ -9,7 +9,7 @@ import caseStudiesRouter from "./routers/case_studies.router";
 import userRouter from './routers/user.router';
 import questionsRouter from './routers/questions.router';
 import { dbConnect } from './configs/database.config';//import database config
-import userScoresRouter from './routers/userScores.router';
+import userScoresRouter from './routers/userscores.router';
 dbConnect();
 
 const app = express();
