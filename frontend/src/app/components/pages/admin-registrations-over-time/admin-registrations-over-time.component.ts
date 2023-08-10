@@ -6,7 +6,6 @@ import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-admin-registrations-over-time',
   templateUrl: './admin-registrations-over-time.component.html',
-  styleUrls: ['./admin-registrations-over-time.component.css']
 })
 export class AdminRegistrationsOverTimeComponent  implements OnInit {
 

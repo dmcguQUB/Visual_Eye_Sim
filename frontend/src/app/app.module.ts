@@ -34,7 +34,6 @@ import { TitleComponent } from './components/partials/title/title.component';
 // Import the module from the SDK
 import { AuthModule } from '@auth0/auth0-angular';
 import { AuthButtonComponent } from './components/partials/buttons/auth-button.component';
-import { UserProfileComponent } from './components/partials/user-profile/user-profile.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { InputContainerComponent } from './components/partials/input-container/input-container.component'; 
@@ -75,7 +74,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     DirectOphthalmoscopyTestComponent,
     NavbarComponent,
     AuthButtonComponent,
-    UserProfileComponent,
     LoadingComponent,
     TitleComponent,
     LoginPageComponent,

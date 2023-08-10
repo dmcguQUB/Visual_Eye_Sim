@@ -13,7 +13,6 @@ Chart.register(PieController, Title, Tooltip, ArcElement, CategoryScale);
 @Component({
   selector: 'app-scores',
   templateUrl: './scores.component.html',
-  styleUrls: ['./scores.component.css'],
 })
 export class ScoresComponent implements OnInit {
   userId: string = ''; // You can get the user ID from your authentication mechanism
