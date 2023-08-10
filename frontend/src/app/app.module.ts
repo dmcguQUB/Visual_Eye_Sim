@@ -86,7 +86,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     FooterComponent,
     ScoresComponent,
     AdminPageComponent,
-    NavbarAdminComponent,
     AdminAvgScoreVsTimeComponent,
     AdminRegistrationsOverTimeComponent,
     AdminNavbarComponent,
