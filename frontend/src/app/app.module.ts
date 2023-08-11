@@ -45,7 +45,6 @@ import { FooterComponent } from './components/partials/footer/footer.component';
 import { ScoresComponent } from './components/pages/scores/scores.component';
 import { AdminPageComponent } from './components/pages/admin-page/admin-page.component';
 import { VisualFieldsTestRightComponent } from './components/pages/visual-fields-test-right/visual-fields-test-right.component';
-import { NavbarAdminComponent } from './components/partials/navbar-admin/navbar-admin.component';
 import { AdminAvgScoreVsTimeComponent } from './components/pages/admin-avg-score-vs-time/admin-avg-score-vs-time.component';
 import { AdminRegistrationsOverTimeComponent } from './components/pages/admin-registrations-over-time/admin-registrations-over-time.component';
 import { AdminNavbarComponent } from './components/partials/admin-navbar/admin-navbar.component';
