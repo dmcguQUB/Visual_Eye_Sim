@@ -1,37 +1,37 @@
 <div class="parent-container">
   <!-- Navbar Component -->
   <app-navbar></app-navbar>
-  
-  <!-- Right Container -->
-  <div class="right-container text-center">
-    <!-- case-study-detail.component.html -->
-    <div class="card case-study-details">
-      <img class="card-img-top case-study-image" [src]="caseStudy.imageUrl" [alt]="caseStudy.name" />
-      <div class="card-body">
-        <h5 class="card-title name">{{caseStudy.name}}</h5>
-        <p class="card-text"><strong>Age:</strong> {{ caseStudy.age }}</p>
-        <p class="card-text"><strong>Gender:</strong> {{ caseStudy.gender }}</p>
-        <p class="card-text"><strong>Medical History:</strong> {{ caseStudy.medicalHistory }}</p>
-        <p class="card-text"><strong>Drug Information:</strong> {{ caseStudy.drugInfo }}</p>
-        <p class="card-text"><strong>Social Information:</strong> {{ caseStudy.socialInfo }}</p>
-        <p class="card-text"><strong>Family History:</strong> {{ caseStudy.familyHistory }}</p>
-      </div>
-    </div>
-  </div>
 
-  <!--instructions for this stage-->
-  <div class="card">
-  <div class="case-study-instructions text-center">
-    <h2>Instructions:</h2>
-    <p>Read the <strong>background</strong> of the patient for this case study. Use the <strong>icon in the bottom right of the page</strong> to ask them appropriate questions in order to gather as much detail as possible. Please remember that some information the patient says may not be useful.</p>
-    <p>Click the button below when you are finished speaking to the patient. Later you will conduct eye test examinations, investigations and provide diagnosis.</p>
-    <default-button 
-    *ngIf="showButton" 
+  <!-- Right Container -->
+  <div class="card-container right-container">
+
+     <!--instructions for this stage-->
+     <div class="card-container case-study-instructions text-center">
+      <h2>Instructions:</h2>
+      <p>Read the <strong>background</strong> of the patient for this case study. Use the <strong>icon in the bottom right of the page</strong> to ask them appropriate questions in order to gather as much detail as possible. Please remember that some information the patient says may not be useful.</p>
+      <p>Click the button below when you are finished speaking to the patient. Later you will conduct eye test examinations, investigations and provide diagnosis.</p>
+    </div>
+
+    <!-- case-study-detail.component.html -->
+    <div class="card-container">
+      <img class="card-img-top case-study-image" [src]="caseStudy.imageUrl" [alt]="caseStudy.name" />
+      <h5 class="title name">{{caseStudy.name}}</h5>
+      <p><strong>Age:</strong> {{ caseStudy.age }}</p>
+      <p><strong>Gender:</strong> {{ caseStudy.gender }}</p>
+      <p><strong>Medical History:</strong> {{ caseStudy.medicalHistory }}</p>
+      <p><strong>Drug Information:</strong> {{ caseStudy.drugInfo }}</p>
+      <p><strong>Social Information:</strong> {{ caseStudy.socialInfo }}</p>
+      <p><strong>Family History:</strong> {{ caseStudy.familyHistory }}</p>
+    </div>
+
+    <div class="card-container case-study-button text-center">
+      <default-button 
+      *ngIf="showButton" 
       [type]="'button'" 
       [text]="'Confirm Finished'" 
       [bgColor]="'#9c88ff'"
       (onClick)="handleClick()"
     ></default-button>
+    </div>
   </div>
-</div>
 </div>
