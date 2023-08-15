@@ -8,6 +8,8 @@ canvas {
 /* Parent Container allow them to be on the same line*/
 .parent-container {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* Navbar Styles */

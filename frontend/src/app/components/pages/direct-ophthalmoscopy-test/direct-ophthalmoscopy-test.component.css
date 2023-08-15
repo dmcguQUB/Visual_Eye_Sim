@@ -1,6 +1,8 @@
 /* Parent Container allows for a row layout */
 .parent-container {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* Navbar Styles */
@@ -89,4 +91,7 @@
 
 .button:hover {
   background-color: #45a049;
+}
+.text-center {
+  text-align: center;
 }

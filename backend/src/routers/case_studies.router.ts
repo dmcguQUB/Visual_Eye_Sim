@@ -1,46 +1,51 @@
-import { Router } from "express"; //import router
-import expressAsyncHandler from "express-async-handler";
-import { sample_case_studies } from "../data";
-import { CaseStudyModel } from "../models/case-study-model";
+//backend/src/routers/case_studies.router.ts
+// Import necessary modules and dependencies
+import { Router } from "express"; // Importing the Router class from Express
+import expressAsyncHandler from "express-async-handler"; // Middleware for handling asynchronous operations safely
+import { sample_case_studies } from "../data"; // Sample case studies data (used for seeding)
+import { CaseStudyModel } from "../models/case-study-model"; // Importing the CaseStudyModel
 
-//create new router calling router method
+// Create a new router instance using Express's Router
 const router = Router();
 
-//we are creating api to populate the case study model
+// API endpoint to populate the case study model with sample data
 router.get(
   "/seed",
   expressAsyncHandler(async (req, res) => {
+    // Count the number of existing case studies in the database
     const caseStudyCount = await CaseStudyModel.countDocuments();
-    //if more than one already seeded
+    
+    // If case studies are already seeded, send a response and exit
     if (caseStudyCount > 0) {
       res.send("Seed is already done");
       return;
     }
-    //if not then it will seed
+    
+    // If not already seeded, create case studies using the sample data
     await CaseStudyModel.create(sample_case_studies);
     res.send("Seed is done now");
   })
 );
 
-//getting all the sample use cases i
+// API endpoint to get all case studies
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    //use Mongodb instead of data.ts file
+    // Retrieve all case studies from the database using CaseStudyModel
     const case_studies = await CaseStudyModel.find();
-    res.send(case_studies); //return all the foods we got from the database
+    res.send(case_studies); // Return all the case studies fetched from the database
   })
 );
 
-//get the use case by ID
+// API endpoint to get a specific case study by its ID
 router.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    console.log(CaseStudyModel.findById(req.params.id));
+    // Find a case study by its ID using CaseStudyModel
     const caseStudy = await CaseStudyModel.findById(req.params.id);
-    res.send(caseStudy);
+    res.send(caseStudy); // Return the specific case study based on the provided ID
   })
 );
 
-//need to export router so can be used in server.ts file
+// Export the router so it can be used in other files (e.g., server.ts)
 export default router;

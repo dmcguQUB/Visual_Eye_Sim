@@ -3,6 +3,7 @@
 export const sample_case_studies: any[] =[
 
   {
+    //case study 1
     caseStudyNumber:1,
     name: 'Lizzy Bard',
     imageUrl: 'assets/patient-1.jpg',
@@ -13,6 +14,7 @@ export const sample_case_studies: any[] =[
     socialInfo: 'Stopped smoking 5 years ago. She has alcohol at Christmas only. Ex-office worker.',
     familyHistory: 'Mother had cateracts. Father had lazy eye.'
   },
+  //case study 2
   {
     caseStudyNumber:2,
     name: 'Beth Tate',
@@ -25,6 +27,7 @@ export const sample_case_studies: any[] =[
     familyHistory: 'Mother had cateracts. Father had lazy eye.'
   },
   {
+    //case study 3
     caseStudyNumber:3,
     name: 'Frank Howard',
     imageUrl: 'assets/patient-3.jpg',
@@ -38,8 +41,10 @@ export const sample_case_studies: any[] =[
 ]
 
 
+//sample users to populate the database
 export const sample_users: any[] = [
   {
+    //user 1
     name: "John Doe",
     email: "john@gmail.com",
     password: "12345",
@@ -47,6 +52,7 @@ export const sample_users: any[] = [
     isAdmin: true,
   },
   {
+    //user 2
     name: "Jane Doe",
     email: "Jane@gmail.com",
     password: "12345",
@@ -55,8 +61,10 @@ export const sample_users: any[] = [
   },
 ];
 
+//samle questions to populate database
 export const sample_questions: any[] = [
   {
+    //case study 1
     questionText: "Case Study 1 - Question 1",
     options: [
       { text: "Option 1", correct: true },
@@ -78,7 +86,8 @@ export const sample_questions: any[] = [
     explanation: "Explanation for Case Study 1 - Question 2",
     caseStudyId: "1",
   },
-  // ... More questions for Case Study 1
+
+  //case study 2
   {
     questionText: "Case Study 2 - Question 1",
     options: [
@@ -101,12 +110,10 @@ export const sample_questions: any[] = [
     explanation: "Explanation for Case Study 2 - Question 2",
     caseStudyId: "2",
   },
-  // ... More questions for Case Study 2
-  // And so on for more case studies
 ];
 
-// backend/src/data.ts
 
+//sample user scores data to populate the database
 export const sample_user_scores: any[] = [
   {
     userId: "64b83c2db2ec5e03be43b139", // assuming John Doe's ID is 1
@@ -115,9 +122,7 @@ export const sample_user_scores: any[] = [
     answers: [
       { questionId: "64b947a5f704861cb51260ae", userAnswer: "Option 1", correct: true },
       { questionId: "64b947a5f704861cb51260b3", userAnswer: "Option 2", correct: false },
-      // more answers...
     ],
     testTakenAt: new Date(),
   },
-  // more user scores...
 ];

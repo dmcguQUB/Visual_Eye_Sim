@@ -1,31 +1,35 @@
 //backend/src/routers/userscores.router.ts
+// Import necessary modules and dependencies
 import { Router } from "express"; 
 import expressAsyncHandler from "express-async-handler";
-import { sample_user_scores } from "../data";
-import { UserScoreModel } from "../models/userscores";
-import authMid from "../middlewares/auth.mid";
-import { RequestWithUser } from '../models/user.model'; // Update this path if needed
-import mongoose from 'mongoose'; // Make sure mongoose is imported
+import { sample_user_scores } from "../data"; // Sample user scores data (used for seeding)
+import { UserScoreModel } from "../models/userscores"; // Importing the UserScoreModel
+import authMid from "../middlewares/auth.mid"; // Importing authentication middleware
+import { RequestWithUser } from '../models/user.model'; // Importing RequestWithUser interface
+import mongoose from 'mongoose'; // Importing mongoose (Make sure mongoose is imported)
 
-//create new router calling router method
+// Create a new router instance using Express's Router
 const router = Router();
 
-
-//seed database and define structure
+// API endpoint to populate the user scores collection with sample data
 router.get(
   "/seed",
   expressAsyncHandler(async (req, res) => {
     const userScoreCount = await UserScoreModel.countDocuments();
+    
+    // If user scores are already seeded, send a response and exit
     if (userScoreCount > 0) {
       res.send("User score seed is already done");
       return;
     }
+    
+    // Create user scores using sample data
     await UserScoreModel.create(sample_user_scores);
     res.send("User score seed is done now");
   })
 );
 
-// GET request to fetch all scores from the collection
+// API endpoint to fetch all user scores from the collection
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
@@ -34,7 +38,7 @@ router.get(
   })
 );
 
-// GET request to fetch a specific user's scores
+// API endpoint to fetch scores for a specific user
 router.get(
   "/user/:userId",
   expressAsyncHandler(async (req, res) => {
@@ -47,32 +51,31 @@ router.get(
   })
 );
 
+// Middleware to authenticate user before submitting a new score
 router.post(
   "/",
   (req, res, next) => {
     try {
-      return authMid(req, res, next);
+      return authMid(req, res, next); // Authenticate using authMid middleware
     } catch (error) {
-      console.error(error); // log error
+      console.error(error); // Log error
       res.status(500).json({ error: 'Internal server error' });
     }
   },
   expressAsyncHandler(async (req, res) => {
-    // Type assertion for req
-    const requestWithUser = req as RequestWithUser;
+    const requestWithUser = req as RequestWithUser; // Type assertion for req
 
     try {
-   
       const scoreData = requestWithUser.body;
-      console.log("score data : ", scoreData);
-      // You may need to validate that `user` and `_id` exist here.
+
+      // Validate user existence and ID
       if (requestWithUser.user && requestWithUser.user._id) {
         scoreData.userId = requestWithUser.user._id;
-    
       } else {
         throw new Error('User information is missing.');
       }
 
+      // Create and save the new score
       const newScore = new UserScoreModel(scoreData);
       const savedScore = await newScore.save();
 
@@ -82,7 +85,7 @@ router.post(
         throw new Error('Error saving score');
       }
     } catch (error) {
-      console.log(error);  // log error message in your console
+      console.log(error);  // Log error message
       if (error instanceof Error) {
         res.status(500).send({ error: error.message });
       }
@@ -90,13 +93,13 @@ router.post(
   })
 );
 
-
-//get the total number of correct and incorrect answers by case study id.
+// API endpoint to get total correct and incorrect answers for a case study
 router.get(
   "/case-study/:caseStudyId",
   expressAsyncHandler(async (req, res) => {
     const caseStudyId = req.params.caseStudyId;
-    console.log(caseStudyId);
+    
+    // Aggregate correct and incorrect answers
     const aggregation = await UserScoreModel.aggregate([
       { $match: { caseStudyId } },
       { $unwind: '$answers' },
@@ -108,6 +111,7 @@ router.get(
       },
     ]);
     
+    // Extract correct and incorrect counts from the aggregation result
     const result = {
       correct: aggregation.find((a) => a._id === true)?.count || 0,
       incorrect: aggregation.find((a) => a._id === false)?.count || 0,
@@ -116,13 +120,13 @@ router.get(
   })
 );
 
-//MIGHT NOT NEED (might be duplicate of what already have)
-//get the average score of users for each case study
+// API endpoint to get the average score for a case study
 router.get(
   "/case-study/:caseStudyId/average-score",
   expressAsyncHandler(async (req, res) => {
     const caseStudyId = req.params.caseStudyId;
 
+    // Aggregate total correct and total answers
     const aggregation = await UserScoreModel.aggregate([
       { $match: { caseStudyId } },
       { $unwind: '$answers' },
@@ -136,32 +140,25 @@ router.get(
     ]);
 
     const result = aggregation[0];
-    console.log("Result is : "+result);
 
     if (!result) {
       res.status(404).send({ message: 'Case study not found or no answers given yet.' });
       return;
     }
 
-    console.log("Result is : "+result);
+    const averageScore = (result.correct / result.total) * 100; // Calculate average score
 
-    const averageScore = (result.correct / result.total) * 100; // this will be a percentage
-
-    console.log("Result correct is : "+result.correct);
-    console.log("Result total is : "+result.total);
-
-
-    //this is a percentage
-    res.send({ averageScore });
+    res.send({ averageScore }); // Send the average score as response
   })
 );
 
-//check how the average scores change over time
+// API endpoint to get average scores over time for a case study
 router.get(
   "/case-study/:caseStudyId/average-score-over-time",
   expressAsyncHandler(async (req, res) => {
     const caseStudyId = req.params.caseStudyId;
 
+    // Aggregate average scores over time
     const aggregation = await UserScoreModel.aggregate([
       { $match: { caseStudyId } },
       { $unwind: '$answers' },
@@ -195,12 +192,9 @@ router.get(
       return;
     }
 
-    res.send(aggregation);
+    res.send(aggregation); // Send aggregated results as response
   })
 );
 
-
-
-
-//need to export router so can be used in server.ts file
+// Export the router so it can be used in other files (e.g., server.ts)
 export default router;

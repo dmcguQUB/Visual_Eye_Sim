@@ -1,143 +1,20 @@
-   /* Canvas container */
-   #canvasContainer {
-    position: relative; /*postion canvas relative to its normal position in doc*/
-    height: 100%;
-    width: auto;
-    border: 1px solid black;
-    overflow: auto; /* Set to auto to allow for scrolling. This ensures the zoom does not go outside of the canvas */
-  }
-
-  /*Snellen Chart CSS*/
-  #snellenChart {
-    position: relative; /* Position the snellen chart precisely in relation to the canvas  */
-    width: 100%;
-    height: auto; /*Height set to auto to maintain the ratio of the image when zooming*/
-  }
-
-  /* Card container styles */
-.card-container {
-  background-color: rgb(238, 234, 234);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  margin: 20px;
-  padding: 20px;
-  color: #9c88ff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-
-  
-  /* Parent Container allow them to be on the same line */
-  .parent-container {
-    display: flex;
-  }
-  
-  /* Navbar Styles */
-  .app-navbar {
-    width: 25%; /* Adjust width according to your needs */
-  }
-  
-  /* Pupil Reflexes Test Styles */
-  .eye-movements-container {
-    width: 75%; /* Adjust width according to your needs */
-  }
-  
-  .title {
-    text-align: center;
-    margin-left: 0px;
-    padding-left: 0px;
-  }
-  
-  /*button css*/
-
-.btn-primary {
-  margin-top: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #9c88ff;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.25rem;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-  background-color: #495057;
-  cursor: pointer;
-}
-
- /*button css*/
-
- .btn-secondary {
-  margin-top: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: greenyellow;
-  color: black;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.25rem;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-  background-color: #495057;
-  cursor: pointer;
-}
-
- /*button css*/
-
- .btn-tert {
-  margin-top: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: lightgray;
-  color: black;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.25rem;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.btn-tert:hover {
-  background-color: #495057;
-  cursor: pointer;
-}
-
-
-
-.container-fluid {
-  display: flex;          /* Set the parent container as a flex container */
-}
-
-.layout-wrapper {
-  display: flex; 
-  height: 100vh;
-}
-
-app-navbar {
+/* Canvas container */
+#canvasContainer {
+  position: relative;
   height: 100%;
-  border-right: 1px solid #ddd; /* Optional: for a separating line */
-  width: 25%; /* Adjust this to change the width of the navbar */
+  width: auto;
+  border: 1px solid black;
+  overflow: auto;
 }
 
-.main-content {
-  width: 75%; /* Adjust this in accordance to the width of the navbar */
-  justify-content: center;
-  align-items: center;
-
+/* Snellen Chart CSS */
+#snellenChart {
+  position: relative;
+  width: 100%;
+  height: auto;
 }
+
+/* Card container styles */
 .card-container {
   background-color: rgb(238, 234, 234);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
@@ -150,4 +27,77 @@ app-navbar {
   align-items: center;
   justify-content: center;
   width: 70%;
+}
+
+/* Parent Container */
+.parent-container {
+  display: flex;
+}
+
+/* Navbar Styles */
+.app-navbar {
+  width: 25%;
+}
+
+/* Pupil Reflexes Test Styles */
+.eye-movements-container {
+  width: 75%;
+}
+
+.title {
+  text-align: center;
+}
+
+/* Button Styles */
+.btn-primary, .btn-secondary, .btn-tert {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #9c88ff;
+  color: white;
+}
+
+.btn-primary:hover, .btn-tert:hover {
+  background-color: #495057;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background-color: greenyellow;
+  color: black;
+}
+
+.btn-tert {
+  background-color: lightgray;
+  color: black;
+}
+
+.container-fluid {
+  display: flex;
+}
+
+.layout-wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+app-navbar {
+  height: 100%;
+  border-right: 1px solid #ddd;
+  width: 25%;
+}
+
+.main-content {
+  width: 75%;
+  justify-content: center;
+  align-items: center;
 }

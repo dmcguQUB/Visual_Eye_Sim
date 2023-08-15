@@ -1,15 +1,24 @@
-/* General styles */
-.container {
+
+.full-container {
   display: flex;
-  padding: 20px;
+  justify-content: space-between;
+  align-items: center;
+  height: 90%;
+  margin-top: 20px;
 }
 
-.full-height {
-  height: 100vh;
+.parent-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 90%;
+  margin-top: 20px;
 }
 
-.center-text {
-  text-align: center;
+
+/* Styles for the navbar to make it span the full width */
+.navbar {
+  height: 100%;
 }
 
 .button {
@@ -56,13 +65,6 @@
   height: 10%;
 }
 
-@media (max-height: 600px) {
-  .button-bottom-right,
-  .button-bottom-left {
-    top: 60%;
-  }
-}
-
 #canvasContainer {
   position: relative;
   display: flex;
@@ -74,21 +76,23 @@
   max-width: 600px;
   min-height: 600px;
   min-width: 500px;
-  margin-right: ;
 }
 
+/* Style for the image to make it fit within its container */
 #Hand {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  object-fit: contain;  /* Added this property */
   pointer-events: none;
 }
-
 #myCanvas {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  
   
 }
 
@@ -102,6 +106,7 @@
   vertical-align: middle;
 }
 
+/* Style to limit the width of the Switch Eye button */
 .default-button {
   background-color: #9c88ff;
   border: none;
@@ -113,6 +118,8 @@
   font-size: 16px;
   transition-duration: 0.4s;
   cursor: pointer;
+  max-width: 600px;  /* Added this property */
+  margin: auto;  /* Added this property */
 }
 
 .default-button:hover {
@@ -133,11 +140,7 @@
   justify-content: center;
 }
 
-.parent-container {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-}
+
 /* Button styles */
 #topLeftButton {
   position: absolute;
