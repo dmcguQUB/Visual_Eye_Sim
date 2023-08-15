@@ -7,7 +7,6 @@ declare global {
 import {
   ViewChild,
   ElementRef,
-  TemplateRef,
   Component,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +14,7 @@ import { UseCaseService } from 'src/app/services/usecases.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 
 
+//removed the styles and doesn't have a template as code is mainly just ts file
 @Component({
   selector: 'app-visual-fields',
   template: '',

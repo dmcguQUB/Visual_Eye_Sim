@@ -15,10 +15,15 @@
   margin-top: 20px;
 }
 
+.eye-movements-container{
+  width: 75%;
+  margin-left: 20%;
+}
 
 /* Styles for the navbar to make it span the full width */
 .navbar {
   height: 100%;
+  width: 25%;
 }
 
 .button {

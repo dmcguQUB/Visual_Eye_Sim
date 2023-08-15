@@ -1,15 +1,9 @@
-
-canvas {
-  display: block;
-  margin: 0 auto;
-  justify-content: center;
-}
-
-/* Parent Container allow them to be on the same line*/
-.parent-container {
+ /* Parent Container allows for a row layout */
+ .parent-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
 }
 
 /* Navbar Styles */
@@ -17,15 +11,49 @@ canvas {
   width: 25%; /* Adjust width according to your needs */
 }
 
-/* Puipil reflexes Test Styles */
+/* Eye Movements Container Styles */
 .eye-movements-container {
+  display: flex;
+  flex-direction: column;
   width: 75%; /* Adjust width according to your needs */
 }
 
-.title {
-  text-align: center;
-  margin-left: 0px;
-  padding-left: 0px;
+/* Title Container Styles */
+.title-container {
+  text-align: center; /* Center the title */
+  padding: 20px 0; /* Add some vertical padding */
 }
 
+/* Title Styles */
+.title {
+  margin: 0; /* Reset the margin */
+}
+
+/* Case Study Instructions Styles */
+.case-study-instructions {
+  text-align: center;
+  padding: 10px;
+}
+
+/* Canvas Container Styles */
+#canvasContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.card-container {
+  background-color: rgb(238, 234, 234);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  margin: 20px;
+  padding: 20px;
+  color: #9c88ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+}
 

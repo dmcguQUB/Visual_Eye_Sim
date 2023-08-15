@@ -1,16 +1,33 @@
-<div class="container bg-light py-5">
-  <h1 class="display-5 fw-bold">Welcome to Quiz App</h1>
-  <p class="col-med-8 fs-4">
-    This quiz will contain {{totalQuestions}} questions in total. Each Question holds 10 points.
-  </p>
-  <h4>Rules:</h4>
-  <ol>
-    <li>Correct Question gives you 10 points</li>
-    <li>Incorrect Question gives you 0 points</li>
-    <li>You will have 60 seconds to answer a question</li>
-    <li>Refreshing the page will reset the Quiz</li>
-  </ol>
-
-  <h1 style="font-family: cursive;text-align:center">All the best!!</h1>
-  <button class="btn btn-primary bt-lg" (click)="startQuiz()" [disabled]="loading">Start the Quiz!!</button>
+<div class="full-container">
+  <div class="parent-container">
+    <!--navbar partial-->
+    <div class="d-flex justify-content-left text-center">
+    <app-navbar></app-navbar>
+  </div>
+  
+    <!--Right Container-->
+    <div class="card-container right-container">
+      <!--Title-->
+      <div class="card-container title-container">
+        <h1 class="title">Eye tests quiz</h1>
+      </div>
+      <!--Instructions-->
+      <div class="card-container case-study-instructions text-center">
+        <h2>Instructions:</h2>
+        <ol>
+          <li>Correct Question gives you 10 points</li>
+          <li>Incorrect Question gives you 0 points</li>
+          <li>You will have 60 seconds to answer a question</li>
+          <li>Refreshing the page will reset the Quiz</li>
+        </ol>
+      </div>
+  <!--Start quiz-->
+    <default-button
+    [type]="'button'"
+    [text]="'Start Quiz'"
+    [bgColor]="'#9c88ff'"
+    (click)="startQuiz()"
+  ></default-button>
+</div>
+</div>
 </div>

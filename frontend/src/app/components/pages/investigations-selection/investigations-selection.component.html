@@ -1,0 +1,37 @@
+<div class="full-container">
+  <div class="parent-container">
+    <!--navbar partial-->
+    <div class="d-flex justify-content-left text-center">
+    <app-navbar></app-navbar>
+  </div>
+  
+    <!--Right Container-->
+    <div class="card-container right-container">
+      <!--Title-->
+      <div class="card-container title-container">
+        <h1 class="title">Investigation selection</h1>
+      </div>
+      <!--Instructions-->
+      <div class="card-container case-study-instructions text-center">
+        <h2>Instructions:</h2>
+        <p>Choose the invet.</p>
+      </div>
+  
+      <div class="card-container">
+
+      </div>
+
+    <!--Switch to other eye-->
+      <div class="card-container">
+        <default-button
+          [type]="'button'"
+          [text]="'Switch to ' + otherEye + ' Eye'"
+          [bgColor]="'#9c88ff'"
+          (onClick)="handleClick()"
+        ></default-button>
+      </div>
+    </div>
+  </div>
+  </div>
+  
+  

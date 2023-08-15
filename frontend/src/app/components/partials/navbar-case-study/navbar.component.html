@@ -1,55 +1,33 @@
 <div class="navbar navbar-default">
   <h1 class="case-study-header">
-    <a routerLink="/case-study-detail/{{ caseStudy._id }}">{{
-      caseStudy.name
-    }}</a>
+    <a [routerLink]="'/case-study-detail/' + caseStudy._id">{{ caseStudy.name }}</a>
   </h1>
   <div class="navbar-inner">
     <ul class="nav navbar-nav">
       <li class="active">
-        <a routerLink="/case-study-detail/{{ caseStudy._id }}"
-          >Background Info</a
-        >
+        <a [routerLink]="'/case-study-detail/' + caseStudy._id">Background Info</a>
       </li>
-      <li class="dropdown">
-        <!--Only show dropdown after the user has clicked the first step-->
-        <a class="dropdown-toggle" *ngIf="isButtonClicked">Examinations</a>
+      <li class="dropdown" *ngIf="isPatientConvoFinished">
+        <a class="dropdown-toggle">Examinations</a>
         <ul class="dropdown-menu">
-          <!--Links to the tests-->
-          <li>
-            <a routerLink="/visual-acuity-test/{{ caseStudy._id }}"
-              >Visual Acuity Test</a
-            >
-          </li>
-          <li>
-            <a routerLink="/visual-fields-test-left/{{ caseStudy._id }}"
-              >Visual Fields Test By Confrontation</a
-            >
-          </li>
-
-          <li>
-            <a routerLink="/pupil-reflexes-test/{{ caseStudy._id }}"
-              >Pupil Reflexes Test</a
-            >
-          </li>
-          <li>
-            <a routerLink="/eye-movements-test/{{ caseStudy._id }}"
-              >Eye Movements Test</a
-            >
-          </li>
-          <li>
-            <a routerLink="/direct-ophthalmoscopy-test/{{ caseStudy._id }}"
-              >Direct Ophthalmoscopy</a
-            >
-          </li>
-          <li>
-            <a routerLink="/welcome/{{ caseStudy._id }}">Test Yourself</a>
-          </li>
+          <li><a [routerLink]="'/visual-acuity-test/' + caseStudy._id">Visual Acuity Test</a></li>
+          <li><a [routerLink]="'/visual-fields-test-left/' + caseStudy._id">Visual Fields Test By Confrontation</a></li>
+          <li><a [routerLink]="'/pupil-reflexes-test/' + caseStudy._id">Pupil Reflexes Test</a></li>
+          <li><a [routerLink]="'/eye-movements-test/' + caseStudy._id">Eye Movements Test</a></li>
+          <li><a [routerLink]="'/direct-ophthalmoscopy-test/' + caseStudy._id">Direct Ophthalmoscopy</a></li>
+          <li><a [routerLink]="'/welcome/' + caseStudy._id">Test Yourself</a></li>
         </ul>
       </li>
-      <li><a href="#" *ngIf="isButtonClicked">Investigation</a></li>
-      <li><a href="#" *ngIf="isButtonClicked">Investigation images</a></li>
-      <li><a href="#" *ngIf="isButtonClicked">Diagnosis</a></li>
+      <li class="dropdown" *ngIf="isPatientConvoFinished && isEyeExaminationTestFinished && isInvestigationTestFinished">
+        <a class="dropdown-toggle">Investigations</a>
+        <ul class="dropdown-menu">
+          <li><a>Investigations Selection</a></li>
+          <li *ngIf="isInvestigationTestFinished"><a>Investigations Images</a></li>
+        </ul>
+      </li>
+      <li *ngIf="isPatientConvoFinished && isEyeExaminationTestFinished && isInvestigationTestFinished">
+        <a href="#">Diagnosis</a>
+      </li>
     </ul>
   </div>
 </div>

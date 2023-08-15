@@ -1,10 +1,27 @@
-<div class="parent-container">
-  <!--navbar partial-->
-  <app-navbar></app-navbar>
- <!--eye movements container-->
- <div class="eye-movements-container">
-   <h1 class="title">Visual Fields Test By Confrontation</h1>
-   <canvas #myCanvas id="myCanvas" width="600" height="600" (mousemove)="mouseMoveHandler($event)"></canvas>
- </div>
-
+<div class="full-container">
+  <div class="parent-container">
+    <!--navbar partial-->
+    <app-navbar></app-navbar>
+    <!--eye movements container-->
+    <div class="eye-movements-container card-container">
+          <!--Title-->
+    <div class="card-container title-container">
+      <h1 class="title">Visual Fields Test By Confrontation</h1>
+    </div>
+    <!--Instructions-->
+    <div class="card-container case-study-instructions text-center">
+      <h2>Instructions:</h2>
+      <p>Move the mouse in order to see the back of the retina. You can adjust the resolution and peep hole size using your keyboard.</p>
+    </div>
+    <div id="canvasContainer">
+      <canvas
+        #myCanvas
+        id="myCanvas"
+        width="600"
+        height="600"
+        (mousemove)="mouseMoveHandler($event)"
+      ></canvas>
+    </div>
+    </div>
+  </div>
 </div>

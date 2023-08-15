@@ -55,6 +55,7 @@ import { UserscoreScoreOverTimeComponent } from './components/pages/userscore-sc
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 import { AvatarComponent } from './components/partials/avatar/avatar.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { InvestigationsSelectionComponent } from './components/pages/investigations-selection/investigations-selection.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     UserscoreScoreOverTimeComponent,
     UserProfilePageComponent,
     AvatarComponent,
+    InvestigationsSelectionComponent,
   ],
   imports: [
     BrowserModule,

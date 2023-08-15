@@ -1,75 +1,53 @@
-.full-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-}
-
-.parent-container {
+/* Parent Container */
+.container {
   display: flex;
   flex-direction: row;
-  height: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  background-color: white;
 }
 
-.d-flex {
+/* Card Styles */
+.card {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.scores-container {
-  width: 90%;
-  margin: 0 auto;
-}
-
-.card-container {
-  padding: 20px;
-  margin: 20px 0;
-  border: 1px solid #ddd;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.scores-instructions {
-  background-color: #f9f9f9;
-}
-
-.scores-tables {
-  background-color: #fff;
-}
-.graph-container {
+  background-color: rgb(238, 234, 234);
+  color: #9c88ff;
+  margin-right: 20px; /* Adjust spacing between cards */
+  padding: 20px;
   width: 100%;
-  height: 400px; /* Set this to whatever height you desire */
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-table {
-  width: 100%;
-  table-layout: fixed; /* This makes the column widths to be more predictable */
-  overflow-x: auto; /* Allows horizontal scrolling if the table gets too wide */
+.card-title {
+  font-size: 2em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #9c88ff;
 }
 
-td, th {
-  word-wrap: break-word; /* Breaks up words to prevent overflow */
-  overflow: hidden;
-  max-width: 200px; /* You can adjust this value */
-}
-.scores-container {
-  margin-bottom: 20px;
+/* Font Awesome Icons */
+.fa-check {
+  color: green;
 }
 
+.fa-times {
+  color: red;
+}
 
-@media (max-width: 600px) {
-  .card-container {
-    width: 90%;
-  }
-  .parent-container {
-    flex-direction: column;
-  }
+/* User's Activities */
+.card-outline-secondary {
+  border-color: #9c88ff;
+}
+
+.card-header {
+  background-color: #9c88ff;
+  color: white;
+}
+
+.btn-primary {
+  background-color: #9c88ff;
+  border-color: #9c88ff;
 }

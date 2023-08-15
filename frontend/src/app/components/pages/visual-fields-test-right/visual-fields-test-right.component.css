@@ -15,10 +15,13 @@
   margin-top: 20px;
 }
 
-
+.eye-movements-container{
+  margin-left: 10%;
+}
 /* Styles for the navbar to make it span the full width */
 .navbar {
   height: 100%;
+
 }
 
 .button {
@@ -95,6 +98,8 @@
   
   
 }
+
+
 
 .message-container {
   background-color: #f9f9f9;

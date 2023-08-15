@@ -2,6 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { ButtonStateService } from 'src/app/services/buttonState.service';
+import { ExamStateService } from 'src/app/services/examStateService';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 
@@ -11,13 +12,16 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-//vars
-isButtonClicked: boolean = false;
+//vars for propagating the user conversation
+isPatientConvoFinished: boolean = false;
+isEyeExaminationTestFinished: boolean = false;
+isInvestigationTestFinished: boolean = false;
+
 
 
   caseStudy: CaseStudies = new CaseStudies(); // Set to a default value
 
-  constructor(private activatedRoute: ActivatedRoute, private useCaseService: UseCaseService,private buttonStateService: ButtonStateService) { }
+  constructor(private activatedRoute: ActivatedRoute, private useCaseService: UseCaseService,private buttonStateService: ButtonStateService, private examStateService: ExamStateService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -28,11 +32,15 @@ isButtonClicked: boolean = false;
         }, error => {
           console.log('An error occurred:', error); // Log any errors for debugging
         });
+
+        this.examStateService.isEyeExaminationTestFinished$.subscribe(isFinished => {
+          this.isEyeExaminationTestFinished = isFinished;
+        });
       }
     });
     
     //change button so user goes to examinations stage when they are finished with intro
-    this.buttonStateService.currentButtonState.subscribe(state => this.isButtonClicked = state);
+    this.buttonStateService.currentButtonState.subscribe(state => this.isPatientConvoFinished = state);
 
   }
 

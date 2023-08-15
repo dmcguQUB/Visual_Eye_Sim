@@ -24,9 +24,8 @@
       <p><strong>Family History:</strong> {{ caseStudy.familyHistory }}</p>
     </div>
 
-    <div class="card-container case-study-button text-center">
+    <div *ngIf="showButton" class="card-container case-study-button text-center">
       <default-button 
-      *ngIf="showButton" 
       [type]="'button'" 
       [text]="'Confirm Finished'" 
       [bgColor]="'#9c88ff'"

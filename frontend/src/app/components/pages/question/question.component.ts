@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { interval } from 'rxjs';
+import { ExamStateService } from 'src/app/services/examStateService';
 import { QuestionService } from 'src/app/services/questions.service';
 import { UserService } from 'src/app/services/user.service';
 import { Question } from 'src/app/shared/models/question';
@@ -27,14 +28,17 @@ export class QuestionComponent implements OnInit {
   useCaseId: any = "";
   currentUser:User= new User();
   userId: string ="";
-  // Add this line to store userId
+  public isEyeExaminationTestFinished: boolean = false; // adding to change the state of the navbar to unlock investigations
+
 
   // Add a new state variable to track loading status
 public loading: boolean = true;
+
+
   
 
 
-  constructor(private questionsService: QuestionService, private route: ActivatedRoute, private userService: UserService) {
+  constructor(private questionsService: QuestionService, private route: ActivatedRoute, private userService: UserService,  private examStateService: ExamStateService) {
 
    }
   ngOnInit(): void {
@@ -112,8 +116,11 @@ answer(currentQuestionNumber: number, option: any) {
    correct: option.correct,
  };
 
+ //if the quiz current question number is the same as the question list length end the test
  if (currentQuestionNumber === this.questionList.length) {
    this.isQuizCompleted = true; //completed quiz, show results
+   this.isEyeExaminationTestFinished = true;
+   this.examStateService.isEyeExaminationTestFinished = true; // Update the service//edit this boolean which will update navbar to show investigations (next stage)
    this.stopCounter(); //stop counter
    this.sendUserScore(); // Send the user's score to backend when the quiz is completed
  }
