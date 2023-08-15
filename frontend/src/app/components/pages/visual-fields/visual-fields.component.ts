@@ -5,9 +5,10 @@ declare global {
 
 
 import {
-  Component,
   ViewChild,
   ElementRef,
+  TemplateRef,
+  Component,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UseCaseService } from 'src/app/services/usecases.service';
@@ -16,8 +17,7 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
 
 @Component({
   selector: 'app-visual-fields',
-  templateUrl: './visual-fields.component.html',
-  styleUrls: ['./visual-fields.component.css']
+  template: '',
 })
 
 //creating abstract class as will be used by both left and right eye
