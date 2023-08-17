@@ -6,6 +6,7 @@ import {
   AfterViewInit,
   Input,
 } from '@angular/core';
+import { ButtonStateService } from 'src/app/services/buttonState.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 
 @Component({
@@ -22,10 +23,16 @@ export class VisualAcuityTestComponent implements OnInit, AfterViewInit {
   currentConvo = 1;// to order convo type
   displayedMessages: string[] = [];// declare messages var to show with time delay
 
+  showStartButton: boolean = true;
+  showNavButtons: boolean = false;
+
+  constructor(private buttonStateService: ButtonStateService) {}
 
 
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+     // Subscribe to button state
+     this.buttonStateService.currentButtonState.subscribe(state => this.showNavButtons = state);
+  }
 
   ngAfterViewInit(): void {
     this.baseWidth = this.chart.nativeElement.clientWidth;
@@ -41,12 +48,16 @@ export class VisualAcuityTestComponent implements OnInit, AfterViewInit {
   nextConvo() {
     if (this.currentConvo < 3) {
       this.currentConvo++;
+      this.showStartButton = true; // Reset the button for the next convo
+      this.showNavButtons = false; // Hide the navigation buttons
     }
   }
   
   prevConvo() {
     if (this.currentConvo > 1) {
       this.currentConvo--;
+      this.showStartButton = true; // Reset the button for the previous convo
+      this.showNavButtons = false; // Hide the navigation buttons
     }
   }
 
@@ -60,14 +71,17 @@ export class VisualAcuityTestComponent implements OnInit, AfterViewInit {
         index++;
       } else {
         clearInterval(intervalId);
+        this.buttonStateService.changeButtonState(true); // Display the navigation buttons
       }
     }, 1000); // delay of 1 second
   }
 
   onDisplayMessages(index: number) {
     this.displayedMessages = []; // reset displayed messages
+    this.showStartButton = false; // hide the start button
     this.displayMessagesWithDelay(this.allMessages[index]); // display messages from the selected array
   }
+
   
   clearConvo() {
     this.displayedMessages = [];

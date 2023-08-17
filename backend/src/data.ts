@@ -64,52 +64,105 @@ export const sample_users: any[] = [
 //samle questions to populate database
 export const sample_questions: any[] = [
   {
+    //EYE TESTS
     //case study 1
-    questionText: "Case Study 1 - Question 1",
+    questionText: "Case Study 1 - Eye Tests - Question 1",
     options: [
       { text: "Option 1", correct: true },
       { text: "Option 2", correct: false },
       { text: "Option 3", correct: false },
       { text: "Option 4", correct: false },
     ],
-    explanation: "Explanation for Case Study 1 - Question 1",
-    caseStudyId: "1",
+    explanation: "Explanation for Case Study 1 - Eye Tests  - Question 1",
+    caseStudyId: "64c23a6d1a8f96f293896214",
+    questionType: "eye-test"
+
   },
   {
-    questionText: "Case Study 1 - Question 2",
+    questionText: "Case Study 1 - Eye Tests - Question 2",
     options: [
       { text: "Option 1", correct: false },
       { text: "Option 2", correct: true },
       { text: "Option 3", correct: false },
       { text: "Option 4", correct: false },
     ],
-    explanation: "Explanation for Case Study 1 - Question 2",
-    caseStudyId: "1",
+    explanation: "Explanation for Case Study 1 - Eye Tests  - Question 2",
+    caseStudyId: "64c23a6d1a8f96f293896214",
+    questionType: "eye-test"
   },
 
   //case study 2
   {
-    questionText: "Case Study 2 - Question 1",
+    questionText: "Case Study 2 - Eye Tests - Question 1",
     options: [
       { text: "Option 1", correct: false },
       { text: "Option 2", correct: false },
       { text: "Option 3", correct: true },
       { text: "Option 4", correct: false },
     ],
-    explanation: "Explanation for Case Study 2 - Question 1",
-    caseStudyId: "2",
+    explanation: "Explanation for Case Study 2 - Eye Tests  - Question 1",
+    caseStudyId: "64c23a6d1a8f96f293896215",
+    questionType: "eye-test"
   },
   {
-    questionText: "Case Study 2 - Question 2",
+    questionText: "Case Study 2 - Eye Tests - Question 2",
     options: [
       { text: "Option 1", correct: false },
       { text: "Option 2", correct: false },
       { text: "Option 3", correct: false },
       { text: "Option 4", correct: true },
     ],
-    explanation: "Explanation for Case Study 2 - Question 2",
-    caseStudyId: "2",
+    explanation: "Explanation for Case Study 2 - Eye Tests  - Question 2",
+    caseStudyId: "64c23a6d1a8f96f293896215",
+    questionType: "eye-test"
   },
+  {
+    //Investigations
+    //case study 1
+    questionText: "Case Study 1 - Investigation - Question 1, Choose which investigations you want to request:",
+    options: [
+      { text: "Erythrocyte sedimentation rate", correct: true },
+      { text: "C-reactive protein", correct: true },
+      { text: "Full blood picture", correct: true },
+      { text: "Urea and electrolytes", correct: true },
+      { text: "Liver function test", correct: true },
+      { text: "Blood glucose", correct: true },
+      { text: "Blood pressure", correct: false },
+      { text: "Temporal artery biopsy", correct: true },
+      { text: "CT head", correct: true },
+      { text: "Fundal photograph", correct: true },
+      { text: "Flourescein angiography", correct: false },
+      { text: "Optical coherence tomography", correct: true },
+      { text: "Formal visual fields", correct: true },
+    ],
+    explanation: "Explanation for Case Study 1 - Eye Tests  - Question 1",
+    caseStudyId: "64c23a6d1a8f96f293896214",
+    questionType: "eye-test"
+
+  },{
+   //case study 2
+   questionText: "Case Study 2 - Investigation - Question 1, Choose which investigations you want to request:",
+   options: [
+     { text: "Erythrocyte sedimentation rate", correct: true },
+     { text: "C-reactive protein", correct: true },
+     { text: "Full blood picture", correct: true },
+     { text: "Urea and electrolytes", correct: true },
+     { text: "Liver function test", correct: true },
+     { text: "Blood glucose", correct: true },
+     { text: "Blood pressure", correct: false },
+     { text: "Temporal artery biopsy", correct: true },
+     { text: "CT head", correct: true },
+     { text: "Fundal photograph", correct: true },
+     { text: "Flourescein angiography", correct: false },
+     { text: "Optical coherence tomography", correct: true },
+     { text: "Formal visual fields", correct: true },
+   ],
+   explanation: "Explanation for Case Study 2 - Eye Tests  - Question 1",
+   caseStudyId: "64c23a6d1a8f96f293896215",
+   questionType: "eye-test"
+
+ },
+  
 ];
 
 

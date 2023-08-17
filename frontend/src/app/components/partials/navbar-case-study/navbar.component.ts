@@ -1,8 +1,8 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { ButtonStateService } from 'src/app/services/buttonState.service';
-import { ExamStateService } from 'src/app/services/examStateService';
+import { ExamStateService } from 'src/app/services/examStateService.service';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 

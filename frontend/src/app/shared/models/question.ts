@@ -7,6 +7,8 @@ export class Question {
   options!: Option[];
   explanation!: string;
   caseStudyId!: string;
+  questionType?: 'eye-test' | 'investigation' | 'diagnosis'|null; // identify which type of question it is for 
+
   
 
   // Initialize in case an empty value is found within the search
@@ -16,6 +18,7 @@ export class Question {
     this.options = [{text: '', correct: false}];
     this.explanation = '';
     this.caseStudyId = '';
+    this.questionType;// assign null to start
   }
 }
 

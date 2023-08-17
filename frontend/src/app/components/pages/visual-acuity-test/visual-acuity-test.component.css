@@ -13,7 +13,12 @@
   width: 100%;
   height: auto;
 }
-
+.right-container{
+  background-color: rgb(238, 234, 234);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+   border-radius: 10px;
+  color: #9c88ff;
+}
 /* Card container styles */
 .card-container {
   background-color: rgb(238, 234, 234);
@@ -27,6 +32,20 @@
   align-items: center;
   justify-content: center;
   width: 70%;
+}
+
+.row{
+  background-color: rgb(238, 234, 234);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  margin: 20px;
+  padding: 20px;
+  color: #9c88ff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Parent Container */
@@ -88,13 +107,16 @@
 .layout-wrapper {
   display: flex;
   height: 100vh;
+  align-items: center;
+
 }
 
-app-navbar {
+/* Styles for the navbar to make it span the full width */
+.navbar {
   height: 100%;
-  border-right: 1px solid #ddd;
   width: 25%;
 }
+
 
 .main-content {
   width: 75%;

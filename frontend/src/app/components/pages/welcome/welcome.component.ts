@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '@auth0/auth0-angular';
 import { QuestionService } from 'src/app/services/questions.service'; // Import your service
 
 @Component({
@@ -14,7 +13,7 @@ export class WelcomeComponent implements OnInit {
   loading: boolean = true; 
   totalQuestions?: number;  // Define totalQuestions variable
 
-  constructor(private router: Router, private route: ActivatedRoute, public auth: AuthService, private questionService: QuestionService){} // Inject your service
+  constructor(private router: Router, private route: ActivatedRoute, private questionService: QuestionService){} // Inject your service
 
   ngOnInit(): void {
     this.useCaseId = this.route.snapshot.paramMap.get('useCaseId');

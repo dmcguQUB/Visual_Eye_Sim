@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButton, MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,7 @@ import { AppComponent } from './app.component';
 import { WelcomeComponent } from './components/pages/welcome/welcome.component';
 import { QuestionComponent } from './components/pages/question/question.component';
 import { HeaderComponent } from './components/partials/header/header.component';
-import { ChangeBgDirective } from './change-bg.directive';
+import { ChangeBgDirective } from './shared/directives/change-bg.directive';
 import { HomeComponent } from './components/pages/home/home.component';
 import { CaseStudyDetailComponent } from './components/pages/case-study-detail/case-study-detail.component';
 import { PupilReflexesTestComponent } from './components/pages/pupil-reflexes-test/pupil-reflexes-test.component';
@@ -32,7 +32,6 @@ import { TitleComponent } from './components/partials/title/title.component';
 
 
 // Import the module from the SDK
-import { AuthModule } from '@auth0/auth0-angular';
 import { AuthButtonComponent } from './components/partials/buttons/auth-button.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
@@ -56,6 +55,8 @@ import { UserProfilePageComponent } from './components/pages/user-profile-page/u
 import { AvatarComponent } from './components/partials/avatar/avatar.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { InvestigationsSelectionComponent } from './components/pages/investigations-selection/investigations-selection.component';
+import { PatientConversationComponent } from './components/partials/patient-conversation/patient-conversation.component';
+import { QaComponent } from './components/partials/qa/qa.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +98,8 @@ import { InvestigationsSelectionComponent } from './components/pages/investigati
     UserProfilePageComponent,
     AvatarComponent,
     InvestigationsSelectionComponent,
+    PatientConversationComponent,
+    QaComponent,
   ],
   imports: [
     BrowserModule,
@@ -105,15 +108,6 @@ import { InvestigationsSelectionComponent } from './components/pages/investigati
     MatMenuModule,
     BrowserAnimationsModule,
     MatButtonModule,
-     // Import the module into the application, with configuration
-     AuthModule.forRoot({
-      domain: 'dev-7tjbr40gbhkjn2xi.us.auth0.com',
-      clientId: 'LJovVWHFkNXSiWncavMZt9quL665PEoM',
-      //allows Auth0 to redirect the user back to the specific URL after successfully authenticating.
-      authorizationParams: {
-        redirect_uri: window.location.origin
-      }
-    }),
     FormsModule,
     //module used for root
     ToastrModule.forRoot({

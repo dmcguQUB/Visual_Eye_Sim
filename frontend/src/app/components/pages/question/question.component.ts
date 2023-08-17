@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { interval } from 'rxjs';
-import { ExamStateService } from 'src/app/services/examStateService';
+import { ExamStateService } from 'src/app/services/examStateService.service';
 import { QuestionService } from 'src/app/services/questions.service';
 import { UserService } from 'src/app/services/user.service';
 import { Question } from 'src/app/shared/models/question';
@@ -29,7 +29,7 @@ export class QuestionComponent implements OnInit {
   currentUser:User= new User();
   userId: string ="";
   public isEyeExaminationTestFinished: boolean = false; // adding to change the state of the navbar to unlock investigations
-
+  questionType: string ="eye-test"
 
   // Add a new state variable to track loading status
 public loading: boolean = true;
@@ -38,7 +38,7 @@ public loading: boolean = true;
   
 
 
-  constructor(private questionsService: QuestionService, private route: ActivatedRoute, private userService: UserService,  private examStateService: ExamStateService) {
+  constructor(private questionsService: QuestionService, private route: ActivatedRoute, private userService: UserService,  private examStateService: ExamStateService,private cdr: ChangeDetectorRef) {
 
    }
   ngOnInit(): void {
@@ -58,21 +58,23 @@ public loading: boolean = true;
 
 
   }
-
-  getQuestionsForUseCase() {
+getQuestionsForUseCase() {
     console.log("This is case study from question component" + this.useCaseId);
     if (this.useCaseId) {
       this.questionsService.getQuestionsByCaseStudyId(this.useCaseId).subscribe((res) => {
-        this.questionList = res;
-
-        // Initialize userAnswers now that we have the questions
+        
+        // Add this line to filter the questions
+        this.questionList = res.filter(question => question.questionType === 'eye-test');
+        
+        // Continue with the existing logic
         this.questionList.forEach(() => this.userAnswers.push({
           questionId: '', 
           userAnswer: '', 
           correct: false,
         }));
-             // Set loading to false now that we have the data
-      this.loading = false;
+
+        // Set loading to false now that we have the data
+        this.loading = false;
       }, (err) => {
         console.error(err);
       });
@@ -81,17 +83,28 @@ public loading: boolean = true;
     }
 }
 
+
   
 
-  //create method to go to next question
-  nextQuestion() {
-    this.currentQuestion++;
+// Method to go to the next question
+nextQuestion() {
+  if (this.currentQuestion < this.questionList.length - 1) { // Make sure we don't exceed the list size
+      this.currentQuestion++;
+  } else {
+      // If you're at the end, you might want to automatically complete the quiz if that's the desired behavior
+      this.isQuizCompleted = true;
+      this.stopCounter();
+      this.sendUserScore();
   }
+}
 
-  //method to go to previous question
-  previousQuestion() {
-    this.currentQuestion--;
+// Method to go to the previous question
+previousQuestion() {
+  if (this.currentQuestion > 0) { // Make sure we don't go below 0
+      this.currentQuestion--;
   }
+}
+
 
   //answer method to select the answer user selects
  // Add a new property to keep track of user's answers
@@ -99,50 +112,32 @@ userAnswers: UserAnswer[] = [];
 
 //answer method to select the answer user selects
 answer(currentQuestionNumber: number, option: any) {
+  // No changes to the beginning of the function
 
-  // If the user has not selected an answer for the current question, add a default answer
-  if (!this.userAnswers[currentQuestionNumber]) {
-   this.userAnswers[currentQuestionNumber] = {
-     questionId: '', 
-     userAnswer: '', 
-     correct: false,
-   };
- }
+  if (option.correct) {
+      this.points += 10;
+      this.correctAnswer++;
+  } else {
+      this.incorrectAnswer++;
+      this.points += 0;
+  }
 
- // Track the user's answer
- this.userAnswers[currentQuestionNumber] = {
-   questionId: this.questionList[this.currentQuestion]._id, // Replace with the actual question ID property
-   userAnswer: option.text, // Replace with the actual user's answer property
-   correct: option.correct,
- };
-
- //if the quiz current question number is the same as the question list length end the test
- if (currentQuestionNumber === this.questionList.length) {
-   this.isQuizCompleted = true; //completed quiz, show results
-   this.isEyeExaminationTestFinished = true;
-   this.examStateService.isEyeExaminationTestFinished = true; // Update the service//edit this boolean which will update navbar to show investigations (next stage)
-   this.stopCounter(); //stop counter
-   this.sendUserScore(); // Send the user's score to backend when the quiz is completed
- }
-
- if (option.correct) {
-   this.points += 10; // if they are correct give 10 points
-   this.correctAnswer++; //increment correct answer
-   setTimeout(() => {
-     this.currentQuestion++; // go to next question
-     this.resetCounter(); //reset counter
-     this.getProgressPercent(); //call progress percent
-   }, 1000); //1 second
- } else {
-   setTimeout(() => {
-     this.currentQuestion++; // go to next question
-     this.incorrectAnswer++; //increment incorrect answer
-     this.resetCounter();
-     this.getProgressPercent();
-   }, 1000);
-   this.points +=0; // if they are incorrect they get 0
- }
+  // Check if you're at the end of the quiz
+  if (currentQuestionNumber >= this.questionList.length) {
+      this.isQuizCompleted = true;
+      this.isEyeExaminationTestFinished = true;
+      this.examStateService.isEyeExaminationTestFinished = true;
+      this.stopCounter();
+      this.sendUserScore();
+  } else {
+      setTimeout(() => {
+          this.currentQuestion++;
+          this.resetCounter();
+          this.getProgressPercent();
+      }, 1000);
+  }
 }
+
 
 
 
@@ -152,9 +147,21 @@ answer(currentQuestionNumber: number, option: any) {
       .subscribe(val => {
         this.counter--;
         if (this.counter === 0) {
+          // Add logic here for unanswered questions
+          if (!this.userAnswers[this.currentQuestion]) {
+            this.userAnswers[this.currentQuestion] = {
+              questionId: this.questionList[this.currentQuestion]._id, 
+              userAnswer: '', 
+              correct: false
+            };
+            this.incorrectAnswer++; // increment incorrect answer count
+            this.points += 0; // no points for unanswered
+        }
+        
+
           this.currentQuestion++; // go to next question
           this.counter = 60; //reset to 60 seconds
-          this.points = 0; // remove 10 points
+          this.getProgressPercent(); // Update progress percent
         }
       });
 
@@ -162,7 +169,8 @@ answer(currentQuestionNumber: number, option: any) {
     setTimeout(() => {
       this.interval$.unsubscribe();
     }, 600000);
-  }
+}
+
 
   //stop counter
   stopCounter() {

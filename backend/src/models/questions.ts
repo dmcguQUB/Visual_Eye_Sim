@@ -19,6 +19,7 @@ export interface Quiz {
   options: Option[];
   explanation: string;
   caseStudyId: string; // This is used to link questions to a specific case study.
+  questionType: 'eye-test' | 'investigation' | 'diagnosis'; // identify which type of question it is for 
 }
 
 // Define the Mongoose schema for the Quiz interface
@@ -27,6 +28,7 @@ export const QuizSchema = new Schema<Quiz>({
   options: { type: [OptionSchema], required: true },
   explanation: { type: String, required: true },
   caseStudyId: { type: String, required: true },
+  questionType: { type: String, enum: ['eye-test', 'investigation', 'diagnosis'], required: true }, // add enum to prevent different values being selected
 }, {
   toJSON: {
     virtuals: true 

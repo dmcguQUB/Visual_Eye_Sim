@@ -53,5 +53,24 @@ router.get(
   })
 );
 
+
+// API endpoint to get questions for a specific case study by its ID and type of question
+router.get(
+  "/case_study/:id/:type",
+  expressAsyncHandler(async (req, res) => {
+    const questions = await QuizModel.find({ 
+      caseStudyId: req.params.id,
+      questionType: req.params.type 
+    });
+
+    if (questions) {
+      res.send(questions);
+    } else {
+      res.status(404).send({ message: 'Questions not found for case study' });
+    }
+  })
+);
+
+
 // Export the router so it can be used in other files (e.g., server.ts)
 export default router;

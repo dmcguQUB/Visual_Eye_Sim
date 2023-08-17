@@ -1,0 +1,7 @@
+<div *ngFor="let qa of questionsAndAnswers; let i = index">
+  <h3>{{ qa.question }}</h3>
+  <select [(ngModel)]="answers[i]" class="form-control">
+    <option *ngFor="let answer of qa.answers">{{ answer }}</option>
+  </select>
+</div>
+<a class="btn btn-primary mt-2" (click)="onSubmit()">Submit</a>

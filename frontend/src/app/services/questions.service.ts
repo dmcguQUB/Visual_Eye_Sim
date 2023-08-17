@@ -18,11 +18,18 @@ export class QuestionService {
     return this.http.get<Question[]>(QUESTIONS_URL);
   }
 
-  // create a page for question when you click onto it. You only need a type of Quiz it is not an array type
-  getQuestionsByCaseStudyId(caseStudyId: string): Observable<Question[]> {
+   // create a page for question when you click onto it. You only need a type of Quiz it is not an array type
+   getQuestionsByCaseStudyId(caseStudyId: string): Observable<Question[]> {
     console.log('this is case study ID from backend' + caseStudyId);
     // search question by id
     return this.http.get<Question[]>(QUESTION_BY_ID_URL + caseStudyId);
+  }
+
+  // create a page for question when you click onto it. You only need a type of Quiz it is not an array type
+  getQuestionsByCaseStudyIdAndQuestionType(caseStudyId: string, questionType:string): Observable<Question[]> {
+    console.log('this is case study ID from backend' + caseStudyId +questionType);
+    // search question by id
+    return this.http.get<Question[]>(QUESTION_BY_ID_URL + caseStudyId + questionType);
   }
 
 // post a user's score in the backend passing userScore object
