@@ -195,6 +195,60 @@ router.get(
     res.send(aggregation); // Send aggregated results as response
   })
 );
+//Works _ MIGHT NO LONGER NEED AS CAN GET MOST RECENT SCORE IN THE PATCH -  "/update-latest/:userId/:caseStudyId",
+//get the lastest score for user and the corresponding CaseId. Mostly used to find the recent test to add the score to
+router.get(
+  "/latest/:userId/:caseStudyId",
+  expressAsyncHandler(async (req, res) => {
+    const { userId, caseStudyId } = req.params;
+
+    const latestUserScore = await UserScoreModel.findOne({
+      userId,
+      caseStudyId
+    }).sort({ createdAt: -1 });  // Sorting by creation date to get the latest score
+
+    if (latestUserScore) {
+      res.send(latestUserScore);
+    } else {
+      res.status(404).send({ message: 'Score not found for the given user and case study.' });
+    }
+  })
+);
+
+//WORKS
+//API method to find the most recent score for a user and case study. The score will be updated with later tests scores (e.g. investigations and diagnosis scores)
+router.patch(
+  "/update-latest/:userId/:caseStudyId",
+  expressAsyncHandler(async (req:any, res:any) => {
+    const { userId, caseStudyId } = req.params;
+    const newScore = req.body.score;  // Assuming the score from test 2 is passed in the request body
+
+    if (typeof newScore !== 'number') {
+      return res.status(400).send({ message: 'Invalid score value in request.' });
+    }
+
+    // First, fetch the latest score for the given user and case study
+    const latestUserScore = await UserScoreModel.findOne({
+      userId,
+      caseStudyId
+    }).sort({ createdAt: -1 });  // Sorting by creation date to get the latest score
+
+    if (!latestUserScore) {
+      return res.status(404).send({ message: 'Score not found for the given user and case study.' });
+    }
+
+    // Add the new score to the fetched score (score from test 1)
+    latestUserScore.score += newScore;
+
+    const updatedScore = await latestUserScore.save();  // Save the updated score
+
+    if (updatedScore) {
+      res.send(updatedScore);
+    } else {
+      res.status(500).send({ message: 'Failed to update the score.' });
+    }
+  })
+);
 
 // Export the router so it can be used in other files (e.g., server.ts)
 export default router;

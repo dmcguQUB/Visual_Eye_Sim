@@ -21,7 +21,7 @@
       <li class="dropdown" *ngIf="isPatientConvoFinished && isEyeExaminationTestFinished">
         <a class="dropdown-toggle">Investigations</a>
         <ul class="dropdown-menu">
-          <li><a>Investigations Selection</a></li>
+          <li [routerLink]="'/investigations-selection/' + caseStudy._id"><a>Investigations Selection</a></li>
           <li *ngIf="isInvestigationTestFinished"><a>Investigations Images</a></li>
         </ul>
       </li>

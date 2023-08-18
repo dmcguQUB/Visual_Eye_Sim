@@ -14,7 +14,6 @@ export class UserScoreService {
   getAllUserScores(): Observable<UserScore[]> {
     return this.http.get<UserScore[]>(`${USER_SCORES_URL}`);
   }
-  
 
   // Fetch user scores by user ID
   getUserScores(userId: string): Observable<UserScore[]> {
@@ -42,7 +41,6 @@ export class UserScoreService {
     >(url);
   }
 
-
   getCorrectAndIncorrectAnswersWithDates(
     caseStudyId: string,
     startDate: string,
@@ -50,8 +48,32 @@ export class UserScoreService {
   ): Observable<{ correct: number; incorrect: number }> {
     const url = `${USER_SCORES_URL}/case-study/${caseStudyId}/answers-in-dates`;
     return this.http.get<{ correct: number; incorrect: number }>(url, {
-      params: { startDate, endDate }
+      params: { startDate, endDate },
     });
   }
-  
+
+  // Fetch the latest user score for a specific user and case study
+  getLatestUserScore(
+    userId: string,
+    caseStudyId: string
+  ): Observable<UserScore | null> {
+    const url = `${USER_SCORES_URL}/latest/${userId}/${caseStudyId}`;
+    return this.http.get<UserScore | null>(url); // Return type could be UserScore or null
+  }
+
+  // Update a user score
+  updateUserScore(score: UserScore): Observable<UserScore> {
+    const url = `${USER_SCORES_URL}/${score.score}`; // Assuming that the score has an _id field
+    return this.http.put<UserScore>(url, score);
+  }
+
+  // Update the latest score of a user for a specific case study with a new test score
+  updateLatestUserScore(
+    userId: string,
+    caseStudyId: string,
+    newTestScore: number
+  ): Observable<UserScore> {
+    const url = `${USER_SCORES_URL}/update-latest/${userId}/${caseStudyId}`;
+    return this.http.patch<UserScore>(url, { score: newTestScore });
+  }
 }

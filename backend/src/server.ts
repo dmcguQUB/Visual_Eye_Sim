@@ -12,7 +12,7 @@ import userRouter from './routers/user.router';
 import questionsRouter from './routers/questions.router';
 import { dbConnect } from './configs/database.config'; // Import database configuration
 import userScoresRouter from './routers/userscores.router';
-
+import testRouter from './routers/test.router';
 // Connect to the MongoDB database using the database configuration
 dbConnect();
 
@@ -33,6 +33,8 @@ app.use("/api/case_studies", caseStudiesRouter); // Router for case studies
 app.use("/api/users", userRouter); // Router for user-related actions
 app.use("/api/questions", questionsRouter); // Router for questions and quizzes
 app.use("/api/userscores", userScoresRouter); // Router for user scores and results
+app.use("/api/test", testRouter); // Router for user scores and results
+
 
 // Serve static assets like eye test images from the backend
 app.use('/assets', express.static(path.join(__dirname, 'assets')));

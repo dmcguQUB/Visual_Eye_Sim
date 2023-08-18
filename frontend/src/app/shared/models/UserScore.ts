@@ -8,6 +8,12 @@ export interface UserAnswer {
   userAnswer: string;
   correct: boolean;
 }
+export interface UserAnswerInvestigation {
+  questionId: string;
+  userAnswers: string[]; // changed from userAnswer to userAnswers which is an array
+  correct: boolean;
+}
+
 export class UserScore {
   userId!: string;
   caseStudyId!: string;
@@ -16,4 +22,5 @@ export class UserScore {
   testTakenAt!: Date;
   questions?: any[]; // Change the type to match the Question model if available
   caseStudy?: CaseStudies; // Add caseStudy property to store case study detail
+  UserAnswerInvestigation?: UserAnswerInvestigation[];
 }

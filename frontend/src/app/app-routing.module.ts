@@ -22,6 +22,7 @@ import { AdminGuard } from './auth/guards/admin.guard';
 import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';
 import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/userscore-score-over-time/userscore-score-over-time.component';
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
+import { InvestigationsSelectionComponent } from './components/pages/QA/investigations-selection/investigations-selection.component';
 
 const routes: Routes = [
   //home route
@@ -68,6 +69,11 @@ const routes: Routes = [
   {
     path: 'welcome/:useCaseId',
     component: WelcomeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'investigations-selection/:useCaseId',
+    component: InvestigationsSelectionComponent,
     canActivate: [AuthGuard],
   },
   {

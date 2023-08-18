@@ -179,3 +179,52 @@ export const sample_user_scores: any[] = [
     testTakenAt: new Date(),
   },
 ];
+
+// Sample data for Test model
+
+export const sample_test_data: any[] = [
+  {
+    userId: "64b83c2db2ec5e03be43b139", // John Doe's ID
+    caseStudyId: "64b55374f856931e2ae20b20", // Referring to the first case study
+
+    // Eye Test Answers
+    eyeTest: {
+      answers: [
+        { questionId: "64b947a5f704861cb51260ae", answer: "Option 1", correct: true },
+        { questionId: "64b947a5f704861cb51260b3", answer: "Option 2", correct: false }
+      ],
+      score: 1 // 1 out of 2 questions correct
+    },
+
+    // Investigations Test Answers
+    investigationsTest: {
+      answers: [
+        {
+          questionId: "64c23a6d1a8f96f293896216",
+          userAnswers: ["Erythrocyte sedimentation rate", "C-reactive protein"],
+          correctAnswers: ["Erythrocyte sedimentation rate", "C-reactive protein", "Full blood picture"]
+        },
+        {
+          questionId: "64c23a6d1a8f96f293896217",
+          userAnswers: ["Temporal artery biopsy", "CT head"],
+          correctAnswers: ["Temporal artery biopsy", "CT head", "Fundal photograph"]
+        }
+      ],
+      score: 2 // 2 out of 2 questions correct (assuming the userAnswers match correctAnswers)
+    },
+
+    // Diagnosis Test Answers
+    diagnosisTest: {
+      answers: [
+        { questionId: "64b947a5f704861cb51260af", answer: "Option 3", correct: true },
+        { questionId: "64b947a5f704861cb51260b4", answer: "Option 1", correct: false }
+      ],
+      score: 1 // 1 out of 2 questions correct
+    },
+
+    createdAt: new Date(),
+  }
+];
+
+
+
