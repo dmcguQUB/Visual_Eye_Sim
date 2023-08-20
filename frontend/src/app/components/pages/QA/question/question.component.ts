@@ -126,7 +126,7 @@ answer(currentQuestionNumber: number, option: any) {
   if (currentQuestionNumber >= this.questionList.length) {
       this.isQuizCompleted = true;
       this.isEyeExaminationTestFinished = true;
-      this.examStateService.isEyeExaminationTestFinished = true;
+      this.examStateService.isTestFinished = true;
       this.stopCounter();
       this.sendUserScore();
   } else {

@@ -1,15 +1,17 @@
 <!--frontend/src/app/components/pages/question/question.component.html-->
-
 <div class="full-container">
   <div class="parent-container">
     <!--navbar partial-->
     <div class="d-flex justify-content-left text-center">
       <app-navbar></app-navbar>
     </div>
-    <!--Pupil reflexes test-->
+
+    <!--Main content-->
+    <!--Quiz content-->
     <div class="card-container eye-movements-container">
       <div class="container mt-5">
         <div class="card">
+          <!--Questions-->
           <ng-container *ngIf="!isQuizCompleted">
             <div class="d-flex justify-content-between p-3">
               <div class="image">
@@ -20,7 +22,7 @@
                 />
               </div>
               <div class="quiz-header">
-                <h4>Investigations</h4>
+                <h4>Eye Tests Quiz</h4>
                 <span>Welcome {{ name }}</span>
               </div>
             </div>
@@ -54,15 +56,25 @@
                 <h3>{{ questionList[currentQuestion].questionText }}</h3>
               </div>
             </div>
-
             <div class="options">
               <!--loop through question array list for the current question. Provide all the options available from array-->
-              <div *ngFor="let option of questionList[currentQuestion]?.options">
-                <input type="checkbox" [value]="option.text" (change)="selectAnswer(currentQuestion, option, $event)">
-                <label>{{ option.text }}</label>
-              </div>
-              
-            </div>
+              <ol *ngFor="let option of questionList[currentQuestion]?.options">
+                <!--Change to not submit answer until user has selected all the options they want-->
+                <li (click)="toggleAnswer(currentQuestion, option)">
+                  <!--call the appChangeBg directive depending on if the answer selected is correct or not-->
+                      <div appChangeBg [isCorrect]="isSelected(option)" class="card">
+                          {{ option.text }}
+                      </div>
+                  </li>
+              </ol>
+          </div>
+
+          <div class="button submit">
+            <button class="btn" (click)="answer(currentQuestion)">
+              Submit Answer
+          </button>
+          
+          </div>
 
             <div class="d-flex justify-content-between">
               <!--disable moving back and forward if below question 1 and over last question-->
@@ -76,7 +88,7 @@
               <button class="btn" (click)="resetQuiz()">
                 <i
                   class="text-primary fa-solid fa-arrows-rotate fa-3x"
-                  (click)="resetQuiz()"
+    
                 ></i>
               </button>
               <button class="btn" (click)="nextQuestion()">
@@ -84,8 +96,9 @@
               </button>
             </div>
           </ng-container>
+          <!--End fo Questions-->
 
-          <!--display the results if the quiz is completed-->
+          <!--Results-->
           <ng-container *ngIf="isQuizCompleted">
             <div class="row d-flex justify-content-between">
               <img
@@ -104,10 +117,11 @@
                 <p>Total Questions Attempted : {{ questionList.length }}</p>
                 <p>Total Correct Answers : {{ correctAnswer }}</p>
                 <p>Total Incorrect Answers : {{ incorrectAnswer }}</p>
-                <p>Your Score : {{ points }}</p>
+                <p>Your Score : {{ userScore$ | async }}</p>
               </div>
             </div>
           </ng-container>
+          <!--End of results-->
         </div>
       </div>
     </div>

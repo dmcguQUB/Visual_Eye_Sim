@@ -5,6 +5,7 @@ import { Observable,map } from 'rxjs';
 import { Question } from '../shared/models/question'; // Assuming you have defined the Quiz model
 import { QUESTIONS_URL, QUESTION_BY_ID_URL, USER_SCORES_URL } from '../shared/constants/url';
 import { UserScore } from '../shared/models/UserScore';
+import { QuestionType } from '../shared/models/question-type';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class QuestionService {
   }
 
   // create a page for question when you click onto it. You only need a type of Quiz it is not an array type
-  getQuestionsByCaseStudyIdAndQuestionType(caseStudyId: string, questionType:string): Observable<Question[]> {
+  getQuestionsByCaseStudyIdAndQuestionType(caseStudyId: string, questionType:QuestionType): Observable<Question[]> {
     console.log('this is case study ID and type from backend', caseStudyId, questionType);
     // search question by id and type
     return this.http.get<Question[]>(QUESTION_BY_ID_URL + caseStudyId + '/' + questionType);

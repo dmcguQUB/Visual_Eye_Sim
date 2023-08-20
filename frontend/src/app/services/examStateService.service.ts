@@ -8,13 +8,13 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ExamStateService {
-  private _isEyeExaminationTestFinished = new BehaviorSubject<boolean>(false);
+  private _isTestFinished = new BehaviorSubject<boolean>(false);
   
-  set isEyeExaminationTestFinished(value: boolean) {
-    this._isEyeExaminationTestFinished.next(value);
+  set isTestFinished(value: boolean) {
+    this._isTestFinished.next(value);
   }
 
-  get isEyeExaminationTestFinished$() {
-    return this._isEyeExaminationTestFinished.asObservable();
+  get isTestFinished$() {
+    return this._isTestFinished.asObservable();
   }
 }

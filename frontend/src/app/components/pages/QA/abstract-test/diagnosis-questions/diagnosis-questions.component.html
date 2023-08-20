@@ -1,0 +1,122 @@
+<!--frontend/src/app/components/pages/question/question.component.html-->
+<div class="full-container">
+  <div class="parent-container">
+    <!--navbar partial-->
+    <div class="d-flex justify-content-left text-center">
+      <app-navbar></app-navbar>
+    </div>
+
+    <!--Main content-->
+    <!--Quiz content-->
+    <div class="card-container eye-movements-container">
+      <div class="container mt-5">
+        <div class="card">
+          <!--Questions-->
+          <ng-container *ngIf="!isQuizCompleted">
+            <div class="d-flex justify-content-between p-3">
+              <div class="image">
+                <img
+                  src="https://freepngimg.com/convert-png/72547-thinking-photography-question-mark-man-stock"
+                  width="90"
+                  alt="logo"
+                />
+              </div>
+              <div class="quiz-header">
+                <h4>Eye Tests Quiz</h4>
+                <span>Welcome {{ name }}</span>
+              </div>
+            </div>
+            <div class="d-flex justify-content-around py-3">
+              <div class="score">
+                <h5>{{ points }} Points</h5>
+              </div>
+              <div class="question-remain">
+                <!--dynamically change question number-->
+                <span style="font-style: italic"
+                  >Question {{ currentQuestion + 1 }} of
+                  {{ questionList.length }}</span
+                >
+              </div>
+              <div class="timer">
+                <h5>{{ counter }} Seconds ⏲️</h5>
+              </div>
+            </div>
+            <div class="progress mb-3">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                [ngStyle]="{ width: progress + '%' }"
+                aria-valuenow="0"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <div class="question">
+              <div class="card">
+                <h3>{{ questionList[currentQuestion].questionText }}</h3>
+              </div>
+            </div>
+
+            <div class="options">
+              <!--loop through question array list for the current question. Provide all the options available from array-->
+              <ol *ngFor="let option of questionList[currentQuestion]?.options">
+                <li (click)="answer(currentQuestion, option)">
+                  <!--call the appChangeBg directive depending on if the answer selected is correct or not-->
+                  <div appChangeBg [isCorrect]="option.correct" class="card">
+                    {{ option.text }}
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <!--disable moving back and forward if below question 1 and over last question-->
+              <button
+                [disabled]="currentQuestion === 0"
+                class="btn"
+                (click)="previousQuestion()"
+              >
+                <i class="text-primary fa-solid fa-chevron-left fa-3x"></i>
+              </button>
+              <button class="btn" (click)="resetQuiz()">
+                <i
+                  class="text-primary fa-solid fa-arrows-rotate fa-3x"
+
+                ></i>
+              </button>
+              <button class="btn" (click)="nextQuestion()">
+                <i class="text-primary fa-solid fa-chevron-right fa-3x"></i>
+              </button>
+            </div>
+          </ng-container>
+          <!--End fo Questions-->
+
+          <!--Results-->
+          <ng-container *ngIf="isQuizCompleted">
+            <div class="row d-flex justify-content-between">
+              <img
+                style="width: 50%"
+                class="img-fluid col-sm-12 mx-auto"
+                src="https://icon-library.com/images/celebration-icon-png/celebration-icon-png-7.jpg"
+                alt=""
+              />
+              <div class="result text-center col-md-6 col-sm-12">
+                <h3>
+                  Congrats!! <br />
+                  You have completed the quiz. <br />
+                  Below is your results:
+                </h3>
+                <p>You have compelted the quiz. See your results below:</p>
+                <p>Total Questions Attempted : {{ questionList.length }}</p>
+                <p>Total Correct Answers : {{ correctAnswer }}</p>
+                <p>Total Incorrect Answers : {{ incorrectAnswer }}</p>
+                <p>Your Score : {{ points }}</p>
+              </div>
+            </div>
+          </ng-container>
+          <!--End of results-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

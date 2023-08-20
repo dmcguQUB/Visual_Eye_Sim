@@ -2,8 +2,10 @@
 // Import necessary modules and dependencies
 import { Router } from "express";
 import expressAsyncHandler from "express-async-handler";
+import { DIAGNOSIS_QUESTION_SCORE, EYE_TEST_QUESTION_SCORE, INVESTIGATION_QUESTION_SCORE } from "../constants/scores";
 import { sample_test_data } from "../data";
 import authMid from "../middlewares/auth.mid";
+import { QuizModel } from "../models/questions";
 import { TestModel } from "../models/test";
 import { RequestWithUser } from "../models/user.model";
 import { UserScoreModel } from "../models/userscores"; // Importing the UserScoreModel
@@ -51,6 +53,30 @@ router.get(
     }
   })
 );
+
+
+//Get the user scores for the most recent test completed after being calculated for specific case study. Most recent submission selected
+//WORKS
+router.get(
+  "/user/:userId/case_study/:caseStudyId",
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+    const caseStudyId = req.params.caseStudyId;
+
+    // Fetching the most recent test based on both userId and caseStudyId
+    const test = await TestModel.findOne({ 
+      userId: userId, 
+      caseStudyId: caseStudyId 
+    }).sort({ dateTaken: -1 });  // sorting by dateTaken in descending order to get the most recent
+
+    if (test) {
+      res.send(test);
+    } else {
+      res.status(404).send({ message: "Scores not found for the specified case study" });
+    }
+  })
+);
+
 
 //WORKS
 //posting a test score for speific case study and test
@@ -114,6 +140,81 @@ router.post(
     }
   })
 );
+
+//4) calculate scores for a user on backend. Better security and prevents people from changing score on frontend
+router.post(
+  "/calculate_score/:userId",
+  expressAsyncHandler(async (req:any, res:any) => {
+    const userTest = await TestModel.findOne({ userId: req.params.userId });
+    if (!userTest) {
+      return res.status(404).send({ message: 'User test not found' });
+    }
+
+    let eyeTestScore = 0;
+    let investigationsTestScore = 0;
+    let diagnosisTestScore = 0;
+
+    // For eyeTest
+    for (const answer of userTest.eyeTest.answers) {
+      const question = await QuizModel.findById(answer.questionId);
+      if (question) {
+        const correctOption = question.options.find(opt => opt.correct);
+        if (correctOption && correctOption.text === answer.answer) {
+          eyeTestScore += EYE_TEST_QUESTION_SCORE;
+        }
+      }
+    }
+
+// For investigationsTest (multiple-choice)
+for (const answer of userTest.investigationsTest.answers) {
+  const question = await QuizModel.findById(answer.questionId);
+  if (question) {
+      const correctAnswers = question.options
+          .filter(opt => opt.correct)
+          .map(opt => opt.text);
+
+      let scoreForThisQuestion = 0;
+
+      for (const userAnswer of answer.userAnswers) {
+          if (correctAnswers.includes(userAnswer)) {
+              scoreForThisQuestion += INVESTIGATION_QUESTION_SCORE; // Add score for every correct answer
+          } else {
+              scoreForThisQuestion -= INVESTIGATION_QUESTION_SCORE; // Deduct score for every incorrect answer (Optional)
+          }
+      }
+
+      investigationsTestScore += scoreForThisQuestion;
+  }
+}
+
+
+    // For diagnosisTest
+    for (const answer of userTest.diagnosisTest.answers) {
+      const question = await QuizModel.findById(answer.questionId);
+      if (question) {
+        const correctOption = question.options.find(opt => opt.correct);
+        if (correctOption && correctOption.text === answer.answer) {
+          diagnosisTestScore += DIAGNOSIS_QUESTION_SCORE;
+        }
+      }
+    }
+
+    
+
+    userTest.eyeTest.score = eyeTestScore;
+    userTest.investigationsTest.score = investigationsTestScore;
+    userTest.diagnosisTest.score = diagnosisTestScore;
+
+    await userTest.save();
+
+    res.send({
+      eyeTestScore: userTest.eyeTest.score,
+      investigationsTestScore: userTest.investigationsTest.score,
+      diagnosisTestScore: userTest.diagnosisTest.score,
+    });
+  })
+);
+
 
 //ADMIN
 //WORKS
@@ -346,7 +447,8 @@ router.get(
   })
 );
 
-//3) Scores for each case study. Output shown on the following:
+//WORKS
+//3) Average percentage score for each case study over time. Output shown on the following:
 // //The total correct answers across all three tests for each test object.
 // The total number of questions across all three tests for each test object.
 // An average percentage calculated over time (e.g. for each day).
@@ -412,6 +514,9 @@ router.get("/case-study/:caseStudyId/average-score-over-time", expressAsyncHandl
     return res.status(500).send({ message: error instanceof Error ? `Server error: ${error.message}` : 'An unexpected server error occurred.' });
   }
 }));
+
+
+
 
 
 // Export the router so it can be used in other files (e.g., server.ts)

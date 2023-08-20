@@ -14,7 +14,7 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
 export class NavbarComponent {
 //vars for propagating the user conversation
 isPatientConvoFinished: boolean = false;
-isEyeExaminationTestFinished: boolean = false;
+isTestFinished: boolean = false;
 isInvestigationTestFinished: boolean = false;
 
 
@@ -33,8 +33,8 @@ isInvestigationTestFinished: boolean = false;
           console.log('An error occurred:', error); // Log any errors for debugging
         });
 
-        this.examStateService.isEyeExaminationTestFinished$.subscribe(isFinished => {
-          this.isEyeExaminationTestFinished = isFinished;
+        this.examStateService.isTestFinished$.subscribe(isFinished => {
+          this.isTestFinished = isFinished;
         });
       }
     });

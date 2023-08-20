@@ -18,14 +18,14 @@
           <li><a [routerLink]="'/welcome/' + caseStudy._id">Test Yourself</a></li>
         </ul>
       </li>
-      <li class="dropdown" *ngIf="isPatientConvoFinished && isEyeExaminationTestFinished">
+      <li class="dropdown" *ngIf="isPatientConvoFinished && isTestFinished">
         <a class="dropdown-toggle">Investigations</a>
         <ul class="dropdown-menu">
           <li [routerLink]="'/investigations-selection/' + caseStudy._id"><a>Investigations Selection</a></li>
           <li *ngIf="isInvestigationTestFinished"><a>Investigations Images</a></li>
         </ul>
       </li>
-      <li *ngIf="isPatientConvoFinished && isEyeExaminationTestFinished && isInvestigationTestFinished">
+      <li *ngIf="isPatientConvoFinished && isTestFinished && isInvestigationTestFinished">
         <a href="#">Diagnosis</a>
       </li>
     </ul>

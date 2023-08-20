@@ -21,3 +21,9 @@ export const QUESTION_BY_ID_URL= QUESTIONS_URL + '/case_study/';
 
 //url for posting user scores to the database 
 export const USER_SCORES_URL = BASE_URL + '/api/userscores/';
+
+//url for the test service in the backend
+export const TEST_URL = BASE_URL + '/api/test/';
+export const TEST_FOR_USER_URL = BASE_URL + '/api/test/user/';
+export const TEST_FOR_CASE_STUDY = BASE_URL + '/api/test/test-scores/case-study/';
+export const TEST_FOR_ALL_TESTS_AND_CASE_STUDIES = BASE_URL + '/api/test/test-scores/global-scores';

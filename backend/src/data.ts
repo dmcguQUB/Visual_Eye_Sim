@@ -137,7 +137,7 @@ export const sample_questions: any[] = [
     ],
     explanation: "Explanation for Case Study 1 - Eye Tests  - Question 1",
     caseStudyId: "64c23a6d1a8f96f293896214",
-    questionType: "eye-test"
+    questionType: "investigation"
 
   },{
    //case study 2
@@ -159,7 +159,7 @@ export const sample_questions: any[] = [
    ],
    explanation: "Explanation for Case Study 2 - Eye Tests  - Question 1",
    caseStudyId: "64c23a6d1a8f96f293896215",
-   questionType: "eye-test"
+   questionType: "investigation"
 
  },
   
@@ -185,30 +185,25 @@ export const sample_user_scores: any[] = [
 export const sample_test_data: any[] = [
   {
     userId: "64b83c2db2ec5e03be43b139", // John Doe's ID
-    caseStudyId: "64b55374f856931e2ae20b20", // Referring to the first case study
+    caseStudyId: "64c23a6d1a8f96f293896214", // Referring to the first case study
 
     // Eye Test Answers
     eyeTest: {
       answers: [
-        { questionId: "64b947a5f704861cb51260ae", answer: "Option 1", correct: true },
-        { questionId: "64b947a5f704861cb51260b3", answer: "Option 2", correct: false }
+        { questionId: "64db6bb927c64bd3631623c1", answer: "Option 1", correct: true },
+        { questionId: "64db6bb927c64bd3631623c6", answer: "Option 2", correct: true }
       ],
-      score: 1 // 1 out of 2 questions correct
+      score: 20 // 1 out of 2 questions correct
     },
 
     // Investigations Test Answers
     investigationsTest: {
       answers: [
         {
-          questionId: "64c23a6d1a8f96f293896216",
+          questionId: "64db6bb927c64bd3631623d5",
           userAnswers: ["Erythrocyte sedimentation rate", "C-reactive protein"],
           correctAnswers: ["Erythrocyte sedimentation rate", "C-reactive protein", "Full blood picture"]
         },
-        {
-          questionId: "64c23a6d1a8f96f293896217",
-          userAnswers: ["Temporal artery biopsy", "CT head"],
-          correctAnswers: ["Temporal artery biopsy", "CT head", "Fundal photograph"]
-        }
       ],
       score: 2 // 2 out of 2 questions correct (assuming the userAnswers match correctAnswers)
     },
@@ -216,10 +211,44 @@ export const sample_test_data: any[] = [
     // Diagnosis Test Answers
     diagnosisTest: {
       answers: [
-        { questionId: "64b947a5f704861cb51260af", answer: "Option 3", correct: true },
-        { questionId: "64b947a5f704861cb51260b4", answer: "Option 1", correct: false }
+        { questionId: "64e0cb2d0330651cec0a0ede", answer: "Option 1", correct: true },
       ],
-      score: 1 // 1 out of 2 questions correct
+      score: 10 // 1 out of 2 questions correct
+    },
+
+    createdAt: new Date(),
+  },
+  {
+    userId: "64b91df69a8d3cea051c8fb6", // John Doe's ID
+    caseStudyId: "64c23a6d1a8f96f293896214", // Referring to the first case study
+
+    // Eye Test Answers
+    eyeTest: {
+      answers: [
+        { questionId: "64db6bb927c64bd3631623c1", answer: "Option 2", correct: false },
+        { questionId: "64db6bb927c64bd3631623c6", answer: "Option 2", correct: true }
+      ],
+      score: 10 // 1 out of 2 questions correct
+    },
+
+    // Investigations Test Answers
+    investigationsTest: {
+      answers: [
+        {
+          questionId: "64db6bb927c64bd3631623d5",
+          userAnswers: ["Erythrocyte sedimentation rate", "C-reactive protein","Full blood picture"],
+          correctAnswers: ["Erythrocyte sedimentation rate", "C-reactive protein", "Full blood picture"]
+        },
+      ],
+      score: 10 // 2 out of 2 questions correct (assuming the userAnswers match correctAnswers)
+    },
+
+    // Diagnosis Test Answers
+    diagnosisTest: {
+      answers: [
+        { questionId: "64e0cb2d0330651cec0a0ede", answer: "Option 2", correct: false },
+      ],
+      score: 10 // 1 out of 2 questions correct
     },
 
     createdAt: new Date(),

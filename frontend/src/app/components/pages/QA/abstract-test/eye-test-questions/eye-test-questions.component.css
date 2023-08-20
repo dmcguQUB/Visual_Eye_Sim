@@ -1,0 +1,43 @@
+.card{
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+li{
+  list-style-type: none;
+  cursor: pointer;
+  margin: 10px 0;
+}
+li .card:hover{
+  border: 1px solid blue;
+}
+
+ol{
+  padding: 0;
+}
+
+ /* Parent Container allows for a row layout */
+ .parent-container {
+  display: flex;
+  align-items: center;
+  
+}
+
+/* Navbar Styles */
+.app-navbar {
+  width: 25%; /* Adjust width according to your needs */
+}
+
+/* Eye Movements Container Styles */
+.eye-movements-container {
+  display: flex;
+  flex-direction: column;
+  width: 75%; /* Adjust width according to your needs */
+}
+
+/* Title Container Styles */
+.title-container {
+  text-align: center; /* Center the title */
+  padding: 20px 0; /* Add some vertical padding */
+}

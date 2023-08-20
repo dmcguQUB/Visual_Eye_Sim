@@ -22,7 +22,9 @@ import { AdminGuard } from './auth/guards/admin.guard';
 import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';
 import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/userscore-score-over-time/userscore-score-over-time.component';
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
-import { InvestigationsSelectionComponent } from './components/pages/QA/investigations-selection/investigations-selection.component';
+import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/eye-test-questions/eye-test-questions.component';
+import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
+import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract-test/investigations-questions/investigations-questions.component';
 
 const routes: Routes = [
   //home route
@@ -72,13 +74,23 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'investigations-selection/:useCaseId',
-    component: InvestigationsSelectionComponent,
+    path: 'question/:useCaseId',
+    component: QuestionComponent,
     canActivate: [AuthGuard],
   },
   {
-    path: 'question/:useCaseId',
-    component: QuestionComponent,
+    path: 'eye-test-questions/:useCaseId',
+    component: EyeTestQuestionsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'diagnosis-questions/:useCaseId',
+    component: DiagnosisQuestionsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'investigations-questions/:useCaseId',
+    component: InvestigationsQuestionsComponent,
     canActivate: [AuthGuard],
   },
   { path: 'login', component: LoginPageComponent },

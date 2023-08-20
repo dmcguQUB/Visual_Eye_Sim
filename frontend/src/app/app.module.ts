@@ -54,9 +54,11 @@ import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/users
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 import { AvatarComponent } from './components/partials/avatar/avatar.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { InvestigationsSelectionComponent } from './components/pages/QA/investigations-selection/investigations-selection.component';
 import { PatientConversationComponent } from './components/partials/patient-conversation/patient-conversation.component';
 import { QaComponent } from './components/partials/qa/qa.component';
+import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/eye-test-questions/eye-test-questions.component';
+import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
+import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract-test/investigations-questions/investigations-questions.component';
 
 @NgModule({
   declarations: [
@@ -97,9 +99,11 @@ import { QaComponent } from './components/partials/qa/qa.component';
     UserscoreScoreOverTimeComponent,
     UserProfilePageComponent,
     AvatarComponent,
-    InvestigationsSelectionComponent,
     PatientConversationComponent,
     QaComponent,
+    EyeTestQuestionsComponent,
+    DiagnosisQuestionsComponent,
+    InvestigationsQuestionsComponent,
   ],
   imports: [
     BrowserModule,
