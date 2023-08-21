@@ -1,9 +1,10 @@
 //frontend/src/app/services/test.service.ts
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { TypeVisitor } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CASE_STUDY_BY_ID_URL, TEST_FOR_ALL_TESTS_AND_CASE_STUDIES, TEST_FOR_CASE_STUDY, TEST_FOR_USER_URL, TEST_URL } from '../shared/constants/url';
-import { Test } from '../shared/models/test';
+import { Test, TestResponse } from '../shared/models/test';
 
 @Injectable({
   providedIn: 'root',
@@ -44,19 +45,29 @@ getAverageTestPercentageForCaseStudyOverTime(caseStudyId: string): Observable<an
   const url = `${CASE_STUDY_BY_ID_URL}${caseStudyId}/average-score-over-time`;
   return this.http.get<any>(url);
 }
+
+//fetch user scores after being calculated
 //6) Post test scores to database
 // Submit test data
-submitTestData(testData: any): Observable<Test> {
-  return this.http.post<Test>(TEST_URL, testData);
+submitTestData(testData: any): Observable<TestResponse> {
+  return this.http.post<TestResponse>(TEST_URL, testData);
 }
 
- // The new method to calculate score
- calculateScore(userId: string): Observable<any> {
-  return this.http.post<any>(`${TEST_URL}calculate_score/${userId}`, {});
+
+
+// Adjust the method signature to accept testId
+calculateScore(testId: string): Observable<Test> {
+  const url = `${TEST_URL}calculate_score/${testId}`;
+  return this.http.post<Test>(url, null);
 }
+
 
 //fetch user scores after being calculated
 fetchUserScore(userId: string,caseStudyId:string ): Observable<any> {
-  return this.http.get<any>(`${TEST_URL}/user/${userId}/case_study/${caseStudyId}`, {});
+  return this.http.get<any>(`${TEST_URL}user/${userId}/case_study/${caseStudyId}`, {});
 }
+
 }
+
+
+

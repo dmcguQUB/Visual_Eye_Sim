@@ -2,13 +2,13 @@
 // Import necessary modules and dependencies
 import { Router } from "express";
 import expressAsyncHandler from "express-async-handler";
-import { DIAGNOSIS_QUESTION_SCORE, EYE_TEST_QUESTION_SCORE, INVESTIGATION_QUESTION_SCORE } from "../constants/scores";
+import mongoose from "mongoose";
+import { DIAGNOSIS_QUESTION_SCORE, EYE_TEST_QUESTION_SCORE, INVESTIGATION_QUESTION_SCORE } from "../constants/points-per-question";
 import { sample_test_data } from "../data";
 import authMid from "../middlewares/auth.mid";
 import { QuizModel } from "../models/questions";
 import { TestModel } from "../models/test";
 import { RequestWithUser } from "../models/user.model";
-import { UserScoreModel } from "../models/userscores"; // Importing the UserScoreModel
 
 // Create a new router instance using Express's Router
 const router = Router();
@@ -67,7 +67,7 @@ router.get(
     const test = await TestModel.findOne({ 
       userId: userId, 
       caseStudyId: caseStudyId 
-    }).sort({ dateTaken: -1 });  // sorting by dateTaken in descending order to get the most recent
+    }).sort({ createdAt: -1 });  // sorting by CREATED in descending order to get the most recent
 
     if (test) {
       res.send(test);
@@ -96,7 +96,9 @@ router.post(
     const requestWithUser = req as RequestWithUser; // Type assertion for req
 
     try {
+
       const testData = requestWithUser.body;
+console.log('Received test data:', testData);
 
       // Validate user existence and ID
       if (!requestWithUser.user || !requestWithUser.user._id) {
@@ -109,13 +111,15 @@ router.post(
         // If eye test data is present, always create a new entry
         const newTest = new TestModel(testData);
         const savedTest = await newTest.save();
-        res.status(201).send(savedTest);
+        console.log('Sending saved testId:', savedTest._id);
+
+        res.status(201).send({ test: savedTest, testId: savedTest._id });
       } else {
         // For investigations or diagnosis, update the most recent document
         const recentTest = await TestModel.findOne({
           userId: testData.userId,
           caseStudyId: testData.caseStudyId,
-        }).sort("-createdAt");
+        }).sort({ createdAt: -1});
 
         if (!recentTest) {
           throw new Error("No recent eye test found to update.");
@@ -130,7 +134,9 @@ router.post(
         }
 
         const updatedTest = await recentTest.save();
-        res.status(200).send(updatedTest);
+        console.log('Sending testId:', updatedTest._id);
+
+        res.status(200).send({ test: updatedTest, testId: updatedTest._id });
       }
     } catch (error) {
       console.log(error); // Log error message
@@ -143,13 +149,30 @@ router.post(
 
 //4) calculate scores for a user on backend. Better security and prevents people from changing score on frontend
 router.post(
-  "/calculate_score/:userId",
+  "/calculate_score/:testId",
+  
   expressAsyncHandler(async (req:any, res:any) => {
-    const userTest = await TestModel.findOne({ userId: req.params.userId });
+    console.log("Original testId:", req.params.testId);
+
+    
+    if (!req.params.testId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).send({ message: 'Invalid testId format' });
+   }
+
+   const testId = new mongoose.Types.ObjectId(req.params.testId);
+   console.log("Received testId:", testId);
+   console.log("Is ObjectId?", testId instanceof mongoose.Types.ObjectId);
+
+
+    // Fetch the test directly using the provided testId
+    const userTest = await TestModel.findById(testId);
+    console.log("Fetched userTest:", userTest);
+
     if (!userTest) {
       return res.status(404).send({ message: 'User test not found' });
     }
 
+    
     let eyeTestScore = 0;
     let investigationsTestScore = 0;
     let diagnosisTestScore = 0;
@@ -165,28 +188,33 @@ router.post(
       }
     }
 
-// For investigationsTest (multiple-choice)
-for (const answer of userTest.investigationsTest.answers) {
-  const question = await QuizModel.findById(answer.questionId);
-  if (question) {
-      const correctAnswers = question.options
-          .filter(opt => opt.correct)
-          .map(opt => opt.text);
+    // For investigationsTest (multiple-choice)
+    for (const answer of userTest.investigationsTest.answers) {
+      console.log("Current Answer:", answer);
 
-      let scoreForThisQuestion = 0;
+      const question = await QuizModel.findById(answer.questionId);
+      console.log("Fetched Question:", question);
 
-      for (const userAnswer of answer.userAnswers) {
-          if (correctAnswers.includes(userAnswer)) {
-              scoreForThisQuestion += INVESTIGATION_QUESTION_SCORE; // Add score for every correct answer
-          } else {
-              scoreForThisQuestion -= INVESTIGATION_QUESTION_SCORE; // Deduct score for every incorrect answer (Optional)
+      if (question) {
+          const correctAnswers = question.options
+              .filter(opt => opt.correct)
+              .map(opt => opt.text);
+
+          let scoreForThisQuestion = 0;
+
+          for (const userAnswer of answer.userAnswers) {
+              if (correctAnswers.includes(userAnswer)) {
+                  scoreForThisQuestion += INVESTIGATION_QUESTION_SCORE; 
+              } else {
+                  scoreForThisQuestion -= INVESTIGATION_QUESTION_SCORE; 
+              }
           }
+
+          console.log("Score for this question:", scoreForThisQuestion);
+
+          investigationsTestScore += scoreForThisQuestion;
       }
-
-      investigationsTestScore += scoreForThisQuestion;
-  }
-}
-
+    }
 
     // For diagnosisTest
     for (const answer of userTest.diagnosisTest.answers) {
@@ -198,8 +226,6 @@ for (const answer of userTest.investigationsTest.answers) {
         }
       }
     }
-
-    
 
     userTest.eyeTest.score = eyeTestScore;
     userTest.investigationsTest.score = investigationsTestScore;
@@ -214,6 +240,7 @@ for (const answer of userTest.investigationsTest.answers) {
     });
   })
 );
+
 
 
 //ADMIN

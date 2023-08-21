@@ -110,7 +110,10 @@
                 <p>Total Questions Attempted : {{ questionList.length }}</p>
                 <p>Total Correct Answers : {{ correctAnswer }}</p>
                 <p>Total Incorrect Answers : {{ incorrectAnswer }}</p>
-                <p>Your Score : {{ points }}</p>
+                <div *ngIf="userScore !== undefined">
+                  <h3>Your Score:</h3>
+                  <p>{{ userScore }}</p>
+                </div>
               </div>
             </div>
           </ng-container>

@@ -20,6 +20,7 @@ export interface TestType {
 
 // Main model for Test object
 export class Test {
+  _id?: string; // add this line
   userId!: string;
   caseStudyId!: string;
   eyeTest?: TestType;
@@ -27,4 +28,8 @@ export class Test {
   diagnosisTest?: TestType;
   createdAt?: Date;  // If you need timestamps
   updatedAt?: Date;  // If you need timestamps
+}
+export interface TestResponse {
+  test: Test;
+  testId: string;
 }

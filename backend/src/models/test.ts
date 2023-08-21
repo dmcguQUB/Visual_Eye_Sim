@@ -1,6 +1,6 @@
+import { ObjectId } from 'mongodb';
 import { Schema, model, Types } from 'mongoose';
 
-// Define the structure for test answers and scores
 interface Test {
   userId: string;
   caseStudyId: string;
@@ -11,6 +11,8 @@ interface Test {
       correct: boolean;
     }[];
     score: number;
+    totalQuestions?: number;
+    correctAnswers?: number;
   };
   investigationsTest: {
     answers: {
@@ -19,6 +21,8 @@ interface Test {
       correctAnswers: string[];
     }[];
     score: number;
+    totalQuestions?: number;
+    correctAnswers?: number;
   };
   diagnosisTest: {
     answers: {
@@ -27,6 +31,8 @@ interface Test {
       correct: boolean;
     }[];
     score: number;
+    totalQuestions?: number;
+    correctAnswers?: number;
   };
 }
 
@@ -39,7 +45,9 @@ const TestSchema = new Schema<Test>({
       answer: { type: String, required: false },
       correct: { type: Boolean, required: false }
     }],
-    score: { type: Number, required: false }
+    score: { type: Number, required: false },
+    totalQuestions: { type: Number, required: false, default: 0 },
+    correctAnswers: { type: Number, required: false, default: 0 }
   },
   investigationsTest: {
     answers: [{
@@ -47,7 +55,9 @@ const TestSchema = new Schema<Test>({
       userAnswers: [{ type: String, required: false }],
       correctAnswers: [{ type: String, required: false }]
     }],
-    score: { type: Number, required: false }
+    score: { type: Number, required: false },
+    totalQuestions: { type: Number, required: false, default: 0 },
+    correctAnswers: { type: Number, required: false, default: 0 }
   },
   diagnosisTest: {
     answers: [{
@@ -55,7 +65,9 @@ const TestSchema = new Schema<Test>({
       answer: { type: String, required: false },
       correct: { type: Boolean, required: false }
     }],
-    score: { type: Number, required: false }
+    score: { type: Number, required: false },
+    totalQuestions: { type: Number, required: false, default: 0 },
+    correctAnswers: { type: Number, required: false, default: 0 }
   }
 }, {
   timestamps: true,
@@ -66,6 +78,5 @@ const TestSchema = new Schema<Test>({
     virtuals: true
   }
 });
-
 
 export const TestModel = model<Test>('test', TestSchema);

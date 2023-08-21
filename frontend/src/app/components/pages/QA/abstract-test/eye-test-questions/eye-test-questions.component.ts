@@ -15,6 +15,7 @@ import { QuestionType } from 'src/app/shared/models/question-type';
   styleUrls: ['./eye-test-questions.component.css']
 })
 export class EyeTestQuestionsComponent extends AbstractTestComponent implements OnInit {
+  userScore?: number;  // Add this property to store the fetched user score
 
   constructor(
     questionsService: QuestionService, 
@@ -50,25 +51,27 @@ export class EyeTestQuestionsComponent extends AbstractTestComponent implements 
           answers.push({
               questionId: this.questionList[currentQuestionNumber]._id,
               answer: option.text, 
-              correct: option.correct
+              correct: option.correct,
           });
       }
   
-    // Update the score if the answer is correct
-    if (option.correct) {
-        this.points += 10;
-        this.correctAnswer++;
-    } else {
-        this.incorrectAnswer++;
-    }
+    // // Update the score if the answer is correct
+    // if (option.correct) {
+    //     this.points += 10;
+    //     this.correctAnswer++;
+    // } else {
+    //     this.incorrectAnswer++;
+    // }
+    
   
      // Access properties directly from the parent class
+     
      if (currentQuestionNumber === this.questionList.length - 1) {
       console.log("Quiz completed.");
       this.isQuizCompleted = true;
       this.stopCounter();
       this.sendUserScore();
-  } else {
+    } else {
       setTimeout(() => {
           this.currentQuestion++;
           this.resetCounter();
@@ -100,13 +103,50 @@ export class EyeTestQuestionsComponent extends AbstractTestComponent implements 
  };
 
  this.testService.submitTestData(testData).subscribe({
-     next: (res) => {
-         console.log('Score sent successfully', res);
-     },
-     error: (err) => {
-         console.error('Error in sending score', err);
-     }
- });
+  next: (res) => {
+    console.log('Score sent successfully', res);
+    if (res && res.test._id) {
+      this.calculateAndFetchUserScore(res.test._id);
+    } else {
+      console.error('Failed to obtain test ID from the response.');
+    }
+  },
+  error: (err) => {
+    console.error('Error in sending score', err);
   }
+});
+}
+
+ // New method to calculate and fetch user score
+ calculateAndFetchUserScore(testId: string): void {
+  this.testService.calculateScore(testId).subscribe({
+    next: (res) => {
+      console.log('Score calculated successfully', res);
+
+      // After successfully calculating the score, fetch the user's score
+      this.testService.fetchUserScore(this.userId, this.useCaseId).subscribe({
+        next: (scoreData) => {
+          console.log('Fetched user score:', scoreData);
+
+          // Here you can use the fetched scoreData to display the user's score
+          // For example, you might want to assign the score to a class property and display it in your component's template.
+          this.displayUserScore(scoreData);  // hypothetical function, you might implement it according to your UI logic.
+        },
+        error: (err) => {
+          console.error('Error fetching user score:', err);
+        }
+      });
+
+    },
+    error: (err) => {
+      console.error('Error in calculating score:', err);
+    }
+  });
+}
+
+// Hypothetical function for UI display logic
+displayUserScore(scoreData: Test) {
+  return this.userScore  = scoreData.eyeTest?.score;
+}
 
 }
