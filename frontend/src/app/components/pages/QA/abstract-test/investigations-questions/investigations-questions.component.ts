@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core'; // Imported OnDestroy
 import { ActivatedRoute } from '@angular/router';
 import { ExamStateService } from 'src/app/services/examStateService.service';
 import { QuestionService } from 'src/app/services/questions.service';
@@ -7,7 +7,7 @@ import { TestService } from 'src/app/services/test.service';
 import { Test, InvestigationsAnswer } from 'src/app/shared/models/test';
 import { AbstractTestComponent } from '../abstract-test.component';
 import { QuestionType } from 'src/app/shared/models/question-type';
-import { Observable, of } from 'rxjs';
+import { Observable, Subscription, switchMap } from 'rxjs'; // Imported Subscription
 import { INVESTIGATION_QUESTION_SCORE } from 'src/app/shared/constants/points-per-question';
 
 @Component({
@@ -17,8 +17,10 @@ import { INVESTIGATION_QUESTION_SCORE } from 'src/app/shared/constants/points-pe
 })
 export class InvestigationsQuestionsComponent
   extends AbstractTestComponent
-  implements OnInit
+  implements OnInit, OnDestroy
 {
+  // Implemented OnDestroy
+
   //selected answers
   userScore?: number; // Add this property to store the fetched user score
   correctAnswer?: number = 0;
@@ -29,7 +31,8 @@ export class InvestigationsQuestionsComponent
   isInvestigationsTestFinished: boolean = false;
   selectedAnswers: string[] = [];
   totalScore: number = 0;
-
+  // Added a subscription collection
+  private subscriptions: Subscription[] = [];
 
   //constructor with args
   constructor(
@@ -49,14 +52,20 @@ export class InvestigationsQuestionsComponent
     super.ngOnInit(); // calling the parent's ngOnInit to inherit all the logic there
     // Once the results are loaded successfully, set the state to true
 
-
     //just adding this for now but will update. Should be called onced test complete
-    this.examStateService.isInvestigationsTestFinished = true;
-    this.examStateService.isInvestigationsTestFinished$.subscribe(
+    // Use a Subscription to manage the observable and prevent memory leaks
+    const sub = this.examStateService.isInvestigationsTestFinished$.subscribe(
       (isFinished) => {
         this.isInvestigationsTestFinished = isFinished;
       }
     );
+
+    this.subscriptions.push(sub); // Added to the subscription collection
+  }
+
+  override ngOnDestroy(): void {
+    // OnDestroy lifecycle hook to unsubscribe from observables
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   // Actual implementation of the answer method
@@ -83,7 +92,7 @@ export class InvestigationsQuestionsComponent
   override nextQuestion(): void {
     if (this.currentQuestion === this.questionList.length - 1) {
       console.log('Quiz completed.');
-      this.updateTotalScore();  // Fetch and set the total score when the component initializes.
+      this.updateTotalScore(); // Fetch and set the total score when the component initializes.
       this.stopCounter();
       this.sendUserAnswers();
       this.isQuizCompleted = true;
@@ -142,30 +151,23 @@ export class InvestigationsQuestionsComponent
 
   // New method to calculate and fetch user score
   calculateAndFetchUserScore(testId: string): void {
-    this.testService.calculateScore(testId).subscribe({
-      next: (res) => {
-        console.log('Score calculated successfully', res);
-
-        // After successfully calculating the score, fetch the user's score
-        this.testService.fetchUserScore(this.userId, this.useCaseId).subscribe({
-          next: (scoreData) => {
-            console.log('Fetched user score:', scoreData);
-
-            // Here you can use the fetched scoreData to display the user's score
-            // For example, you might want to assign the score to a class property and display it in your component's template.
-            // console.log(this.displayUserScore(scoreData)); // hypothetical function, you might implement it according to your UI logic.
-  
-            this.displayUserScore(scoreData); // hypothetical function, you might implement it according to your UI logic.
-          },
-          error: (err) => {
-            console.error('Error fetching user score:', err);
-          },
-        });
-      },
-      error: (err) => {
-        console.error('Error in calculating score:', err);
-      },
-    });
+    //flatter method
+    this.testService
+      .calculateScore(testId)
+      .pipe(
+        switchMap(() => {
+          return this.testService.fetchUserScore(this.userId, this.useCaseId);
+        })
+      )
+      .subscribe({
+        next: (scoreData) => {
+          console.log('Fetched user score:', scoreData);
+          this.displayUserScore(scoreData);
+        },
+        error: (err) => {
+          console.error('Error in calculating or fetching user score:', err);
+        },
+      });
   }
 
   //display user scores after sent to db, calculated scored and fetched
@@ -178,44 +180,50 @@ export class InvestigationsQuestionsComponent
   }
   updateTotalScore(): void {
     this.getTotalScore().subscribe(
-      score => {
+      (score) => {
         console.log('Total Score:', score);
-        this.totalScore =score; //assign value to score total
+        this.totalScore = score; //assign value to score total
       },
-      error => {
+      (error) => {
         console.error('Error fetching total score:', error);
       }
     );
-    
   }
   getTotalScore(): Observable<number> {
-    return new Observable(observer => {
-        let totalScore = 0;
+    return new Observable((observer) => {
+      let totalScore = 0;
 
-        console.log('Use Case ID:', this.useCaseId);
-console.log('Question Type:', this.questionType);
+      console.log('Use Case ID:', this.useCaseId);
+      console.log('Question Type:', this.questionType);
 
-
-        if (this.useCaseId && this.questionType) {
-            this.questionsService.getCorrectAnswersByCaseStudyIdAndQuestionType(this.useCaseId, this.questionType)
-            .subscribe(correctAnswers => {
+      if (this.useCaseId && this.questionType) {
+        this.questionsService
+          .getCorrectAnswersByCaseStudyIdAndQuestionType(
+            this.useCaseId,
+            this.questionType
+          )
+          .subscribe(
+            (correctAnswers) => {
               console.log('Received correct answers:', correctAnswers);
-              
-                correctAnswers.forEach(answer => {
-                    totalScore += (answer.correctOptions.length || 0) * (this.pointsPerQuestion || 0);
-                });
-                observer.next(totalScore);
-                observer.complete();
+
+              correctAnswers.forEach((answer) => {
+                totalScore +=
+                  (answer.correctOptions.length || 0) *
+                  (this.pointsPerQuestion || 0);
+              });
+              observer.next(totalScore);
+              observer.complete();
             },
-            error => {
-                observer.error(error);
-            });
-        } else {
-            observer.next(totalScore); // just send the total score if conditions aren't met
-            observer.complete();
-        }
+            (error) => {
+              observer.error(error);
+            }
+          );
+      } else {
+        observer.next(totalScore); // just send the total score if conditions aren't met
+        observer.complete();
+      }
     });
-}
+  }
 
   //
   toggleAnswer(currentQuestionNumber: number, option: any) {

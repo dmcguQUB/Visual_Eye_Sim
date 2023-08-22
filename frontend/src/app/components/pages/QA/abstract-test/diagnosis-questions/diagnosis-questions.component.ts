@@ -40,18 +40,18 @@ export class DiagnosisQuestionsComponent
 
   //overriide diagnosis test
   override ngOnInit() {
-    console.log('DiagnosisTestComponent initialized.');
+    // console.log('DiagnosisTestComponent initialized.');
     super.ngOnInit(); // calling the parent's ngOnInit to inherit all the logic there
   }
 
   // Actual implementation of the answer method
   answer(currentQuestionNumber: number, option: any) {
-    console.log(
-      'Answer method called for question:',
-      currentQuestionNumber,
-      'with option:',
-      option
-    );
+    // console.log(
+    //   'Answer method called for question:',
+    //   currentQuestionNumber,
+    //   'with option:',
+    //   option
+    // );
     // Typecast testAnswers to EyeAndDiagnosisAnswer[]
     let answers = this.testAnswers as EyeAndDiagnosisAnswer[];
 
@@ -61,7 +61,7 @@ export class DiagnosisQuestionsComponent
         this.questionList[currentQuestionNumber]._id;
       answers[currentQuestionNumber].answer = option.text; // Assuming option has a text property for answer text
       answers[currentQuestionNumber].correct = option.correct;
-      console.log('Data to be sent:', this.testAnswers);
+      // console.log('Data to be sent:', this.testAnswers);
     } else {
       // If not initialized, then push a new answer object
       answers.push({
@@ -71,13 +71,6 @@ export class DiagnosisQuestionsComponent
       });
     }
 
-    // // Update the score if the answer is correct
-    // if (option.correct) {
-    //     this.points += 10;
-    //     this.correctAnswer++;
-    // } else {
-    //     this.incorrectAnswer++;
-    // }
 
     // Access properties directly from the parent class
 
@@ -93,6 +86,7 @@ export class DiagnosisQuestionsComponent
         this.getProgressPercent();
       }, 1000);
     }
+    this.getProgressPercent();
   }
 
   sendUserScore(): void {
