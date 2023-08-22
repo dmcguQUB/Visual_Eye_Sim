@@ -13,6 +13,8 @@ export class PupilReflexesTestComponent implements OnInit, AfterViewInit, OnDest
   private mouseX = 0;
   private mouseY = 0;
   private faceImage = new Image();
+  private boundMouseMoveHandler: any; // Store the bound function
+
 
   private eyes = [
     {
@@ -29,18 +31,19 @@ export class PupilReflexesTestComponent implements OnInit, AfterViewInit, OnDest
     this.faceImage.onload = () => {
       this.drawScene();
     };
-    //image for pupil reflexes
+    //image for face
     this.faceImage.src = 'assets/woman-close-up-pr.jpg';
   }
 
   ngAfterViewInit(): void {
     this.ctx = this.canvas.nativeElement.getContext('2d')!;
-    this.canvas.nativeElement.addEventListener('mousemove', this.mouseMoveHandler.bind(this), false);
+    this.boundMouseMoveHandler = this.mouseMoveHandler.bind(this);
+    this.canvas.nativeElement.addEventListener('mousemove', this.boundMouseMoveHandler, false);
     this.drawScene();
   }
 
   ngOnDestroy(): void {
-    this.canvas.nativeElement.removeEventListener('mousemove', this.mouseMoveHandler.bind(this), false);
+    this.canvas.nativeElement.removeEventListener('mousemove', this.boundMouseMoveHandler, false);
   }
 
   private mouseMoveHandler(e: MouseEvent): void {
