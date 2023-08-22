@@ -1,10 +1,10 @@
 //component to be used to show user converations
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-patient-convo',
   templateUrl: './patient-convo.component.html',
-  styleUrls: ['./patient-convo.component.css']
+  styleUrls: ['./patient-convo.component.css'],
 })
 export class PatientConvoComponent {
 
