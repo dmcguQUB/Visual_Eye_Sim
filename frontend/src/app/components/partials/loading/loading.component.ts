@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
@@ -8,20 +9,24 @@ import { LoadingService } from 'src/app/services/loading.service';
 })
 
 
-export class LoadingComponent implements OnInit {
+export class LoadingComponent implements OnInit, OnDestroy {  // Implement OnDestroy
 
   //create isLoading variable
   isLoading!: boolean;
+  private subscription?: Subscription;  // Create a subscription variable
+
 
   //constructor which passes variable and calls service to determine if loading returning the isloading var and its value
   constructor(loadingService: LoadingService) {
-    loadingService.isLoading.subscribe((isLoading) => {
+    this.subscription = loadingService.isLoading.subscribe(isLoading => {
       this.isLoading = isLoading;
     });
+  }
 
-   }
+  ngOnInit(): void { }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();  // Unsubscribe when component gets destroyed
   }
 
 }
