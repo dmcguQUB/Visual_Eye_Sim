@@ -1,6 +1,5 @@
-import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { UserService } from 'src/app/services/user.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
@@ -10,14 +9,18 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   case_studies: CaseStudies[] = [];
   isLoggedIn: boolean = false;
+  private userSubscription!: Subscription;
 
 
   constructor(private useCaseService: UseCaseService, private userService: UserService) {
-    this.userService.userObservable.subscribe((user) => {
+  }
+
+  ngOnInit(): void {
+    this.userSubscription = this.userService.userObservable.subscribe((user) => {
       this.isLoggedIn = !!user.token; // Check if user is logged in
       if (this.isLoggedIn) {
         this.loadCaseStudies();
@@ -25,33 +28,27 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   // Load case studies
-  loadCaseStudies() {
-    let useCaseObservalbe: Observable<CaseStudies[]>;
-
-    useCaseObservalbe = this.useCaseService.getAll();
-
-    useCaseObservalbe.subscribe((serverCaseStudies) => {
+  // Load case studies
+  loadCaseStudies(): void {
+    this.useCaseService.getAll().subscribe((serverCaseStudies) => {
       this.case_studies = serverCaseStudies;
     });
   }
 
-  //populate case study description returns a number
-getDescription(caseStudyNumber: number): string {
-
-  //case study 1
-  if (caseStudyNumber === 1) {
-    return `Sudden loss of vision.`;
-  } else if (caseStudyNumber === 2) {
-    //case study 2
-    return `Headaches and visual symptoms.`;
-    //case study 3
-  } else {
-    return `Blur in only eye.`;
+  // Populate case study description returns a number
+  getDescription(caseStudyNumber: number): string {
+    switch (caseStudyNumber) {
+      case 1: return `Sudden loss of vision.`;
+      case 2: return `Headaches and visual symptoms.`;
+      default: return `Blur in only eye.`;
+    }
   }
-}
 
 }

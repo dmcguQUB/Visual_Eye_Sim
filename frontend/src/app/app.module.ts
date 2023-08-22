@@ -33,7 +33,7 @@ import { TitleComponent } from './components/partials/title/title.component';
 
 // Import the module from the SDK
 import { AuthButtonComponent } from './components/partials/buttons/auth-button.component';
-import { AuthInterceptor } from './auth/auth.interceptor';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { InputContainerComponent } from './components/partials/input-container/input-container.component'; 
 import { DefaultButtonComponent } from './components/partials/default-button/default-button.component';
