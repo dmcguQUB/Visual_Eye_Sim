@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/shared/models/User';
+import { takeUntil } from 'rxjs/operators';  // Import takeUntil
+
 
 @Component({
   selector: 'app-user-profile-page',
@@ -18,6 +21,10 @@ export class UserProfilePageComponent  implements OnInit {
   tempName: string = '';
   tempAddress: string = '';
 
+  //create to destroy all subscriptions
+  private destroy$: Subject<boolean> = new Subject<boolean>();  // Subject to manage component's observables
+
+
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
@@ -33,10 +40,12 @@ export class UserProfilePageComponent  implements OnInit {
   }
 
   saveName(): void {
-    this.userService.updateName(this.tempName).subscribe((updatedUser) => {
-      this.currentUser.name = updatedUser.name;
-      this.isNameEditMode = false;
-    });
+    this.userService.updateName(this.tempName)
+      .pipe(takeUntil(this.destroy$))  // Unsubscribe when component is destroyed
+      .subscribe((updatedUser) => {
+        this.currentUser.name = updatedUser.name;
+        this.isNameEditMode = false;
+      });
   }
 
   cancelNameEdit(): void {
@@ -50,14 +59,22 @@ export class UserProfilePageComponent  implements OnInit {
   }
 
   saveAddress(): void {
-    this.userService.updateAddress(this.tempAddress).subscribe((updatedUser) => {
-      this.currentUser.address = updatedUser.address;
-      this.isAddressEditMode = false;
-    });
+    this.userService.updateAddress(this.tempAddress)
+      .pipe(takeUntil(this.destroy$))  // Unsubscribe when component is destroyed
+      .subscribe((updatedUser) => {
+        this.currentUser.address = updatedUser.address;
+        this.isAddressEditMode = false;
+      });
   }
+
 
   cancelAddressEdit(): void {
     this.isAddressEditMode = false;
+  }
+
+  ngOnDestroy(): void {  // OnDestroy lifecycle hook to complete the Subject, thus unsubscribing from observables
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
   

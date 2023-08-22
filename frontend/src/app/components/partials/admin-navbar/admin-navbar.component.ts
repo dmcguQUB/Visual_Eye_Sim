@@ -1,22 +1,31 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'admin-navbar',
   templateUrl: './admin-navbar.component.html',
-  styleUrls: ['./admin-navbar.component.css']
+  styleUrls: ['./admin-navbar.component.css'],
 })
-export class AdminNavbarComponent implements OnInit{
-  
-  screenWidth?: number;
-  isMobile?: boolean;
+export class AdminNavbarComponent implements OnInit, OnDestroy {
+  // Implement OnDestroy
+
+  screenWidth: number = window.innerWidth; // Directly initialize with the current width
+  isMobile: boolean = this.screenWidth < 768;
 
   ngOnInit(): void {
-    this.onResize();
+    this.checkScreenSize();
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event?: any) {
-    this.screenWidth = window.innerWidth;
-    this.isMobile = this.screenWidth < 768 ? true : false;
+  @HostListener('window:resize')
+  onResize() {
+    this.checkScreenSize();
   }
+
+  // Extracting the logic to determine the screen size
+  private checkScreenSize() {
+    this.screenWidth = window.innerWidth;
+    this.isMobile = this.screenWidth < 768;
+  }
+
+  // OnDestroy lifecycle hook to remove the host listener when component gets destroyed
+  ngOnDestroy() {}
 }

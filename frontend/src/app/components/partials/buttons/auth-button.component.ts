@@ -1,5 +1,5 @@
 //frontend/src/app/components/partials/buttons/login-button.component.ts
-import { Component, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Inject } from '@angular/core'; // Import ChangeDetectionStrategy
 import { AuthService } from '@auth0/auth0-angular';
 import { DOCUMENT } from '@angular/common';
 
@@ -7,7 +7,8 @@ import { DOCUMENT } from '@angular/common';
   selector: 'app-auth-button',
   template: `
     <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
-      <button class="auth-button btn-logout" (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
+      <!-- Use the logout method instead of directly accessing the document property -->
+      <button class="auth-button btn-logout" (click)="logout()">
         Log out
       </button>
     </ng-container>
@@ -40,8 +41,14 @@ import { DOCUMENT } from '@angular/common';
     .btn-logout:hover {
       background-color: #caccd1;
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush  // Use OnPush change detection
 })
 export class AuthButtonComponent {
-  constructor(@Inject(DOCUMENT) public document: Document, public auth: AuthService) {}
+  constructor(@Inject(DOCUMENT) private document: Document, public auth: AuthService) {}
+
+  logout() {
+    const returnTo = this.document.location.origin;
+    this.auth.logout({ logoutParams: { returnTo } });
+  }
 }
