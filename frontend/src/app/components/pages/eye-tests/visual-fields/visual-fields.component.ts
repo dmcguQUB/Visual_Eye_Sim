@@ -1,17 +1,14 @@
-//required to clean script to prevent bugs while navigating
-declare global {
-  interface Window { cleanup: () => void; }
-}
-
-
 import {
   ViewChild,
   ElementRef,
   Component,
+  OnDestroy
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UseCaseService } from 'src/app/services/usecases.service';
+import { Subscription } from 'rxjs';  // <-- Import Subscription
 import { CaseStudies } from 'src/app/shared/models/casestudies';
+import { Iris } from 'src/app/shared/interfaces/IDrawings.ts/IEye';
 
 
 //removed the styles and doesn't have a template as code is mainly just ts file
@@ -21,14 +18,14 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
 })
 
 //creating abstract class as will be used by both left and right eye
-export abstract class VisualFieldsComponent {
+export abstract class VisualFieldsComponent implements OnDestroy {
 
   //properties - shared
   @ViewChild('myCanvas') myCanvas!: ElementRef<HTMLCanvasElement>;
   protected ctx!: CanvasRenderingContext2D;
 
   protected face = { x: 0, y: 0, radiusX: 0, radiusY: 0, rotation: 0 };
-  protected iriss: any[] = [];
+  protected iriss: Iris[] = []; // <-- Defined type instead of any
 
 
   caseStudy = new CaseStudies();
@@ -41,17 +38,18 @@ export abstract class VisualFieldsComponent {
   thisEye: string = 'Left';
   otherEye: string = 'Right';
 
+  private subscriptions: Subscription = new Subscription(); // <-- Store subscriptions
+  
+  // define separate flags for each image
+  backgroundImgLoaded: boolean = false;
+  handImageLoaded: boolean = false;
+
   //constructor
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private useCaseService: UseCaseService // Inject UseCaseService
   ) {}
-
-
-  // define separate flags for each image
-  backgroundImgLoaded: boolean = false;
-  handImageLoaded: boolean = false;
 
    // Abstract method for setting the hand image source
    abstract setHandImageSrc(): string;
@@ -75,20 +73,23 @@ export abstract class VisualFieldsComponent {
   this.handImage.src = this.setHandImageSrc();
 
 
-    // Fetch the caseStudy
-    this.activatedRoute.params.subscribe((params) => {
-      console.log(params);
-      if (params['useCaseId']) {
-        this.useCaseService.getUseCaseById(params['useCaseId']).subscribe(
-          (serverCaseStudy) => {
-            this.caseStudy = serverCaseStudy;
-          },
-          (error) => {
-            console.log('An error occurred:', error); // Log any errors for debugging
-          }
-        );
-      }
-    });
+   
+  const subscription = this.activatedRoute.params.subscribe((params) => {
+    if (params['useCaseId']) {
+      this.useCaseService.getUseCaseById(params['useCaseId']).subscribe(
+        (serverCaseStudy) => {
+          this.caseStudy = serverCaseStudy;
+        },
+        (error) => {
+          console.log('An error occurred:', error);
+        }
+      );
+    }
+  });
+
+  //add subscription
+  this.subscriptions.add(subscription);
+
 
     //set button messages from cource
     this.buttonMessages = this.setButtonMessages();
@@ -224,13 +225,13 @@ export abstract class VisualFieldsComponent {
 
 
   ngOnDestroy(): void {
-    // <-- Add OnDestroy lifecycle hook
-    // Remove the script when the component is destroyed
-    // Call cleanup function from visual-fields-test-left.js
-    if (window['cleanup']) {
-      window['cleanup']();
+    this.subscriptions.unsubscribe(); // <-- Unsubscribe
+
+    if (typeof window.cleanup === "function") {
+      window.cleanup();
     }
   }
 }
+
 
 

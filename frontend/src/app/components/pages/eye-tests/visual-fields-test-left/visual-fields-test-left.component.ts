@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { VisualFieldsComponent } from '../visual-fields/visual-fields.component';
 
 @Component({
@@ -6,10 +6,11 @@ import { VisualFieldsComponent } from '../visual-fields/visual-fields.component'
   templateUrl: './visual-fields-test-left.component.html',
   styleUrls: ['./visual-fields-test-left.component.css'],
 })
-export class VisualFieldsTestLeftComponent
-  extends VisualFieldsComponent
-  implements OnInit
-{
+export class VisualFieldsTestLeftComponent extends VisualFieldsComponent {
+  //image to determine which eye it is
+  override readonly thisEye: string = 'Left';
+  override readonly otherEye: string = 'Right ';
+
   setHandImageSrc(): string {
     return 'assets/Left-hand.png';
   }
@@ -25,15 +26,5 @@ export class VisualFieldsTestLeftComponent
   //change position of the hand
   override drawHand() {
     this.ctx.drawImage(this.handImage, 80, 30); //<----need to change this for each
-  }
-
-    //image to determine which eye it is
-    override thisEye: string = 'Left';
-    override otherEye: string = 'Right ';
-
-
-  override ngOnInit() {
-    super.ngOnInit();
-    
   }
 }

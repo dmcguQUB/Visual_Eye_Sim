@@ -9,3 +9,18 @@ export interface EyeBallOrPupil {
   y: number;
   radius: number;
 }
+
+export interface Iris { // <-- Defined type
+  iris: {
+    x: number;
+    y: number;
+    radius: number;
+  };
+  pupil: {
+    x: number;
+    y: number;
+    radius: number;
+    targetRadius: number;
+  };
+
+}
