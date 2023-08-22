@@ -8,13 +8,24 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ExamStateService {
-  private _isTestFinished = new BehaviorSubject<boolean>(false);
+  private _isEyeTestFinished = new BehaviorSubject<boolean>(false);
+  private _isInvestigationsTestFinished = new BehaviorSubject<boolean>(false);
   
-  set isTestFinished(value: boolean) {
-    this._isTestFinished.next(value);
+  // ... you can add more stages as needed
+
+  // For Eye Test
+  set isEyeTestFinished(value: boolean) {
+    this._isEyeTestFinished.next(value);
+  }
+  get isEyeTestFinished$() {
+    return this._isEyeTestFinished.asObservable();
   }
 
-  get isTestFinished$() {
-    return this._isTestFinished.asObservable();
+  // For Investigations Test
+  set isInvestigationsTestFinished(value: boolean) {
+    this._isInvestigationsTestFinished.next(value);
+  }
+  get isInvestigationsTestFinished$() {
+    return this._isInvestigationsTestFinished.asObservable();
   }
 }

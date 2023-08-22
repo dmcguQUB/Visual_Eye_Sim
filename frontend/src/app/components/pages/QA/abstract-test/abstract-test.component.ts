@@ -25,8 +25,6 @@ public questionList: Question[] = [];
   public points: number = 0;
   questionText: string ='';
   public counter: number = 0; // we'll initialize it properly inside ngOnInit
-  correctAnswer: number = 0;
-  incorrectAnswer: number = 0;
   interval$: any; //for the stop clock
   progress: string = "0"; //to update progress bar
   isQuizCompleted: boolean = false;

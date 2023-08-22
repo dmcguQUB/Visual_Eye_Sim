@@ -7,8 +7,7 @@ import { PupilReflexesTestComponent } from './components/pages/eye-tests/pupil-r
 import { VisualFieldsTestLeftComponent } from './components/pages/eye-tests/visual-fields-test-left/visual-fields-test-left.component'; // visual fields test by confrontation imported route
 import { VisualAcuityTestComponent } from './components/pages/eye-tests/visual-acuity-test/visual-acuity-test.component'; //visual acuity test
 import { EyeMovementsTestComponent } from './components/pages/eye-tests/eye-movements-test/eye-movements-test.component'; //eye movemebts
-import { DirectOphthalmoscopyTestComponent } from './components/pages/eye-tests/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
-import { QuestionComponent } from './components/pages/QA/question/question.component';
+import { DirectOphthalmoscopyTestComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
 import { WelcomeComponent } from './components/pages/QA/welcome/welcome.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
@@ -25,6 +24,7 @@ import { UserProfilePageComponent } from './components/pages/user-profile-page/u
 import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/eye-test-questions/eye-test-questions.component';
 import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
 import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract-test/investigations-questions/investigations-questions.component';
+import { DirectOphthalmoscopyTestRightComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test-right/direct-ophthalmoscopy-test-right.component';
 
 const routes: Routes = [
   //home route
@@ -64,18 +64,17 @@ const routes: Routes = [
     component: TestVisualFieldsTestComponent,
   },
   {
-    path: 'direct-ophthalmoscopy-test/:useCaseId',
+    path: 'direct-ophthalmoscopy-test-left/:useCaseId',
     component: DirectOphthalmoscopyTestComponent,
     canActivate: [AuthGuard],
-  },
+  },{
+  path: 'direct-ophthalmoscopy-test-right/:useCaseId',
+  component: DirectOphthalmoscopyTestRightComponent,
+  canActivate: [AuthGuard],
+},
   {
     path: 'welcome/:useCaseId',
     component: WelcomeComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'question/:useCaseId',
-    component: QuestionComponent,
     canActivate: [AuthGuard],
   },
   {

@@ -3,6 +3,7 @@
 import { Router } from "express"; // Importing the Router class from Express
 import expressAsyncHandler from "express-async-handler"; // Middleware for handling asynchronous operations safely
 import { sample_questions } from "../data"; // Sample quiz questions data (used for seeding)
+import { Option } from "../interface/option";
 import { QuizModel } from "../models/questions"; // Importing the QuizModel
 
 // Create a new router instance using Express's Router
@@ -70,6 +71,45 @@ router.get(
     }
   })
 );
+
+
+//API to get all correct answers for a question for a case study   (this returns an Array to allow for multiple choice)
+router.get(
+  "/correct_answers/case_study/:id/:questionType",
+  expressAsyncHandler(async (req, res) => {
+    // Retrieve quiz questions for a specific case study using QuizModel, caseStudyId, and questionType
+    const questions = await QuizModel.find({ 
+      caseStudyId: req.params.id, 
+      questionType: req.params.questionType 
+  });
+
+
+    if (!questions) {
+      res.status(404).send({ message: 'Questions not found for case study' });
+      return;
+    }
+
+    // Create an array to store correct answers
+    const correctAnswers: { questionId: string, questionText: string, correctOptions: Option[] }[] = [];
+
+    // For each question, find all correct answers
+    questions.forEach(question => {
+      const correctOptions = question.options.filter(option => option.correct);
+      if (correctOptions.length > 0) {
+        correctAnswers.push({
+          questionId: question._id.toString(),
+          questionText: question.questionText,
+          correctOptions: correctOptions
+        });
+      }
+    });
+
+    // Respond with the array of correct answers
+    res.send(correctAnswers);
+  })
+);
+
+
 
 
 // Export the router so it can be used in other files (e.g., server.ts)

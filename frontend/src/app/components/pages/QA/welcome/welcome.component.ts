@@ -28,6 +28,6 @@ export class WelcomeComponent implements OnInit {
   }
 
   startQuiz() {
-    this.router.navigate(['/question', this.useCaseId]);
+    this.router.navigate(['/eye-test-questions', this.useCaseId]);
   }
 }

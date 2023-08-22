@@ -1,0 +1,62 @@
+<div class="full-container">
+  <div class="parent-container">
+    <!--navbar partial-->
+    <div class="d-flex justify-content-left text-center">
+    <app-navbar></app-navbar>
+  </div>
+  
+    <!--Right Container-->
+    <div class="card-container right-container">
+      <!--Title-->
+      <div class="card-container title-container">
+        <h1 class="title">Direct Ophthalmoscopy</h1>
+      </div>
+      <!--Instructions-->
+      <div class="card-container case-study-instructions text-center">
+        <h2>Instructions:</h2>
+        <p>Move the mouse in order to see the back of the retina. You can adjust the resolution and peep hole size using your keyboard.</p>
+      </div>
+  
+      <div class="card-container">
+          <!--Buttons for adjusting resolution and size-->
+          <button class="button" (click)="adjustResolution(-1)">Lower Resolution (Press Down Key)</button>
+          <button class="button" (click)="adjustResolution(1)">Higher Resolution (Press Up Key)</button>
+          <button class="button" (click)="adjustSize(-1)">Decrease Size (Press Left Key)</button>
+          <button class="button"(click)="adjustSize(1)">Increase Size (Press Right Key)</button>
+      </div>
+      <!--Direct Ophthalmoscopy Test-->
+      <div class="ophthalmoscopy-container">
+        <div id="canvasContainer">
+          <canvas id="myCanvas" width="600" height="600"></canvas>
+        </div>
+        <!--Black Background-->
+        <div id="black-background"></div>
+        <!--Background image of eye -->
+        <div id="background-image" #backgroundImage></div>
+        <!--Mask layer-->
+        <div id="maskLayer">
+          <svg id="maskSvg" #maskSvg width="100%" height="100%">
+            <defs>
+              <mask id="mask">
+                <rect width="100%" height="100%" fill="white"/>
+                <circle id="maskCircle" #maskCircle cx="0" cy="0" r="50" fill="black"/>
+              </mask>
+            </defs>
+            <rect width="100%" height="100%" fill="black" mask="url(#mask)"/>
+          </svg>              
+        </div>
+      </div>
+    <!--Switch to other eye-->
+      <div class="card-container">
+        <default-button
+          [type]="'button'"
+          [text]="'Switch to ' + otherEye + ' Eye'"
+          [bgColor]="'#9c88ff'"
+          (onClick)="handleClick()"
+        ></default-button>
+      </div>
+    </div>
+  </div>
+  </div>
+  
+  

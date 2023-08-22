@@ -1,11 +1,12 @@
 //frontend/src/app/services/questions.service.ts
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable,map } from 'rxjs';
+import { Observable,map, of } from 'rxjs';
 import { Question } from '../shared/models/question'; // Assuming you have defined the Quiz model
 import { QUESTIONS_URL, QUESTION_BY_ID_URL, USER_SCORES_URL } from '../shared/constants/url';
 import { UserScore } from '../shared/models/UserScore';
 import { QuestionType } from '../shared/models/question-type';
+import { CorrectAnswer } from '../shared/models/correct-answer';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,16 @@ getTotalQuestionsForCaseStudy(caseStudyId: string): Observable<number> {
     map((questions: Question[]) => questions.length)
   );
 }
+
+//get correct answers for question using case study and questiontype
+getCorrectAnswersByCaseStudyIdAndQuestionType(caseStudyId: string, questionType: QuestionType | undefined): Observable<CorrectAnswer[]> {
+  if (!questionType) {
+      // Handle the undefined case, maybe throw an error or return an empty observable
+      return of([]);
+  }
+  return this.http.get<CorrectAnswer[]>(`${QUESTIONS_URL}/correct_answers/case_study/${caseStudyId}/${questionType}`);
+}
+
 
 
 }

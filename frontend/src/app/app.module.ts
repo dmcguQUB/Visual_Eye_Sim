@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './components/pages/QA/welcome/welcome.component';
-import { QuestionComponent } from './components/pages/QA/question/question.component';
+
 import { HeaderComponent } from './components/partials/header/header.component';
 import { ChangeBgDirective } from './shared/directives/change-bg.directive';
 import { HomeComponent } from './components/pages/home/home.component';
@@ -24,7 +24,7 @@ import { PupilReflexesTestComponent } from './components/pages/eye-tests/pupil-r
 import { VisualFieldsTestLeftComponent } from './components/pages/eye-tests/visual-fields-test-left/visual-fields-test-left.component';
 import { VisualAcuityTestComponent } from './components/pages/eye-tests/visual-acuity-test/visual-acuity-test.component';
 import { EyeMovementsTestComponent } from './components/pages/eye-tests/eye-movements-test/eye-movements-test.component';
-import { DirectOphthalmoscopyTestComponent } from './components/pages/eye-tests/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
+import { DirectOphthalmoscopyTestComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
 import { NavbarComponent } from './components/partials/navbar-case-study/navbar.component';
 import { LoadingComponent } from './components/partials/loading/loading.component';
 import { LoadingInterceptor } from './shared/interceptors/loading.interceptor';
@@ -54,17 +54,16 @@ import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/users
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 import { AvatarComponent } from './components/partials/avatar/avatar.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { PatientConversationComponent } from './components/partials/patient-conversation/patient-conversation.component';
 import { QaComponent } from './components/partials/qa/qa.component';
 import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/eye-test-questions/eye-test-questions.component';
 import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
 import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract-test/investigations-questions/investigations-questions.component';
+import { DirectOphthalmoscopyTestRightComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test-right/direct-ophthalmoscopy-test-right.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
-    QuestionComponent,
     HeaderComponent,
     ChangeBgDirective,
     HomeComponent,
@@ -99,11 +98,11 @@ import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract
     UserscoreScoreOverTimeComponent,
     UserProfilePageComponent,
     AvatarComponent,
-    PatientConversationComponent,
     QaComponent,
     EyeTestQuestionsComponent,
     DiagnosisQuestionsComponent,
     InvestigationsQuestionsComponent,
+    DirectOphthalmoscopyTestRightComponent,
   ],
   imports: [
     BrowserModule,

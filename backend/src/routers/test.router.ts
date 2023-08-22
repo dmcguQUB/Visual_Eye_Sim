@@ -152,7 +152,7 @@ router.post(
   "/calculate_score/:testId",
   
   expressAsyncHandler(async (req:any, res:any) => {
-    console.log("Original testId:", req.params.testId);
+    // console.log("Original testId:", req.params.testId);
 
     
     if (!req.params.testId.match(/^[0-9a-fA-F]{24}$/)) {
@@ -160,13 +160,13 @@ router.post(
    }
 
    const testId = new mongoose.Types.ObjectId(req.params.testId);
-   console.log("Received testId:", testId);
-   console.log("Is ObjectId?", testId instanceof mongoose.Types.ObjectId);
+  //  console.log("Received testId:", testId);
+  //  console.log("Is ObjectId?", testId instanceof mongoose.Types.ObjectId);
 
 
     // Fetch the test directly using the provided testId
     const userTest = await TestModel.findById(testId);
-    console.log("Fetched userTest:", userTest);
+    // console.log("Fetched userTest:", userTest);
 
     if (!userTest) {
       return res.status(404).send({ message: 'User test not found' });
@@ -178,22 +178,27 @@ router.post(
     let diagnosisTestScore = 0;
 
     // For eyeTest
+    let correctEyeAnswers = 0;
     for (const answer of userTest.eyeTest.answers) {
       const question = await QuizModel.findById(answer.questionId);
       if (question) {
         const correctOption = question.options.find(opt => opt.correct);
         if (correctOption && correctOption.text === answer.answer) {
           eyeTestScore += EYE_TEST_QUESTION_SCORE;
+          correctEyeAnswers++;
         }
       }
     }
+    userTest.eyeTest.totalQuestions = userTest.eyeTest.answers.length;
+    userTest.eyeTest.correctAnswers = correctEyeAnswers;
+    
 
     // For investigationsTest (multiple-choice)
     for (const answer of userTest.investigationsTest.answers) {
-      console.log("Current Answer:", answer);
+      // console.log("Current Answer:", answer);
 
       const question = await QuizModel.findById(answer.questionId);
-      console.log("Fetched Question:", question);
+      // console.log("Fetched Question:", question);
 
       if (question) {
           const correctAnswers = question.options
@@ -201,31 +206,48 @@ router.post(
               .map(opt => opt.text);
 
           let scoreForThisQuestion = 0;
-
-          for (const userAnswer of answer.userAnswers) {
-              if (correctAnswers.includes(userAnswer)) {
-                  scoreForThisQuestion += INVESTIGATION_QUESTION_SCORE; 
-              } else {
-                  scoreForThisQuestion -= INVESTIGATION_QUESTION_SCORE; 
+          let correctInvestigationAnswers = 0;
+          for (const answer of userTest.investigationsTest.answers) {
+            const question = await QuizModel.findById(answer.questionId);
+            if (question) {
+              const correctAnswers = question.options
+                  .filter(opt => opt.correct)
+                  .map(opt => opt.text);
+          
+              let isCorrect = true;
+              for (const userAnswer of answer.userAnswers) {
+                if (correctAnswers.includes(userAnswer)) {
+                  investigationsTestScore += INVESTIGATION_QUESTION_SCORE; 
+                } else {
+                  investigationsTestScore -= INVESTIGATION_QUESTION_SCORE; 
+                  isCorrect = false;
+                }
               }
+              if (isCorrect) correctInvestigationAnswers++;
+            }
           }
-
-          console.log("Score for this question:", scoreForThisQuestion);
-
+          userTest.investigationsTest.totalQuestions = userTest.investigationsTest.answers.length;
+          userTest.investigationsTest.correctAnswers = correctInvestigationAnswers;
+          // console.log("Score for this question:", scoreForThisQuestion);
           investigationsTestScore += scoreForThisQuestion;
       }
     }
 
     // For diagnosisTest
+    let correctDiagnosisAnswers = 0;
     for (const answer of userTest.diagnosisTest.answers) {
       const question = await QuizModel.findById(answer.questionId);
       if (question) {
         const correctOption = question.options.find(opt => opt.correct);
         if (correctOption && correctOption.text === answer.answer) {
           diagnosisTestScore += DIAGNOSIS_QUESTION_SCORE;
+          correctDiagnosisAnswers++;
         }
       }
     }
+    userTest.diagnosisTest.totalQuestions = userTest.diagnosisTest.answers.length;
+    userTest.diagnosisTest.correctAnswers = correctDiagnosisAnswers;
+    
 
     userTest.eyeTest.score = eyeTestScore;
     userTest.investigationsTest.score = investigationsTestScore;
@@ -237,7 +259,14 @@ router.post(
       eyeTestScore: userTest.eyeTest.score,
       investigationsTestScore: userTest.investigationsTest.score,
       diagnosisTestScore: userTest.diagnosisTest.score,
+      eyeTestTotalQuestions: userTest.eyeTest.totalQuestions,
+      eyeTestCorrectAnswers: userTest.eyeTest.correctAnswers,
+      investigationsTestTotalQuestions: userTest.investigationsTest.totalQuestions,
+      investigationsTestCorrectAnswers: userTest.investigationsTest.correctAnswers,
+      diagnosisTestTotalQuestions: userTest.diagnosisTest.totalQuestions,
+      diagnosisTestCorrectAnswers: userTest.diagnosisTest.correctAnswers
     });
+    
   })
 );
 

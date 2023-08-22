@@ -7,6 +7,7 @@ import { TestService } from 'src/app/services/test.service';
 import { Test, EyeAndDiagnosisAnswer } from 'src/app/shared/models/test';
 import { AbstractTestComponent } from '../abstract-test.component';
 import { QuestionType } from 'src/app/shared/models/question-type';
+import { EYE_TEST_QUESTION_SCORE } from 'src/app/shared/constants/points-per-question';
 
 
 @Component({
@@ -16,6 +17,11 @@ import { QuestionType } from 'src/app/shared/models/question-type';
 })
 export class EyeTestQuestionsComponent extends AbstractTestComponent implements OnInit {
   userScore?: number;  // Add this property to store the fetched user score
+   correctAnswer?: number = 0;
+   incorrectAnswer?: number = 0;
+  totalQuestions?: number =0;
+  pointsPerQuestion?: number = EYE_TEST_QUESTION_SCORE;
+  typeOfTest: String = "Eye Test";
 
   constructor(
     questionsService: QuestionService, 
@@ -68,9 +74,10 @@ export class EyeTestQuestionsComponent extends AbstractTestComponent implements 
      
      if (currentQuestionNumber === this.questionList.length - 1) {
       console.log("Quiz completed.");
-      this.isQuizCompleted = true;
       this.stopCounter();
       this.sendUserScore();
+      this.isQuizCompleted = true;
+
     } else {
       setTimeout(() => {
           this.currentQuestion++;
@@ -98,7 +105,7 @@ export class EyeTestQuestionsComponent extends AbstractTestComponent implements 
      caseStudyId: this.useCaseId,
      eyeTest: {
          score: this.points,
-         answers: cleanedEyeTestAnswers
+         answers: cleanedEyeTestAnswers as EyeAndDiagnosisAnswer[]
      }
  };
 
@@ -128,8 +135,12 @@ export class EyeTestQuestionsComponent extends AbstractTestComponent implements 
         next: (scoreData) => {
           console.log('Fetched user score:', scoreData);
 
+          
+
           // Here you can use the fetched scoreData to display the user's score
           // For example, you might want to assign the score to a class property and display it in your component's template.
+          console.log(this.displayUserScore(scoreData));// hypothetical function, you might implement it according to your UI logic.
+
           this.displayUserScore(scoreData);  // hypothetical function, you might implement it according to your UI logic.
         },
         error: (err) => {
@@ -146,7 +157,21 @@ export class EyeTestQuestionsComponent extends AbstractTestComponent implements 
 
 // Hypothetical function for UI display logic
 displayUserScore(scoreData: Test) {
-  return this.userScore  = scoreData.eyeTest?.score;
+
+  console.log("the score data is being display", scoreData)
+  this.userScore = scoreData.eyeTest?.score ?? 0;
+  this.correctAnswer = scoreData.eyeTest?.correctAnswers ?? 0;
+  this.totalQuestions = scoreData.eyeTest?.totalQuestions??0;
+  this.incorrectAnswer = this.totalQuestions - this.correctAnswer;
+
+     // Once the results are loaded successfully, set the state to true
+    this.examStateService.isEyeTestFinished = true;
 }
 
+getTotalScore(): number {
+  return (this.totalQuestions || 0) * (this.pointsPerQuestion || 0);
 }
+
+
+}
+

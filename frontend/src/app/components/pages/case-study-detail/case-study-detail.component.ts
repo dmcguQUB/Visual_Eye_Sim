@@ -1,92 +1,80 @@
-//case-study-detail.component.ts
-import { Component, OnInit, ViewChild, Renderer2, Inject, AfterViewInit  } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 import { UseCaseService } from 'src/app/services/usecases.service';
-import { MatMenuTrigger } from '@angular/material/menu';
-import { DOCUMENT } from '@angular/common';
 import { ButtonStateService } from 'src/app/services/buttonState.service';
-
+import { Observable, EMPTY, Subscription } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-case-study-detail',
   templateUrl: './case-study-detail.component.html',
   styleUrls: ['./case-study-detail.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush // Use OnPush change detection strategy
 })
-export class CaseStudyDetailComponent implements OnInit {
+export class CaseStudyDetailComponent implements OnInit, OnDestroy {
 
-  //this is a method to return an array of case studies
-  caseStudy: CaseStudies = new CaseStudies();
+  private subscription: Subscription | undefined;
+  caseStudy$: Observable<CaseStudies> | undefined;// Use an observable for the case study data
   isButtonClicked: boolean = false;
   showButton: boolean = true;
-
-
-  //botpress 
   botpressScript!: HTMLScriptElement;
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private useCaseService: UseCaseService,
-    private renderer2: Renderer2,
     private buttonStateService: ButtonStateService,
     @Inject(DOCUMENT) private _document: Document
   ) {}
 
   ngOnInit(): void {
-    //locate the case study phase
-    this.activatedRoute.params.subscribe((params) => {
-      console.log(params);
-      if (params['useCaseId']) {
-        this.useCaseService.getUseCaseById(params['useCaseId']).subscribe(serverCaseStudy => {
-          console.log('Data returned from backend:', serverCaseStudy);  // Add this
-          this.caseStudy = serverCaseStudy;
-          console.log('this.caseStudy after assignment:', this.caseStudy);  // And this
-        }, error => {
-          console.log('An error occurred:', error); // Log any errors for debugging
-        });
-      
-      }
+    this.caseStudy$ = this.activatedRoute.params.pipe(
+      switchMap(params => this.useCaseService.getUseCaseById(params['useCaseId'])),
+      catchError(error => {
+        console.log('An error occurred:', error);
+        // Handle error gracefully (e.g., show error message to user)
+        return EMPTY;
+      })
+    );
+    this.subscription = this.caseStudy$.subscribe(() => {
+      // Call the method to add the script file for the Botpress chatbot
+      this.addScriptToElement("https://cdn.botpress.cloud/webchat/v0/inject.js");
+      this.addScriptToElement("https://mediafiles.botpress.cloud/32e236a8-39dd-49e5-8a8d-bd9604e12cf8/webchat/config.js");
     });
-  
-  }
-  @ViewChild(MatMenuTrigger) menu!: MatMenuTrigger;
+  };
 
-  ngAfterViewInit(): void {
-    // Call the method to add the script file for the Botpress chatbot
-    this.addScriptToElement("https://cdn.botpress.cloud/webchat/v0/inject.js");
-    this.addScriptToElement("https://mediafiles.botpress.cloud/32e236a8-39dd-49e5-8a8d-bd9604e12cf8/webchat/config.js");
-  }
 
-  //define add to script for botpress
   addScriptToElement(src: string): HTMLScriptElement {
-    const script = this.renderer2.createElement('script');
+    const script = this._document.createElement('script');
     script.type = 'text/javascript';
     script.src = src;
     script.async = true;
     script.defer = true;
-    this.renderer2.appendChild(this._document.body, script);
-  
+    this._document.body.appendChild(script);
+
     // Save a reference to the Botpress script so that you can remove it later if needed
     if (src === "https://cdn.botpress.cloud/webchat/v0/inject.js") {
       this.botpressScript = script;
     }
-  
+
     return script;
   }
 
-  //destory after changing page to prevent performance issues
   ngOnDestroy(): void {
+    // Unsubscribe from the caseStudy$ observable
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  
     // Remove the Botpress script when the component is destroyed
     if (this.botpressScript) {
-      this.renderer2.removeChild(this._document.body, this.botpressScript);
+      this._document.body.removeChild(this.botpressScript);
     }
   }
-//button to check if the user has finsihed with the first stage to unlock further investiagation features
+  
   handleClick(): void {
     this.buttonStateService.changeButtonState(true);
-    this.showButton = false;  // Set the showButton variable to false when the button is clicked
+    this.showButton = false;
   }
-  
-  
 }

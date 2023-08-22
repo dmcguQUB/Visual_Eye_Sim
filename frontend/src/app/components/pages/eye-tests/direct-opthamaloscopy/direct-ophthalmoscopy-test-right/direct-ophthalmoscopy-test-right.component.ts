@@ -11,12 +11,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 
 @Component({
-  selector: 'app-direct-ophthalmoscopy-test',
-  templateUrl: './direct-ophthalmoscopy-test.component.html',
-  styleUrls: ['./direct-ophthalmoscopy-test.component.css'],
+  selector: 'app-direct-ophthalmoscopy-test-right',
+  templateUrl: './direct-ophthalmoscopy-test-right.component.html',
+  styleUrls: ['./direct-ophthalmoscopy-test-right.component.css']
 })
-export class DirectOphthalmoscopyTestComponent
-  implements OnInit, AfterViewInit
+export class DirectOphthalmoscopyTestRightComponent  implements OnInit, AfterViewInit
 {
   @ViewChild('maskSvg', { static: true })
   maskSvg!: ElementRef<SVGElement>;
@@ -34,8 +33,8 @@ export class DirectOphthalmoscopyTestComponent
   sizeArray = [30, 50, 70]; // Set the sizes you need
   resolution = 3; // Initial resolution
   //image to determine which iris it is
-  thisEye: string = 'Left';
-  otherEye: string = 'Right';
+  thisEye: string = 'Right';
+  otherEye: string = 'Left';
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
@@ -99,15 +98,18 @@ export class DirectOphthalmoscopyTestComponent
   // Update your handleClick() method
   handleClick(): void {
     this.thisEye = this.thisEye === 'Left' ? 'Right' : 'Left';
-    let route =
+  
+    let routeBase =
       this.thisEye === 'Right'
-        ? ''
-        : '';
-
+        ? 'direct-ophthalmoscopy-test-right/'
+        : 'direct-ophthalmoscopy-test-left/';
+  
     this.activatedRoute.params.subscribe((params) => {
       if (params['useCaseId']) {
-        this.router.navigate([`${route}${params['useCaseId']}`]);
+        this.router.navigate([routeBase + params['useCaseId']]);
       }
     });
   }
-}
+  }
+
+

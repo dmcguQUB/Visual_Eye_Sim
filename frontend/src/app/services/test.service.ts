@@ -55,6 +55,7 @@ submitTestData(testData: any): Observable<TestResponse> {
 
 
 
+
 // Adjust the method signature to accept testId
 calculateScore(testId: string): Observable<Test> {
   const url = `${TEST_URL}calculate_score/${testId}`;

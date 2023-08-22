@@ -22,14 +22,15 @@
                 />
               </div>
               <div class="quiz-header">
-                <h4>Eye Tests Quiz</h4>
+                <h4>{{typeOfTest}} Quiz</h4>
                 <span>Welcome {{ name }}</span>
               </div>
             </div>
             <div class="d-flex justify-content-around py-3">
-              <div class="score">
+              <!--CAN ADD IN IF HAVE TIME-->
+              <!-- <div class="score">
                 <h5>{{ points }} Points</h5>
-              </div>
+              </div> -->
               <div class="question-remain">
                 <!--dynamically change question number-->
                 <span style="font-style: italic"
@@ -107,12 +108,13 @@
                   Below is your results:
                 </h3>
                 <p>You have compelted the quiz. See your results below:</p>
-                <p>Total Questions Attempted : {{ questionList.length }}</p>
-                <p>Total Correct Answers : {{ correctAnswer }}</p>
-                <p>Total Incorrect Answers : {{ incorrectAnswer }}</p>
-                <div *ngIf="userScore !== undefined">
+              
+                <div *ngIf="userScore ||correctAnswer || incorrectAnswer || totalQuestions!== undefined">
                   <h3>Your Score:</h3>
-                  <p>{{ userScore }}</p>
+                  <p>{{ userScore }} / {{getTotalScore()}}</p>
+                  <p>Total Questions Attempted : {{ totalQuestions }}</p>
+                  <p>Total Correct Answers : {{ correctAnswer }}</p>
+                  <p>Total Incorrect Answers : {{ incorrectAnswer }}</p>
                 </div>
               </div>
             </div>

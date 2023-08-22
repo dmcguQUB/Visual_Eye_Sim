@@ -14,19 +14,19 @@
           <li><a [routerLink]="'/visual-fields-test-left/' + caseStudy._id">Visual Fields Test By Confrontation</a></li>
           <li><a [routerLink]="'/pupil-reflexes-test/' + caseStudy._id">Pupil Reflexes Test</a></li>
           <li><a [routerLink]="'/eye-movements-test/' + caseStudy._id">Eye Movements Test</a></li>
-          <li><a [routerLink]="'/direct-ophthalmoscopy-test/' + caseStudy._id">Direct Ophthalmoscopy</a></li>
+          <li><a [routerLink]="'/direct-ophthalmoscopy-test-left/' + caseStudy._id">Direct Ophthalmoscopy</a></li>
           <li><a [routerLink]="'/welcome/' + caseStudy._id">Test Yourself</a></li>
         </ul>
       </li>
-      <li class="dropdown" *ngIf="isPatientConvoFinished && isTestFinished">
+      <li class="dropdown" *ngIf="isPatientConvoFinished && isEyeTestFinished">
         <a class="dropdown-toggle">Investigations</a>
         <ul class="dropdown-menu">
-          <li [routerLink]="'/investigations-selection/' + caseStudy._id"><a>Investigations Selection</a></li>
-          <li *ngIf="isInvestigationTestFinished"><a>Investigations Images</a></li>
+          <li><a [routerLink]="'/investigations-questions/' + caseStudy._id">Investigations Selection</a></li>
+          <li *ngIf="isInvestigationsTestFinished"><a>Investigations Images</a></li>
         </ul>
       </li>
-      <li *ngIf="isPatientConvoFinished && isTestFinished && isInvestigationTestFinished">
-        <a href="#">Diagnosis</a>
+      <li *ngIf="isPatientConvoFinished && isEyeTestFinished && isInvestigationsTestFinished">
+        <a [routerLink]="'/diagnosis-questions/' + caseStudy._id">Diagnosis</a>
       </li>
     </ul>
   </div>

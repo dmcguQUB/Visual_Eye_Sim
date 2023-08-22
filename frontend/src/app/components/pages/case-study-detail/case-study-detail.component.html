@@ -13,16 +13,19 @@
     </div>
 
     <!-- case-study-detail.component.html -->
-    <div class="card-container">
-      <img class="card-img-top case-study-image" [src]="caseStudy.imageUrl" [alt]="caseStudy.name" />
-      <h5 class="title name">{{caseStudy.name}}</h5>
-      <p><strong>Age:</strong> {{ caseStudy.age }}</p>
-      <p><strong>Gender:</strong> {{ caseStudy.gender }}</p>
-      <p><strong>Medical History:</strong> {{ caseStudy.medicalHistory }}</p>
-      <p><strong>Drug Information:</strong> {{ caseStudy.drugInfo }}</p>
-      <p><strong>Social Information:</strong> {{ caseStudy.socialInfo }}</p>
-      <p><strong>Family History:</strong> {{ caseStudy.familyHistory }}</p>
-    </div>
+<div class="card-container">
+  <ng-container *ngIf="caseStudy$ | async as caseStudy">
+    <img class="card-img-top case-study-image" [src]="caseStudy.imageUrl" [alt]="caseStudy.name" />
+    <h5 class="title name">{{caseStudy.name}}</h5>
+    <p><strong>Age:</strong> {{ caseStudy.age }}</p>
+    <p><strong>Gender:</strong> {{ caseStudy.gender }}</p>
+    <p><strong>Medical History:</strong> {{ caseStudy.medicalHistory }}</p>
+    <p><strong>Drug Information:</strong> {{ caseStudy.drugInfo }}</p>
+    <p><strong>Social Information:</strong> {{ caseStudy.socialInfo }}</p>
+    <p><strong>Family History:</strong> {{ caseStudy.familyHistory }}</p>
+  </ng-container>
+</div>
+
 
     <div *ngIf="showButton" class="card-container case-study-button text-center">
       <default-button 

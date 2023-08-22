@@ -1,6 +1,8 @@
 // Class to show the questions
 // frontend/src/app/shared/models/quiz.ts 
 
+import { Option } from "./option";
+
 export class Question {
   _id!: string;
   questionText!: string;
@@ -22,7 +24,3 @@ export class Question {
   }
 }
 
-export interface Option {
-  text: string;
-  correct: boolean;
-}
