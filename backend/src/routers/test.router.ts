@@ -3,7 +3,7 @@
 import { Router } from "express";
 import expressAsyncHandler from "express-async-handler";
 import mongoose from "mongoose";
-import { DIAGNOSIS_QUESTION_SCORE, EYE_TEST_QUESTION_SCORE, INVESTIGATION_QUESTION_SCORE } from "../constants/points-per-question";
+import { DIAGNOSIS_QUESTION_SCORE, EYE_TEST_QUESTION_SCORE, INVESTIGATION_OPTION_SCORE } from "../constants/points-per-question";
 import { sample_test_data } from "../data";
 import authMid from "../middlewares/auth.mid";
 import { QuizModel } from "../models/questions";
@@ -148,127 +148,138 @@ console.log('Received test data:', testData);
 );
 
 //4) calculate scores for a user on backend. Better security and prevents people from changing score on frontend
-router.post(
-  "/calculate_score/:testId",
-  
-  expressAsyncHandler(async (req:any, res:any) => {
-    // console.log("Original testId:", req.params.testId);
+router.post("/calculate_score/:testId", expressAsyncHandler(async (req: any, res: any) => {  // Validate testId format
+  if (!req.params.testId.match(/^[0-9a-fA-F]{24}$/)) {
+    return res.status(400).send({ message: 'Invalid testId format' });
+  }
 
-    
-    if (!req.params.testId.match(/^[0-9a-fA-F]{24}$/)) {
-      return res.status(400).send({ message: 'Invalid testId format' });
-   }
+  const testId = new mongoose.Types.ObjectId(req.params.testId);
 
-   const testId = new mongoose.Types.ObjectId(req.params.testId);
-  //  console.log("Received testId:", testId);
-  //  console.log("Is ObjectId?", testId instanceof mongoose.Types.ObjectId);
+  const userTest = await TestModel.findById(testId);
 
+  if (!userTest) {
+    return res.status(404).send({ message: 'User test not found' });
+  }
 
-    // Fetch the test directly using the provided testId
-    const userTest = await TestModel.findById(testId);
-    // console.log("Fetched userTest:", userTest);
+  let eyeTestScore = 0;
+  let investigationsTestScore = 0;
+  let diagnosisTestScore = 0;
 
-    if (!userTest) {
-      return res.status(404).send({ message: 'User test not found' });
+  // Scoring for eyeTest
+  let correctEyeAnswers = 0;
+  for (const answer of userTest.eyeTest.answers) {
+    const question = await QuizModel.findById(answer.questionId);
+    if (question) {
+      const correctOption = question.options.find(opt => opt.correct);
+      if (correctOption && correctOption.text === answer.answer) {
+        eyeTestScore += EYE_TEST_QUESTION_SCORE;
+        correctEyeAnswers++;
+      }
     }
+  }
+  userTest.eyeTest.totalQuestions = userTest.eyeTest.answers.length;
+  userTest.eyeTest.correctAnswers = correctEyeAnswers;
 
-    
-    let eyeTestScore = 0;
-    let investigationsTestScore = 0;
-    let diagnosisTestScore = 0;
+  // Scoring for investigationsTest
+  let correctInvestigationAnswers = 0;
+  let totalCorrectOptions = 0;
+  for (const answer of userTest.investigationsTest.answers) {
+    const question = await QuizModel.findById(answer.questionId);
+    if (question) {
+      const correctAnswers = question.options.filter(opt => opt.correct).map(opt => opt.text);
+      totalCorrectOptions += correctAnswers.length;
 
-    // For eyeTest
-    let correctEyeAnswers = 0;
-    for (const answer of userTest.eyeTest.answers) {
-      const question = await QuizModel.findById(answer.questionId);
-      if (question) {
-        const correctOption = question.options.find(opt => opt.correct);
-        if (correctOption && correctOption.text === answer.answer) {
-          eyeTestScore += EYE_TEST_QUESTION_SCORE;
-          correctEyeAnswers++;
+      let isCorrect = true;
+      for (const userAnswer of answer.userAnswers) {
+        if (correctAnswers.includes(userAnswer)) {
+          investigationsTestScore += INVESTIGATION_OPTION_SCORE;
+        } else {
+          investigationsTestScore -= INVESTIGATION_OPTION_SCORE;
+          isCorrect = false;
         }
       }
+
+      if (isCorrect) correctInvestigationAnswers++;
     }
-    userTest.eyeTest.totalQuestions = userTest.eyeTest.answers.length;
-    userTest.eyeTest.correctAnswers = correctEyeAnswers;
-    
+  }
+  userTest.investigationsTest.totalQuestions = userTest.investigationsTest.answers.length;
+  userTest.investigationsTest.correctAnswers = correctInvestigationAnswers;
+  if (userTest.investigationsTest.totalQuestions !== 0) {
+    userTest.investigationsTest.percentage = (investigationsTestScore / (INVESTIGATION_OPTION_SCORE * totalCorrectOptions)) * 100;
+  }
 
-    // For investigationsTest (multiple-choice)
-    for (const answer of userTest.investigationsTest.answers) {
-      // console.log("Current Answer:", answer);
-
-      const question = await QuizModel.findById(answer.questionId);
-      // console.log("Fetched Question:", question);
-
-      if (question) {
-          const correctAnswers = question.options
-              .filter(opt => opt.correct)
-              .map(opt => opt.text);
-
-          let scoreForThisQuestion = 0;
-          let correctInvestigationAnswers = 0;
-          for (const answer of userTest.investigationsTest.answers) {
-            const question = await QuizModel.findById(answer.questionId);
-            if (question) {
-              const correctAnswers = question.options
-                  .filter(opt => opt.correct)
-                  .map(opt => opt.text);
-          
-              let isCorrect = true;
-              for (const userAnswer of answer.userAnswers) {
-                if (correctAnswers.includes(userAnswer)) {
-                  investigationsTestScore += INVESTIGATION_QUESTION_SCORE; 
-                } else {
-                  investigationsTestScore -= INVESTIGATION_QUESTION_SCORE; 
-                  isCorrect = false;
-                }
-              }
-              if (isCorrect) correctInvestigationAnswers++;
-            }
-          }
-          userTest.investigationsTest.totalQuestions = userTest.investigationsTest.answers.length;
-          userTest.investigationsTest.correctAnswers = correctInvestigationAnswers;
-          // console.log("Score for this question:", scoreForThisQuestion);
-          investigationsTestScore += scoreForThisQuestion;
+  // Scoring for diagnosisTest
+  let correctDiagnosisAnswers = 0;
+  for (const answer of userTest.diagnosisTest.answers) {
+    const question = await QuizModel.findById(answer.questionId);
+    if (question) {
+      const correctOption = question.options.find(opt => opt.correct);
+      if (correctOption && correctOption.text === answer.answer) {
+        diagnosisTestScore += DIAGNOSIS_QUESTION_SCORE;
+        correctDiagnosisAnswers++;
       }
     }
+  }
+  userTest.diagnosisTest.totalQuestions = userTest.diagnosisTest.answers.length;
+  userTest.diagnosisTest.correctAnswers = correctDiagnosisAnswers;
 
-    // For diagnosisTest
-    let correctDiagnosisAnswers = 0;
-    for (const answer of userTest.diagnosisTest.answers) {
-      const question = await QuizModel.findById(answer.questionId);
-      if (question) {
-        const correctOption = question.options.find(opt => opt.correct);
-        if (correctOption && correctOption.text === answer.answer) {
-          diagnosisTestScore += DIAGNOSIS_QUESTION_SCORE;
-          correctDiagnosisAnswers++;
-        }
-      }
-    }
-    userTest.diagnosisTest.totalQuestions = userTest.diagnosisTest.answers.length;
-    userTest.diagnosisTest.correctAnswers = correctDiagnosisAnswers;
-    
+  // Update scores
+  userTest.eyeTest.score = eyeTestScore;
+  userTest.investigationsTest.score = investigationsTestScore;
+  userTest.diagnosisTest.score = diagnosisTestScore;
 
-    userTest.eyeTest.score = eyeTestScore;
-    userTest.investigationsTest.score = investigationsTestScore;
-    userTest.diagnosisTest.score = diagnosisTestScore;
+  // Calculate percentages for each test
+  if (userTest.eyeTest.totalQuestions !== 0) {
+    userTest.eyeTest.percentage = (eyeTestScore / (userTest.eyeTest.totalQuestions * EYE_TEST_QUESTION_SCORE)) * 100;
+  }
+  if (userTest.diagnosisTest.totalQuestions !== 0) {
+    userTest.diagnosisTest.percentage = (diagnosisTestScore / (userTest.diagnosisTest.totalQuestions * DIAGNOSIS_QUESTION_SCORE)) * 100;
+  }
 
-    await userTest.save();
+  // Calculate total score and percentage
+  userTest.totalScore = userTest.eyeTest.score + userTest.investigationsTest.score + userTest.diagnosisTest.score;
+  let totalPercentage = 0;
+  let validTestsCount = 0;
 
-    res.send({
-      eyeTestScore: userTest.eyeTest.score,
-      investigationsTestScore: userTest.investigationsTest.score,
-      diagnosisTestScore: userTest.diagnosisTest.score,
-      eyeTestTotalQuestions: userTest.eyeTest.totalQuestions,
-      eyeTestCorrectAnswers: userTest.eyeTest.correctAnswers,
-      investigationsTestTotalQuestions: userTest.investigationsTest.totalQuestions,
-      investigationsTestCorrectAnswers: userTest.investigationsTest.correctAnswers,
-      diagnosisTestTotalQuestions: userTest.diagnosisTest.totalQuestions,
-      diagnosisTestCorrectAnswers: userTest.diagnosisTest.correctAnswers
-    });
-    
-  })
+  if (userTest.eyeTest.percentage !== undefined) {
+    totalPercentage += userTest.eyeTest.percentage;
+    validTestsCount++;
+  }
+  if (userTest.investigationsTest.percentage !== undefined) {
+    totalPercentage += userTest.investigationsTest.percentage;
+    validTestsCount++;
+  }
+  if (userTest.diagnosisTest.percentage !== undefined) {
+    totalPercentage += userTest.diagnosisTest.percentage;
+    validTestsCount++;
+  }
+
+  // Calculate total possible scores for each test type
+const eyeTestTotalPossibleScore = userTest.eyeTest.totalQuestions * EYE_TEST_QUESTION_SCORE;
+const investigationsTestTotalPossibleScore = totalCorrectOptions * INVESTIGATION_OPTION_SCORE;
+const diagnosisTestTotalPossibleScore = userTest.diagnosisTest.totalQuestions * DIAGNOSIS_QUESTION_SCORE;
+
+// Calculate the total possible score for the entire test
+const totalPossibleScore = eyeTestTotalPossibleScore + investigationsTestTotalPossibleScore + diagnosisTestTotalPossibleScore;
+
+// Calculate total percentage using the formula you provided
+userTest.totalPercentage = (userTest.totalScore / totalPossibleScore) * 100;
+await userTest.save();
+
+
+  res.send({
+    eyeTestScore: userTest.eyeTest.score,
+    eyeTestPercentage: userTest.eyeTest.percentage || 0,
+    investigationsTestScore: userTest.investigationsTest.score,
+    investigationsTestPercentage: userTest.investigationsTest.percentage || 0,
+    diagnosisTestScore: userTest.diagnosisTest.score,
+    diagnosisTestPercentage: userTest.diagnosisTest.percentage || 0,
+    totalScore: userTest.totalScore,
+    totalPercentage: userTest.totalPercentage
+  });
+})
 );
+
 
 
 

@@ -41,16 +41,16 @@ import { InputValidationComponent } from './components/partials/input-validation
 import { TextInputComponent } from './components/partials/text-input/text-input.component'; 
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { FooterComponent } from './components/partials/footer/footer.component';
-import { ScoresComponent } from './components/pages/graphs/scores/scores.component';
-import { AdminPageComponent } from './components/pages/graphs/admin-page/admin-page.component';
+import { ScoresComponent } from './components/pages/graphs/userscores/scores/scores.component'; 
+import { AdminPageComponent } from './components/pages/graphs/userscores/admin-page/admin-page.component'; 
 import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
-import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/admin-avg-score-vs-time/admin-avg-score-vs-time.component';
-import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/admin-registrations-over-time/admin-registrations-over-time.component';
+import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/userscores/admin-avg-score-vs-time/admin-avg-score-vs-time.component'; 
+import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/userscores/admin-registrations-over-time/admin-registrations-over-time.component'; 
 import { AdminNavbarComponent } from './components/partials/admin-navbar/admin-navbar.component';
 import { PatientConvoComponent } from './components/partials/patient-convo/patient-convo.component';
 import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';
 import { NavbarUserscoreComponent } from './components/partials/navbar-userscore/navbar-userscore.component';
-import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/userscore-score-over-time/userscore-score-over-time.component';
+import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/userscores/userscore-score-over-time/userscore-score-over-time.component';
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 import { AvatarComponent } from './components/partials/avatar/avatar.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -59,6 +59,7 @@ import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/e
 import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
 import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract-test/investigations-questions/investigations-questions.component';
 import { DirectOphthalmoscopyTestRightComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test-right/direct-ophthalmoscopy-test-right.component';
+import { UserScoresComponent } from './components/pages/graphs/user-scores/user-scores.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { DirectOphthalmoscopyTestRightComponent } from './components/pages/eye-t
     DiagnosisQuestionsComponent,
     InvestigationsQuestionsComponent,
     DirectOphthalmoscopyTestRightComponent,
+    UserScoresComponent,
   ],
   imports: [
     BrowserModule,

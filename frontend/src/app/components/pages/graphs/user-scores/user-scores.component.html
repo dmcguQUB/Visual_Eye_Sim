@@ -1,0 +1,105 @@
+<div class="full-container">
+  <div class="parent-container">
+    <!--navbar partial-->
+    <div class="d-flex justify-content-left text-center">
+      <app-navbar-userscore></app-navbar-userscore>
+    </div>
+
+    <!--Right Container-->
+    <div class="card-container right-container">
+      <!--Title-->
+      <div class="card-container title-container">
+        <h1 class="title">User Test Scores</h1>
+      </div>
+
+      <!--Instructions-->
+      <div class="card-container case-study-instructions text-center">
+        <h2>Instructions:</h2>
+        <p>View your past scores on tests for each case study.</p>
+      </div>
+
+      <div class="card-container">
+        <ng-container *ngIf="loading">Loading...</ng-container>
+        <ng-container *ngIf="!loading && paginatedUserTests?.length">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th (click)="sort('caseStudyNumber')">Case Study Number</th>
+                <th (click)="sort('name')">Case Study Subject</th>
+                <th (click)="sort('createdAt')">Test Taken At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let test of paginatedUserTests">
+                <td>{{ caseStudies[test.caseStudyId]?.caseStudyNumber }}</td>
+                <td>{{ caseStudies[test.caseStudyId]?.name }}</td>
+                <td>{{ test.createdAt | date : "medium" }}</td>
+                <td>
+                  <button (click)="showDetails(test)">Show Details</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="">
+            <button (click)="previousPage()">Previous</button>
+            <button (click)="nextPage()">Next</button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!loading && !paginatedUserTests?.length">
+          No tests found.
+        </ng-container>
+      </div>
+
+      <!--More details-->
+      <div class="card-container" *ngIf="showDetailsSection">
+        <div class="single-test-container">
+          <div class="container mt-5 card-container" *ngIf="selectedUserTest">
+            <div class="card-container">
+              <h2>User Test Details</h2>
+            </div>
+            <p>Case Study Number: {{ caseStudies[selectedUserTest.caseStudyId]?.caseStudyNumber }}</p>
+            <p>Case Subject: {{ caseStudies[selectedUserTest.caseStudyId]?.name }}</p>
+            <p>Score: {{ selectedUserTest.totalScore }}</p>
+            <p>Percentage: {{ selectedUserTest.totalPercentage }}%</p>
+            <p>Test Taken At: {{ selectedUserTest.createdAt| date : "medium" }}</p>
+          </div>
+    
+          <!-- Chart container -->
+          <div class="container mb-5 card-container" style="height: 400px">
+            <canvas id="scoreChart"></canvas>
+          </div>
+    
+          <!-- Table to display detailed info about each question -->
+          <table class="table table-bordered card-container">
+            <thead>
+              <tr>
+                <th>Number</th>
+                <th>Question</th>
+                <th>User Answer</th>
+                <th>Correct Answer</th>
+                <th>Correct</th>
+                <th>Explanation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="selectedUserTest && selectedUserTest.eyeTest?.answers">
+                <tr *ngFor="let answer of selectedUserTest?.eyeTest?.answers; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ questionsMap[answer.questionId]?.questionText }}</td>
+                  <td>{{ answer.answer }}</td>
+                  <td>{{ getCorrectAnswer(questionsMap[answer.questionId]) }}</td>
+                  <td>{{ answer.correct ? "Yes" : "No" }}</td>
+                  <td>{{ questionsMap[answer.questionId]?.explanation }}</td>
+                </tr>
+              </ng-container>              
+            </tbody>
+          </table>
+          <div class="text-center">
+            <button (click)="closeDetails()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

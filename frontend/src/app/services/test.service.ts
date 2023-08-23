@@ -1,6 +1,5 @@
 //frontend/src/app/services/test.service.ts
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { TypeVisitor } from '@angular/compiler';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CASE_STUDY_BY_ID_URL, TEST_FOR_ALL_TESTS_AND_CASE_STUDIES, TEST_FOR_CASE_STUDY, TEST_FOR_USER_URL, TEST_URL } from '../shared/constants/url';

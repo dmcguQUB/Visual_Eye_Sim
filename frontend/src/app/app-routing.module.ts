@@ -11,20 +11,21 @@ import { DirectOphthalmoscopyTestComponent } from './components/pages/eye-tests/
 import { WelcomeComponent } from './components/pages/QA/welcome/welcome.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
-import { ScoresComponent } from './components/pages/graphs/scores/scores.component';
-import { AdminPageComponent } from './components/pages/graphs/admin-page/admin-page.component';
+import { ScoresComponent } from './components/pages/graphs/userscores/scores/scores.component'; 
+import { AdminPageComponent } from './components/pages/graphs/userscores/admin-page/admin-page.component'; 
 import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
-import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/admin-avg-score-vs-time/admin-avg-score-vs-time.component';
-import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/admin-registrations-over-time/admin-registrations-over-time.component';
-import { AuthGuard } from './auth/guards/auth.guard';
-import { AdminGuard } from './auth/guards/admin.guard';
+import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/userscores/admin-avg-score-vs-time/admin-avg-score-vs-time.component'; 
+import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/userscores/admin-registrations-over-time/admin-registrations-over-time.component';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';
-import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/userscore-score-over-time/userscore-score-over-time.component';
+import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/userscores/userscore-score-over-time/userscore-score-over-time.component';
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/eye-test-questions/eye-test-questions.component';
 import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
 import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract-test/investigations-questions/investigations-questions.component';
 import { DirectOphthalmoscopyTestRightComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test-right/direct-ophthalmoscopy-test-right.component';
+import { UserScoresComponent } from './components/pages/graphs/user-scores/user-scores.component';
 
 const routes: Routes = [
   //home route
@@ -94,6 +95,8 @@ const routes: Routes = [
   },
   { path: 'login', component: LoginPageComponent },
   { path: 'register', component: RegisterPageComponent },
+  ///user-scores.component
+  { path: 'user-scores', component: UserScoresComponent, canActivate: [AuthGuard] },
   { path: 'scores', component: ScoresComponent, canActivate: [AuthGuard] },
   //can only access if authenticated and admin
   { path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard,AdminGuard] },

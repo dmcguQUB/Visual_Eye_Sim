@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb';
 import { Schema, model, Types } from 'mongoose';
 
 interface Test {
@@ -13,6 +12,7 @@ interface Test {
     score: number;
     totalQuestions?: number;
     correctAnswers?: number;
+    percentage?: number;
   };
   investigationsTest: {
     answers: {
@@ -23,6 +23,7 @@ interface Test {
     score: number;
     totalQuestions?: number;
     correctAnswers?: number;
+    percentage?: number;
   };
   diagnosisTest: {
     answers: {
@@ -33,7 +34,10 @@ interface Test {
     score: number;
     totalQuestions?: number;
     correctAnswers?: number;
+    percentage?: number;
   };
+  totalScore: number;
+  totalPercentage: number;
 }
 
 const TestSchema = new Schema<Test>({
@@ -47,7 +51,8 @@ const TestSchema = new Schema<Test>({
     }],
     score: { type: Number, required: false },
     totalQuestions: { type: Number, required: false, default: 0 },
-    correctAnswers: { type: Number, required: false, default: 0 }
+    correctAnswers: { type: Number, required: false, default: 0 },
+    percentage: { type: Number, required: false }
   },
   investigationsTest: {
     answers: [{
@@ -57,7 +62,8 @@ const TestSchema = new Schema<Test>({
     }],
     score: { type: Number, required: false },
     totalQuestions: { type: Number, required: false, default: 0 },
-    correctAnswers: { type: Number, required: false, default: 0 }
+    correctAnswers: { type: Number, required: false, default: 0 },
+    percentage: { type: Number, required: false }
   },
   diagnosisTest: {
     answers: [{
@@ -67,8 +73,11 @@ const TestSchema = new Schema<Test>({
     }],
     score: { type: Number, required: false },
     totalQuestions: { type: Number, required: false, default: 0 },
-    correctAnswers: { type: Number, required: false, default: 0 }
-  }
+    correctAnswers: { type: Number, required: false, default: 0 },
+    percentage: { type: Number, required: false }
+  },
+  totalScore: { type: Number, required: false, default: 0 }, // default value is 0
+  totalPercentage: { type: Number, required: false, default: 0 } // default value is 0
 }, {
   timestamps: true,
   toJSON: {

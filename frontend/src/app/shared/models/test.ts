@@ -9,7 +9,7 @@ export interface EyeAndDiagnosisAnswer {
 export interface InvestigationsAnswer {
   questionId: string;
   userAnswers: string[];
-  correctAnswers: string[];  // Based on your previous note, kept this but you can remove if needed
+  correctAnswers: string[]; 
 }
 
 // Model for eyeTest
@@ -18,6 +18,7 @@ export interface EyeTestType {
   score: number;
   totalQuestions?: number;
   correctAnswers?: number;
+  percentage?: number; 
 }
 
 // Model for investigationsTest
@@ -26,6 +27,7 @@ export interface InvestigationsTestType {
   score: number;
   totalQuestions?: number;
   correctAnswers?: number;
+  percentage?: number; 
 }
 
 // Model for diagnosisTest
@@ -34,6 +36,7 @@ export interface DiagnosisTestType {
   score: number;
   totalQuestions?: number;
   correctAnswers?: number;
+  percentage?: number; // Added this to match the backend
 }
 
 // Main model for Test object
@@ -44,6 +47,8 @@ export class Test {
   eyeTest?: EyeTestType;
   investigationsTest?: InvestigationsTestType;
   diagnosisTest?: DiagnosisTestType;
+  totalScore?: number = 0; // default value added to match backend
+  totalPercentage?: number = 0; // default value added to match backend
   createdAt?: Date;  // If you need timestamps
   updatedAt?: Date;  // If you need timestamps
 }

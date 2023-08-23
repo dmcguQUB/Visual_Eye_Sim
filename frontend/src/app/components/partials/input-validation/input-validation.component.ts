@@ -1,5 +1,6 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 //show which error should be shown 
 const VALIDATORS_MESSAGES:any = {
@@ -16,34 +17,38 @@ const VALIDATORS_MESSAGES:any = {
 })
 
 //Onchanges added 
-export class InputValidationComponent implements OnInit,OnChanges {
-  //Abstract control from angular forms which is used within validation
-  @Input()
-  control!:AbstractControl;
+export class InputValidationComponent implements OnInit, OnChanges, OnDestroy {  // Implement OnDestroy
 
-  @Input()
-  //show errors boolean
-  showErrorsWhen:boolean = true;
-  //error string array
-  errorMessages: string[] = [];
- 
-  constructor() { }
+  @Input() control!: AbstractControl;  //Abstract control from angular forms which is used within validation
 
-  //call the validation
+  @Input() showErrorsWhen: boolean = true;  //show errors boolean
+
+  errorMessages: string[] = [];  //error string array
+
+  private subscriptions: Subscription[] = [];  // Create an array to store subscriptions
+
+    //call the validation
   ngOnChanges(changes: SimpleChanges): void {
     this.checkValidation();
   }
 
-  //need to call validation method for control. When status changes then subscribe to it
+    //need to call validation method for control. When status changes then subscribe to it
   ngOnInit(): void {
-    this.control.statusChanges.subscribe(() => {
-      this.checkValidation();
-    });
-    //when value changes (e.g. add input) sibscribe to the changes
-    this.control.valueChanges.subscribe(() => {
-      this.checkValidation();
-    })
+    this.subscriptions.push(
+      this.control.statusChanges.subscribe(() => {
+        this.checkValidation();
+      }),
+          //when value changes (e.g. add input) sibscribe to the changes
+      this.control.valueChanges.subscribe(() => {
+        this.checkValidation();
+      })
+    );
   }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());  // Unsubscribe from all subscriptions
+  }
+
 
   //need to create validation method to populate errors array
   checkValidation(){
