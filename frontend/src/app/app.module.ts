@@ -25,36 +25,35 @@ import { VisualFieldsTestLeftComponent } from './components/pages/eye-tests/visu
 import { VisualAcuityTestComponent } from './components/pages/eye-tests/visual-acuity-test/visual-acuity-test.component';
 import { EyeMovementsTestComponent } from './components/pages/eye-tests/eye-movements-test/eye-movements-test.component';
 import { DirectOphthalmoscopyTestComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
-import { NavbarComponent } from './components/partials/navbar-case-study/navbar.component';
+import { NavbarComponent } from './components/partials/navbars/navbar-case-study/navbar.component';
 import { LoadingComponent } from './components/partials/loading/loading.component';
 import { LoadingInterceptor } from './shared/interceptors/loading.interceptor';
-import { TitleComponent } from './components/partials/title/title.component';
+import { TitleComponent } from './components/partials/text/title/title.component';
 
 
 // Import the module from the SDK
-import { AuthButtonComponent } from './components/partials/buttons/auth-button.component';
+import { AuthButtonComponent } from './components/partials/buttons folder/buttons/auth-button.component';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
-import { InputContainerComponent } from './components/partials/input-container/input-container.component'; 
-import { DefaultButtonComponent } from './components/partials/default-button/default-button.component';
-import { InputValidationComponent } from './components/partials/input-validation/input-validation.component'; 
-import { TextInputComponent } from './components/partials/text-input/text-input.component'; 
+import { InputContainerComponent } from './components/partials/text/input-container/input-container.component'; 
+import { DefaultButtonComponent } from './components/partials/buttons folder/default-button/default-button.component';
+import { InputValidationComponent } from './components/partials/text/input-validation/input-validation.component'; 
+import { TextInputComponent } from './components/partials/text/text-input/text-input.component'; 
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { FooterComponent } from './components/partials/footer/footer.component';
-import { ScoresComponent } from './components/pages/graphs/userscores/scores/scores.component'; 
 import { AdminPageComponent } from './components/pages/graphs/userscores/admin-page/admin-page.component'; 
 import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
 import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/userscores/admin-avg-score-vs-time/admin-avg-score-vs-time.component'; 
 import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/userscores/admin-registrations-over-time/admin-registrations-over-time.component'; 
-import { AdminNavbarComponent } from './components/partials/admin-navbar/admin-navbar.component';
-import { PatientConvoComponent } from './components/partials/patient-convo/patient-convo.component';
+import { AdminNavbarComponent } from './components/partials/navbars/admin-navbar/admin-navbar.component';
+import { PatientConvoComponent } from './components/partials/text/patient-convo/patient-convo.component';
 import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';
-import { NavbarUserscoreComponent } from './components/partials/navbar-userscore/navbar-userscore.component';
+import { NavbarUserscoreComponent } from './components/partials/navbars/navbar-userscore/navbar-userscore.component';
 import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/userscores/userscore-score-over-time/userscore-score-over-time.component';
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 import { AvatarComponent } from './components/partials/avatar/avatar.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { QaComponent } from './components/partials/qa/qa.component';
+import { QaComponent } from './components/partials/text/qa/qa.component';
 import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/eye-test-questions/eye-test-questions.component';
 import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
 import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract-test/investigations-questions/investigations-questions.component';
@@ -87,7 +86,6 @@ import { UserScoresComponent } from './components/pages/graphs/user-scores/user-
     LoadingComponent,
     RegisterPageComponent,
     FooterComponent,
-    ScoresComponent,
     AdminPageComponent,
     AdminAvgScoreVsTimeComponent,
     AdminRegistrationsOverTimeComponent,

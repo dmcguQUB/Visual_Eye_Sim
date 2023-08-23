@@ -11,7 +11,6 @@ import { DirectOphthalmoscopyTestComponent } from './components/pages/eye-tests/
 import { WelcomeComponent } from './components/pages/QA/welcome/welcome.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
-import { ScoresComponent } from './components/pages/graphs/userscores/scores/scores.component'; 
 import { AdminPageComponent } from './components/pages/graphs/userscores/admin-page/admin-page.component'; 
 import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
 import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/userscores/admin-avg-score-vs-time/admin-avg-score-vs-time.component'; 
@@ -97,7 +96,6 @@ const routes: Routes = [
   { path: 'register', component: RegisterPageComponent },
   ///user-scores.component
   { path: 'user-scores', component: UserScoresComponent, canActivate: [AuthGuard] },
-  { path: 'scores', component: ScoresComponent, canActivate: [AuthGuard] },
   //can only access if authenticated and admin
   { path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard,AdminGuard] },
     //can only access if authenticated and admin

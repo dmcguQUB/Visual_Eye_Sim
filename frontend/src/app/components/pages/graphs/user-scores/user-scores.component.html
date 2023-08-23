@@ -18,7 +18,7 @@
         <p>View your past scores on tests for each case study.</p>
       </div>
 
-      <div class="card-container">
+      <div class="card-container ">
         <ng-container *ngIf="loading">Loading...</ng-container>
         <ng-container *ngIf="!loading && paginatedUserTests?.length">
           <table class="table table-bordered">
@@ -53,7 +53,6 @@
 
       <!--More details-->
       <div class="card-container" *ngIf="showDetailsSection">
-        <div class="single-test-container">
           <div class="container mt-5 card-container" *ngIf="selectedUserTest">
             <div class="card-container">
               <h2>User Test Details</h2>
@@ -83,6 +82,7 @@
               </tr>
             </thead>
             <tbody>
+              <!--Eye tests-->
               <ng-container *ngIf="selectedUserTest && selectedUserTest.eyeTest?.answers">
                 <tr *ngFor="let answer of selectedUserTest?.eyeTest?.answers; let i = index">
                   <td>{{ i + 1 }}</td>
@@ -92,14 +92,38 @@
                   <td>{{ answer.correct ? "Yes" : "No" }}</td>
                   <td>{{ questionsMap[answer.questionId]?.explanation }}</td>
                 </tr>
-              </ng-container>              
+              </ng-container> 
+              
+              <!-- For investigationsTest -->
+<ng-container *ngIf="selectedUserTest && selectedUserTest.investigationsTest?.answers">
+  <tr *ngFor="let answer of selectedUserTest.investigationsTest?.answers; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ questionsMap[answer.questionId]?.questionText }}</td>
+      <td>{{ answer.userAnswers.join(', ') }}</td>
+      <td>{{ getCorrectAnswer(questionsMap[answer.questionId]) }}</td>
+      <td>{{ answer.userAnswers.toString() === answer.correctAnswers.toString() ? "Yes" : "No" }}</td>
+      <td>Explanation not available for InvestigationsTest</td> <!-- Assuming no explanation for this test -->
+  </tr>
+</ng-container>
+
+<!-- For diagnosisTest -->
+<ng-container *ngIf="selectedUserTest && selectedUserTest.diagnosisTest?.answers">
+  <tr *ngFor="let answer of selectedUserTest.diagnosisTest?.answers; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ questionsMap[answer.questionId]?.questionText }}</td>
+      <td>{{ answer.answer }}</td>
+      <td>{{ getCorrectAnswer(questionsMap[answer.questionId]) }}</td>
+      <td>{{ answer.correct ? "Yes" : "No" }}</td>
+      <td>{{ questionsMap[answer.questionId]?.explanation }}</td>
+  </tr>
+</ng-container>
+
             </tbody>
           </table>
           <div class="text-center">
             <button (click)="closeDetails()">Close</button>
           </div>
         </div>
-      </div>
     </div>
   </div>
 </div>

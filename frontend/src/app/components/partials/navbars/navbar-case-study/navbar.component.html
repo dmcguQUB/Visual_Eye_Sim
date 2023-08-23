@@ -25,7 +25,7 @@
           <li *ngIf="isInvestigationsTestFinished"><a>Investigations Images</a></li>
         </ul>
       </li>
-      <li *ngIf="isPatientConvoFinished && isEyeTestFinished && isInvestigationsTestFinished">
+      <li *ngIf="isPatientConvoFinished && isEyeTestFinished">
         <a [routerLink]="'/diagnosis-questions/' + caseStudy._id">Diagnosis</a>
       </li>
     </ul>
