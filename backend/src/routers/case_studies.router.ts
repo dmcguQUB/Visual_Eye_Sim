@@ -8,7 +8,7 @@ import { CaseStudyModel } from "../models/case-study-model"; // Importing the Ca
 // Create a new router instance using Express's Router
 const router = Router();
 
-// API endpoint to populate the case study model with sample data
+//1) API endpoint to populate the case study model with sample data
 router.get(
   "/seed",
   expressAsyncHandler(async (req, res) => {
@@ -27,7 +27,7 @@ router.get(
   })
 );
 
-// API endpoint to get all case studies
+//2) API endpoint to get all case studies
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
@@ -37,7 +37,7 @@ router.get(
   })
 );
 
-// API endpoint to get a specific case study by its ID
+//3) API endpoint to get a specific case study by its ID
 router.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {

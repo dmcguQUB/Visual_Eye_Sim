@@ -9,7 +9,7 @@ import { QuizModel } from "../models/questions"; // Importing the QuizModel
 // Create a new router instance using Express's Router
 const router = Router();
 
-// API endpoint to populate the quiz model with sample questions
+//1) API endpoint to populate the quiz model with sample questions
 router.get(
   "/seed",
   expressAsyncHandler(async (req, res) => {
@@ -28,7 +28,7 @@ router.get(
   })
 );
 
-// API endpoint to get all quiz questions
+// 2) API endpoint to get all quiz questions
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
@@ -38,7 +38,7 @@ router.get(
   })
 );
 
-// API endpoint to get questions for a specific case study by its ID
+//3) API endpoint to get questions for a specific case study by its ID
 router.get(
   "/case_study/:id",
   expressAsyncHandler(async (req, res) => {
@@ -55,7 +55,7 @@ router.get(
 );
 
 
-// API endpoint to get questions for a specific case study by its ID and type of question
+//4) API endpoint to get questions for a specific case study by its ID and type of question
 router.get(
   "/case_study/:id/:type",
   expressAsyncHandler(async (req, res) => {
@@ -73,7 +73,7 @@ router.get(
 );
 
 
-//API to get all correct answers for a question for a case study   (this returns an Array to allow for multiple choice)
+//5) API to get all correct answers for a question for a case study   (this returns an Array to allow for multiple choice)
 router.get(
   "/correct_answers/case_study/:id/:questionType",
   expressAsyncHandler(async (req, res) => {

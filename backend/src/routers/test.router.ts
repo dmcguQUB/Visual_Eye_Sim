@@ -3,7 +3,11 @@
 import { Router } from "express";
 import expressAsyncHandler from "express-async-handler";
 import mongoose from "mongoose";
-import { DIAGNOSIS_QUESTION_SCORE, EYE_TEST_QUESTION_SCORE, INVESTIGATION_OPTION_SCORE } from "../constants/points-per-question";
+import {
+  DIAGNOSIS_QUESTION_SCORE,
+  EYE_TEST_QUESTION_SCORE,
+  INVESTIGATION_OPTION_SCORE,
+} from "../constants/points-per-question";
 import { sample_test_data } from "../data";
 import authMid from "../middlewares/auth.mid";
 import { QuizModel } from "../models/questions";
@@ -31,7 +35,7 @@ router.get(
 );
 
 //WORKS
-// API endpoint to fetch all user scores from the collection
+//1) API endpoint to fetch all user scores from the collection
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
@@ -41,7 +45,7 @@ router.get(
 );
 
 //WORKS
-// API endpoint to fetch scores for a specific user
+//2) API endpoint to fetch scores for a specific user
 router.get(
   "/user/:userId",
   expressAsyncHandler(async (req, res) => {
@@ -54,8 +58,7 @@ router.get(
   })
 );
 
-
-//Get the user scores for the most recent test completed after being calculated for specific case study. Most recent submission selected
+//3) Get the user scores for the most recent test completed after being calculated for specific case study. Most recent submission selected
 //WORKS
 router.get(
   "/user/:userId/case_study/:caseStudyId",
@@ -64,19 +67,20 @@ router.get(
     const caseStudyId = req.params.caseStudyId;
 
     // Fetching the most recent test based on both userId and caseStudyId
-    const test = await TestModel.findOne({ 
-      userId: userId, 
-      caseStudyId: caseStudyId 
-    }).sort({ createdAt: -1 });  // sorting by CREATED in descending order to get the most recent
+    const test = await TestModel.findOne({
+      userId: userId,
+      caseStudyId: caseStudyId,
+    }).sort({ createdAt: -1 }); // sorting by CREATED in descending order to get the most recent
 
     if (test) {
       res.send(test);
     } else {
-      res.status(404).send({ message: "Scores not found for the specified case study" });
+      res
+        .status(404)
+        .send({ message: "Scores not found for the specified case study" });
     }
   })
 );
-
 
 //WORKS
 //posting a test score for speific case study and test
@@ -96,9 +100,8 @@ router.post(
     const requestWithUser = req as RequestWithUser; // Type assertion for req
 
     try {
-
       const testData = requestWithUser.body;
-console.log('Received test data:', testData);
+      console.log("Received test data:", testData);
 
       // Validate user existence and ID
       if (!requestWithUser.user || !requestWithUser.user._id) {
@@ -111,7 +114,7 @@ console.log('Received test data:', testData);
         // If eye test data is present, always create a new entry
         const newTest = new TestModel(testData);
         const savedTest = await newTest.save();
-        console.log('Sending saved testId:', savedTest._id);
+        console.log("Sending saved testId:", savedTest._id);
 
         res.status(201).send({ test: savedTest, testId: savedTest._id });
       } else {
@@ -119,7 +122,7 @@ console.log('Received test data:', testData);
         const recentTest = await TestModel.findOne({
           userId: testData.userId,
           caseStudyId: testData.caseStudyId,
-        }).sort({ createdAt: -1});
+        }).sort({ createdAt: -1 });
 
         if (!recentTest) {
           throw new Error("No recent eye test found to update.");
@@ -134,7 +137,7 @@ console.log('Received test data:', testData);
         }
 
         const updatedTest = await recentTest.save();
-        console.log('Sending testId:', updatedTest._id);
+        console.log("Sending testId:", updatedTest._id);
 
         res.status(200).send({ test: updatedTest, testId: updatedTest._id });
       }
@@ -148,441 +151,354 @@ console.log('Received test data:', testData);
 );
 
 //4) calculate scores for a user on backend. Better security and prevents people from changing score on frontend
-router.post("/calculate_score/:testId", expressAsyncHandler(async (req: any, res: any) => {  // Validate testId format
-  if (!req.params.testId.match(/^[0-9a-fA-F]{24}$/)) {
-    return res.status(400).send({ message: 'Invalid testId format' });
-  }
-
-  const testId = new mongoose.Types.ObjectId(req.params.testId);
-
-  const userTest = await TestModel.findById(testId);
-
-  if (!userTest) {
-    return res.status(404).send({ message: 'User test not found' });
-  }
-
-  let eyeTestScore = 0;
-  let investigationsTestScore = 0;
-  let diagnosisTestScore = 0;
-
-  // Scoring for eyeTest
-  let correctEyeAnswers = 0;
-  for (const answer of userTest.eyeTest.answers) {
-    const question = await QuizModel.findById(answer.questionId);
-    if (question) {
-      const correctOption = question.options.find(opt => opt.correct);
-      if (correctOption && correctOption.text === answer.answer) {
-        eyeTestScore += EYE_TEST_QUESTION_SCORE;
-        correctEyeAnswers++;
-      }
+router.post(
+  "/calculate_score/:testId",
+  expressAsyncHandler(async (req: any, res: any) => {
+    if (!req.params.testId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).send({ message: "Invalid testId format" });
     }
-  }
-  userTest.eyeTest.totalQuestions = userTest.eyeTest.answers.length;
-  userTest.eyeTest.correctAnswers = correctEyeAnswers;
 
-  // Scoring for investigationsTest
-  let correctInvestigationAnswers = 0;
-  let totalCorrectOptions = 0;
-  for (const answer of userTest.investigationsTest.answers) {
-    const question = await QuizModel.findById(answer.questionId);
-    if (question) {
-      const correctAnswers = question.options.filter(opt => opt.correct).map(opt => opt.text);
-      totalCorrectOptions += correctAnswers.length;
+    const testId = new mongoose.Types.ObjectId(req.params.testId);
+    const userTest = await TestModel.findById(testId);
 
-      let isCorrect = true;
-      for (const userAnswer of answer.userAnswers) {
-        if (correctAnswers.includes(userAnswer)) {
-          investigationsTestScore += INVESTIGATION_OPTION_SCORE;
-        } else {
-          investigationsTestScore -= INVESTIGATION_OPTION_SCORE;
-          isCorrect = false;
+    if (!userTest) {
+      return res.status(404).send({ message: "User test not found" });
+    }
+
+    let eyeTestScore = 0;
+    let investigationsTestScore = 0;
+    let diagnosisTestScore = 0;
+
+    let correctEyeAnswers = 0;
+    for (const answer of userTest.eyeTest.answers) {
+      const question = await QuizModel.findById(answer.questionId);
+      if (question) {
+        const correctOption = question.options.find((opt) => opt.correct);
+        if (correctOption && correctOption.text === answer.answer) {
+          eyeTestScore += EYE_TEST_QUESTION_SCORE;
+          correctEyeAnswers++;
         }
       }
-
-      if (isCorrect) correctInvestigationAnswers++;
     }
-  }
-  userTest.investigationsTest.totalQuestions = userTest.investigationsTest.answers.length;
-  userTest.investigationsTest.correctAnswers = correctInvestigationAnswers;
-  if (userTest.investigationsTest.totalQuestions !== 0) {
-    userTest.investigationsTest.percentage = (investigationsTestScore / (INVESTIGATION_OPTION_SCORE * totalCorrectOptions)) * 100;
-  }
+    userTest.eyeTest.totalQuestions = userTest.eyeTest.answers.length;
+    userTest.eyeTest.correctAnswers = correctEyeAnswers;
 
-  // Scoring for diagnosisTest
-  let correctDiagnosisAnswers = 0;
-  for (const answer of userTest.diagnosisTest.answers) {
-    const question = await QuizModel.findById(answer.questionId);
-    if (question) {
-      const correctOption = question.options.find(opt => opt.correct);
-      if (correctOption && correctOption.text === answer.answer) {
-        diagnosisTestScore += DIAGNOSIS_QUESTION_SCORE;
-        correctDiagnosisAnswers++;
+    let correctInvestigationAnswers = 0;
+    let totalCorrectOptions = 0;
+    for (const answer of userTest.investigationsTest.answers) {
+      const question = await QuizModel.findById(answer.questionId);
+      if (question) {
+        const correctAnswers = question.options
+          .filter((opt) => opt.correct)
+          .map((opt) => opt.text);
+        totalCorrectOptions += correctAnswers.length;
+
+        let isCorrect = true;
+        for (const userAnswer of answer.userAnswers) {
+          if (correctAnswers.includes(userAnswer)) {
+            investigationsTestScore += INVESTIGATION_OPTION_SCORE;
+          } else {
+            investigationsTestScore -= INVESTIGATION_OPTION_SCORE;
+            isCorrect = false;
+          }
+        }
+
+        if (isCorrect) correctInvestigationAnswers++;
       }
     }
-  }
-  userTest.diagnosisTest.totalQuestions = userTest.diagnosisTest.answers.length;
-  userTest.diagnosisTest.correctAnswers = correctDiagnosisAnswers;
 
-  // Update scores
-  userTest.eyeTest.score = eyeTestScore;
-  userTest.investigationsTest.score = investigationsTestScore;
-  userTest.diagnosisTest.score = diagnosisTestScore;
+    userTest.investigationsTest.totalQuestions =
+      userTest.investigationsTest.answers.length;
+    userTest.investigationsTest.correctAnswers = correctInvestigationAnswers;
+    if (userTest.investigationsTest.totalQuestions !== 0) {
+      userTest.investigationsTest.percentage = Math.round(
+        (investigationsTestScore /
+          (INVESTIGATION_OPTION_SCORE * totalCorrectOptions)) *
+          100
+      );
+    }
 
-  // Calculate percentages for each test
-  if (userTest.eyeTest.totalQuestions !== 0) {
-    userTest.eyeTest.percentage = (eyeTestScore / (userTest.eyeTest.totalQuestions * EYE_TEST_QUESTION_SCORE)) * 100;
-  }
-  if (userTest.diagnosisTest.totalQuestions !== 0) {
-    userTest.diagnosisTest.percentage = (diagnosisTestScore / (userTest.diagnosisTest.totalQuestions * DIAGNOSIS_QUESTION_SCORE)) * 100;
-  }
+    let correctDiagnosisAnswers = 0;
+    for (const answer of userTest.diagnosisTest.answers) {
+      const question = await QuizModel.findById(answer.questionId);
+      if (question) {
+        const correctOption = question.options.find((opt) => opt.correct);
+        if (correctOption && correctOption.text === answer.answer) {
+          diagnosisTestScore += DIAGNOSIS_QUESTION_SCORE;
+          correctDiagnosisAnswers++;
+        }
+      }
+    }
+    userTest.diagnosisTest.totalQuestions =
+      userTest.diagnosisTest.answers.length;
+    userTest.diagnosisTest.correctAnswers = correctDiagnosisAnswers;
 
-  // Calculate total score and percentage
-  userTest.totalScore = userTest.eyeTest.score + userTest.investigationsTest.score + userTest.diagnosisTest.score;
-  let totalPercentage = 0;
-  let validTestsCount = 0;
+    userTest.eyeTest.score = eyeTestScore;
+    userTest.investigationsTest.score = investigationsTestScore;
+    userTest.diagnosisTest.score = diagnosisTestScore;
 
-  if (userTest.eyeTest.percentage !== undefined) {
-    totalPercentage += userTest.eyeTest.percentage;
-    validTestsCount++;
-  }
-  if (userTest.investigationsTest.percentage !== undefined) {
-    totalPercentage += userTest.investigationsTest.percentage;
-    validTestsCount++;
-  }
-  if (userTest.diagnosisTest.percentage !== undefined) {
-    totalPercentage += userTest.diagnosisTest.percentage;
-    validTestsCount++;
-  }
+    if (userTest.eyeTest.totalQuestions !== 0) {
+      userTest.eyeTest.percentage = Math.round(
+        (eyeTestScore /
+          (userTest.eyeTest.totalQuestions * EYE_TEST_QUESTION_SCORE)) *
+          100
+      );
+    }
+    if (userTest.diagnosisTest.totalQuestions !== 0) {
+      userTest.diagnosisTest.percentage = Math.round(
+        (diagnosisTestScore /
+          (userTest.diagnosisTest.totalQuestions * DIAGNOSIS_QUESTION_SCORE)) *
+          100
+      );
+    }
 
-  // Calculate total possible scores for each test type
-const eyeTestTotalPossibleScore = userTest.eyeTest.totalQuestions * EYE_TEST_QUESTION_SCORE;
-const investigationsTestTotalPossibleScore = totalCorrectOptions * INVESTIGATION_OPTION_SCORE;
-const diagnosisTestTotalPossibleScore = userTest.diagnosisTest.totalQuestions * DIAGNOSIS_QUESTION_SCORE;
+    userTest.totalScore =
+      userTest.eyeTest.score +
+      userTest.investigationsTest.score +
+      userTest.diagnosisTest.score;
 
-// Calculate the total possible score for the entire test
-const totalPossibleScore = eyeTestTotalPossibleScore + investigationsTestTotalPossibleScore + diagnosisTestTotalPossibleScore;
+    const eyeTestTotalPossibleScore =
+      userTest.eyeTest.totalQuestions * EYE_TEST_QUESTION_SCORE;
+    const investigationsTestTotalPossibleScore =
+      totalCorrectOptions * INVESTIGATION_OPTION_SCORE;
+    const diagnosisTestTotalPossibleScore =
+      userTest.diagnosisTest.totalQuestions * DIAGNOSIS_QUESTION_SCORE;
+    const totalPossibleScore =
+      eyeTestTotalPossibleScore +
+      investigationsTestTotalPossibleScore +
+      diagnosisTestTotalPossibleScore;
 
-// Calculate total percentage using the formula you provided
-userTest.totalPercentage = (userTest.totalScore / totalPossibleScore) * 100;
-await userTest.save();
+    userTest.totalPercentage = Math.round(
+      (userTest.totalScore / totalPossibleScore) * 100
+    );
 
+    await userTest.save();
 
-  res.send({
-    eyeTestScore: userTest.eyeTest.score,
-    eyeTestPercentage: userTest.eyeTest.percentage || 0,
-    investigationsTestScore: userTest.investigationsTest.score,
-    investigationsTestPercentage: userTest.investigationsTest.percentage || 0,
-    diagnosisTestScore: userTest.diagnosisTest.score,
-    diagnosisTestPercentage: userTest.diagnosisTest.percentage || 0,
-    totalScore: userTest.totalScore,
-    totalPercentage: userTest.totalPercentage
-  });
-})
+    res.send({
+      eyeTestScore: userTest.eyeTest.score,
+      eyeTestPercentage: userTest.eyeTest.percentage || 0,
+      investigationsTestScore: userTest.investigationsTest.score,
+      investigationsTestPercentage: userTest.investigationsTest.percentage || 0,
+      diagnosisTestScore: userTest.diagnosisTest.score,
+      diagnosisTestPercentage: userTest.diagnosisTest.percentage || 0,
+      totalScore: userTest.totalScore,
+      totalPercentage: userTest.totalPercentage,
+    });
+  })
 );
-
-
-
 
 //ADMIN
 //WORKS
-// 1. Aggregate scores and answers for each specific test within a specific case study
+//5) Aggregate scores and answers for each specific test within a specific case study
 router.get(
   "/test-scores/case-study/:caseStudyId",
   expressAsyncHandler(async (req, res) => {
     const caseStudyId = req.params.caseStudyId;
 
-    // Aggregate for eyeTest
-    const aggregationEyeTest = await TestModel.aggregate([
+    // Get the average percentages for each test within the specific case study
+    const averagePercentages = await TestModel.aggregate([
       { $match: { caseStudyId } },
-      { $unwind: "$eyeTest.answers" },
-      // Group by the correctness of each answer and count them
-      {
-        $group: {
-          _id: "$eyeTest.answers.correct",
-          count: { $sum: 1 },
-        },
-      },
-      // Aggregate further to count correct answers and total attempted
       {
         $group: {
           _id: null,
-          correctCount: {
-            $sum: { $cond: [{ $eq: ["$_id", true] }, "$count", 0] },
-          },
-          totalAttempted: {
-            $sum: "$count",
-          },
+          eyeTestAveragePercentage: { $avg: "$eyeTest.percentage" },
+          investigationsTestAveragePercentage: { $avg: "$investigationsTest.percentage" },
+          diagnosisTestAveragePercentage: { $avg: "$diagnosisTest.percentage" },
         },
       },
     ]);
-
-    // Aggregate for investigationsTest
-    const aggregationInvestigationsTest = await TestModel.aggregate([
-      { $match: { caseStudyId } },
-      { $unwind: "$investigationsTest.answers" },
-      {
-        $group: {
-          _id: "$investigationsTest.answers.correctAnswers",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          correctCount: {
-            $sum: { $cond: [{ $eq: ["$_id", true] }, "$count", 0] },
-          },
-          totalAttempted: {
-            $sum: "$count",
-          },
-        },
-      },
-    ]);
-
-    // Aggregate for diagnosisTest
-    const aggregationDiagnosisTest = await TestModel.aggregate([
-      { $match: { caseStudyId } },
-      { $unwind: "$diagnosisTest.answers" },
-      {
-        $group: {
-          _id: "$diagnosisTest.answers.correct",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          correctCount: {
-            $sum: { $cond: [{ $eq: ["$_id", true] }, "$count", 0] },
-          },
-          totalAttempted: {
-            $sum: "$count",
-          },
-        },
-      },
-    ]);
-
-    // Calculate the combined score across all tests for the specific case study
-    const allTestsAggregationForCaseStudy = {
-      correctCount:
-        (aggregationEyeTest[0]?.correctCount || 0) +
-        (aggregationInvestigationsTest[0]?.correctCount || 0) +
-        (aggregationDiagnosisTest[0]?.correctCount || 0),
-
-      totalAttempted:
-        (aggregationEyeTest[0]?.totalAttempted || 0) +
-        (aggregationInvestigationsTest[0]?.totalAttempted || 0) +
-        (aggregationDiagnosisTest[0]?.totalAttempted || 0),
-    };
-
-    //calculate percentages
-    const eyeTestPercentage = (aggregationEyeTest[0]?.correctCount || 0) / (aggregationEyeTest[0]?.totalAttempted || 1) * 100;
-    const investigationsTestPercentage = (aggregationInvestigationsTest[0]?.correctCount || 0) / (aggregationInvestigationsTest[0]?.totalAttempted || 1) * 100;
-    const diagnosisTestPercentage = (aggregationDiagnosisTest[0]?.correctCount || 0) / (aggregationDiagnosisTest[0]?.totalAttempted || 1) * 100;
-    const allTestsAggregationForCaseStudyPercentage = (allTestsAggregationForCaseStudy.correctCount / allTestsAggregationForCaseStudy.totalAttempted)*100; // calculate total percentage
-
+    
+    const totalAveragePercentage =
+      (averagePercentages[0]?.eyeTestAveragePercentage +
+        averagePercentages[0]?.investigationsTestAveragePercentage +
+        averagePercentages[0]?.diagnosisTestAveragePercentage) /
+      3; // divide by 3 since there are three tests
+    
     res.status(200).json({
       eyeTest: {
-        data: aggregationEyeTest,
-        percentage: eyeTestPercentage
+        averagePercentage: Math.round(averagePercentages[0]?.eyeTestAveragePercentage || 0),
       },
       investigationsTest: {
-        data: aggregationInvestigationsTest,
-        percentage: investigationsTestPercentage
+        averagePercentage: Math.round(averagePercentages[0]?.investigationsTestAveragePercentage || 0),
       },
       diagnosisTest: {
-        data: aggregationDiagnosisTest,
-        percentage: diagnosisTestPercentage
+        averagePercentage: Math.round(averagePercentages[0]?.diagnosisTestAveragePercentage || 0),
       },
       allTestsForCaseStudy: {
-        data: allTestsAggregationForCaseStudy,
-        percentage: allTestsAggregationForCaseStudyPercentage
-    }});
+        averagePercentage: Math.round(totalAveragePercentage),
+      },
+    });
     
   })
 );
 
-
 //ADMIN
 //WORKS
-// 2. Global scores and answers across all tests and case studies
-router.get(
-  "/test-scores/global-scores",
-  expressAsyncHandler(async (req, res) => {
-    // Aggregate global scores and answers for eyeTest
-    const globalAggregationEyeTest = await TestModel.aggregate([
-      { $unwind: "$eyeTest.answers" },
+//6) Global scores and answers across all tests and case studies
+router.get("/test-scores/global-scores", expressAsyncHandler(async (req, res) => {
+    
+  // Aggregate the percentages for all tests
+  const globalAggregation = await TestModel.aggregate([
       {
-        $group: {
-          _id: "$eyeTest.answers.correct",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          correctCount: {
-            $sum: { $cond: [{ $eq: ["$_id", true] }, "$count", 0] },
-          },
-          totalAttempted: {
-            $sum: "$count",
-          },
-        },
-      },
-    ]);
+          $group: {
+              _id: null,
+              totalEyeTestPercentage: { $sum: "$eyeTest.percentage" },
+              totalInvestigationsTestPercentage: { $sum: "$investigationsTest.percentage" },
+              totalDiagnosisTestPercentage: { $sum: "$diagnosisTest.percentage" },
+              count: { $sum: 1 } // Counting the number of documents (tests) to get an average later
+          }
+      }
+  ]);
 
-    // Aggregate global scores and answers for investigationsTest
-    const globalAggregationInvestigationsTest = await TestModel.aggregate([
-      { $unwind: "$investigationsTest.answers" },
-      {
-        $group: {
-          _id: "$investigationsTest.answers.correctAnswers",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          correctCount: {
-            $sum: { $cond: [{ $eq: ["$_id", true] }, "$count", 0] },
-          },
-          totalAttempted: {
-            $sum: "$count",
-          },
-        },
-      },
-    ]);
+  const countOfTests = globalAggregation[0]?.count;
 
-    // Aggregate global scores and answers for diagnosisTest
-    const globalAggregationDiagnosisTest = await TestModel.aggregate([
-      { $unwind: "$diagnosisTest.answers" },
-      {
-        $group: {
-          _id: "$diagnosisTest.answers.correct",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          correctCount: {
-            $sum: { $cond: [{ $eq: ["$_id", true] }, "$count", 0] },
-          },
-          totalAttempted: {
-            $sum: "$count",
-          },
-        },
-      },
-    ]);
+  // Calculating the global average percentage for each test and rounding it
+  const averageEyeTestPercentage = Math.round(globalAggregation[0]?.totalEyeTestPercentage / countOfTests);
+  const averageInvestigationsTestPercentage = Math.round(globalAggregation[0]?.totalInvestigationsTestPercentage / countOfTests);
+  const averageDiagnosisTestPercentage = Math.round(globalAggregation[0]?.totalDiagnosisTestPercentage / countOfTests);
 
-    // Calculating global scoring across all tests
-    const globalScore = {
-      correctCount:
-        globalAggregationEyeTest[0]?.correctCount +
-        globalAggregationInvestigationsTest[0]?.correctCount +
-        globalAggregationDiagnosisTest[0]?.correctCount,
-      totalAttempted:
-        globalAggregationEyeTest[0]?.totalAttempted +
-        globalAggregationInvestigationsTest[0]?.totalAttempted +
-        globalAggregationDiagnosisTest[0]?.totalAttempted,
-    };
+  // Calculating the overall global average percentage and rounding it
+  const sumOfAveragePercentages = averageEyeTestPercentage + averageInvestigationsTestPercentage + averageDiagnosisTestPercentage;
+  const globalAveragePercentage = Math.round(sumOfAveragePercentages / 3); // Since we have 3 tests
 
-    //ca;culate percentages
-    const globalEyeTestPercentage = globalAggregationEyeTest[0]?.correctCount / (globalAggregationEyeTest[0]?.totalAttempted || 1) * 100;
-    const globalInvestigationsTestPercentage = globalAggregationInvestigationsTest[0]?.correctCount / (globalAggregationInvestigationsTest[0]?.totalAttempted || 1) * 100;
-    const globalDiagnosisTestPercentage = globalAggregationDiagnosisTest[0]?.correctCount / (globalAggregationDiagnosisTest[0]?.totalAttempted || 1) * 100;
-    const globalScorePercentage = (globalScore.correctCount/globalScore.totalAttempted)*100;
-    //send data and percentages
-    res.status(200).json({
+  res.status(200).json({
       eyeTest: {
-        data: globalAggregationEyeTest,
-        percentage: globalEyeTestPercentage
+          globalAveragePercentage: averageEyeTestPercentage
       },
       investigationsTest: {
-        data: globalAggregationInvestigationsTest,
-        percentage: globalInvestigationsTestPercentage
+          globalAveragePercentage: averageInvestigationsTestPercentage
       },
       diagnosisTest: {
-        data: globalAggregationDiagnosisTest,
-        percentage: globalDiagnosisTestPercentage
+          globalAveragePercentage: averageDiagnosisTestPercentage
       },
-      globalScore: {
-        data: globalScore,
-        percentage: globalScorePercentage
-      },
-    });
-  })
-);
-
-//WORKS
-//3) Average percentage score for each case study over time. Output shown on the following:
-// //The total correct answers across all three tests for each test object.
-// The total number of questions across all three tests for each test object.
-// An average percentage calculated over time (e.g. for each day).
-interface Entry {
-  date: Date;
-  totalQuestions: number;
-  totalCorrect: number;
-  averagePercentage: number;
-}
-
-router.get("/case-study/:caseStudyId/average-score-over-time", expressAsyncHandler(async (req: any, res: any) => {
-  try {
-    const caseStudyId = req.params.caseStudyId;
-
-    const aggregationResults = await TestModel.aggregate([
-      { $match: { caseStudyId } },
-      { $group: {
-          _id: {
-            year: { $year: "$createdAt" },
-            month: { $month: "$createdAt" },
-            day: { $dayOfMonth: "$createdAt" },
-          },
-          totalQuestions: { $sum: { $add: [ 
-            { $size: "$eyeTest.answers" }, 
-            { $size: "$investigationsTest.answers" }, 
-            { $size: "$diagnosisTest.answers" } 
-          ]}},
-          totalCorrect: { $sum: { $add: [
-            { $sum: { $cond: ['$eyeTest.answers.correct', 1, 0] } },
-            { $sum: { $cond: ['$investigationsTest.answers.correct', 1, 0] } },
-            { $sum: { $cond: ['$diagnosisTest.answers.correct', 1, 0] } },
-          ]}},
-        }
-      },
-      { $project: {
-          date: {
-            $dateFromParts: {
-              'year': '$_id.year', 
-              'month': '$_id.month', 
-              'day': '$_id.day'
-            }
-          },
-          totalQuestions: 1,
-          totalCorrect: 1,
-          averagePercentage: { 
-            $multiply: [
-              { $divide: ['$totalCorrect', '$totalQuestions'] }, 
-              100 
-            ]
-          },
-        }
-      },
-      { $sort: { 'date': 1 } } // Sorting by date
-    ]);
-
-    if (!aggregationResults.length) {
-      return res.status(404).send({ message: 'Case study not found or no answers given yet.' });
-    }
-
-    return res.send({ scoresOverTime: aggregationResults });
-
-  } catch (error) {
-    return res.status(500).send({ message: error instanceof Error ? `Server error: ${error.message}` : 'An unexpected server error occurred.' });
-  }
+      overallGlobalAveragePercentage: globalAveragePercentage
+  });
 }));
 
 
+
+//WORKS
+//7) Average percentage score for each case study over time. Output shown on the following:
+// //The total correct answers across all three tests for each test object.
+// The total number of questions across all three tests for each test object.
+// An average percentage calculated over time (e.g. for each day).
+router.get(
+  "/case-study/:caseStudyId/average-percentage-over-time",
+  expressAsyncHandler(async (req: any, res: any) => {
+    try {
+      const caseStudyId = req.params.caseStudyId;
+
+      const aggregationResults = await TestModel.aggregate([
+        { $match: { caseStudyId } },
+        {
+          $group: {
+            _id: {
+              year: { $year: "$createdAt" },
+              month: { $month: "$createdAt" },
+              day: { $dayOfMonth: "$createdAt" },
+            },
+            averageEyeTestPercentage: { $avg: "$eyeTest.percentage" },
+            averageInvestigationsTestPercentage: { $avg: "$investigationsTest.percentage" },
+            averageDiagnosisTestPercentage: { $avg: "$diagnosisTest.percentage" },
+            overallAveragePercentage: { $avg: "$totalPercentage" }
+          },
+        },
+        {
+          $project: {
+            date: {
+              $dateFromParts: {
+                year: "$_id.year",
+                month: "$_id.month",
+                day: "$_id.day",
+              },
+            },
+            averageEyeTestPercentage: { $round: ["$averageEyeTestPercentage", 0] },
+            averageInvestigationsTestPercentage: { $round: ["$averageInvestigationsTestPercentage", 0] },
+            averageDiagnosisTestPercentage: { $round: ["$averageDiagnosisTestPercentage", 0] },
+            overallAveragePercentage: { $round: ["$overallAveragePercentage", 0] }
+          },
+        },
+        { $sort: { date: 1 } }, // Sorting by date
+      ]);
+
+      if (!aggregationResults.length) {
+        return res
+          .status(404)
+          .send({ message: "Case study not found or no answers given yet." });
+      }
+
+      return res.send({ scoresOverTime: aggregationResults });
+    } catch (error) {
+      return res
+        .status(500)
+        .send({
+          message:
+            error instanceof Error
+              ? `Server error: ${error.message}`
+              : "An unexpected server error occurred.",
+        });
+    }
+  })
+);
+
+
+//8 
+// Average global scores across all case study over time
+router.get(
+  "/average-percentage-over-time",
+  expressAsyncHandler(async (req: any, res: any) => {
+    try {
+      const aggregationResults = await TestModel.aggregate([
+        {
+          $group: {
+            _id: {
+              year: { $year: "$createdAt" },
+              month: { $month: "$createdAt" },
+              day: { $dayOfMonth: "$createdAt" },
+            },
+            averageEyeTestPercentage: { $avg: "$eyeTest.percentage" },
+            averageInvestigationsTestPercentage: { $avg: "$investigationsTest.percentage" },
+            averageDiagnosisTestPercentage: { $avg: "$diagnosisTest.percentage" },
+            overallAveragePercentage: { $avg: "$totalPercentage" }
+          },
+        },
+        {
+          $project: {
+            date: {
+              $dateFromParts: {
+                year: "$_id.year",
+                month: "$_id.month",
+                day: "$_id.day",
+              },
+            },
+            averageEyeTestPercentage: { $round: ["$averageEyeTestPercentage", 0] },
+            averageInvestigationsTestPercentage: { $round: ["$averageInvestigationsTestPercentage", 0] },
+            averageDiagnosisTestPercentage: { $round: ["$averageDiagnosisTestPercentage", 0] },
+            overallAveragePercentage: { $round: ["$overallAveragePercentage", 0] }
+          },
+        },
+        { $sort: { date: 1 } }, // Sorting by date
+      ]);
+
+      if (!aggregationResults.length) {
+        return res
+          .status(404)
+          .send({ message: "No answers given yet." });
+      }
+
+      return res.send({ scoresOverTime: aggregationResults });
+    } catch (error) {
+      return res
+        .status(500)
+        .send({
+          message:
+            error instanceof Error
+              ? `Server error: ${error.message}`
+              : "An unexpected server error occurred.",
+        });
+    }
+  })
+);
 
 
 

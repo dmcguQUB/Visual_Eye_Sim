@@ -24,7 +24,10 @@ import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/e
 import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
 import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract-test/investigations-questions/investigations-questions.component';
 import { DirectOphthalmoscopyTestRightComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test-right/direct-ophthalmoscopy-test-right.component';
-import { UserScoresComponent } from './components/pages/graphs/user-scores/user-scores.component';
+import { UserScoresComponent } from './components/pages/graphs/userscores/user-scores/user-scores.component';
+import { UserScoresOverTimeGraphComponent } from './components/pages/graphs/user/user-scores-over-time-graph/user-scores-over-time-graph.component';
+import { UserCaseStudyCorrectVsOncorrectComponent } from './components/pages/graphs/user/user-case-study-correct-vs-oncorrect/user-case-study-correct-vs-oncorrect.component';
+import { UserCaseStudyQuestionTypeCorrectVsIncorrectComponent } from './components/pages/graphs/user/user-case-study-question-type-correct-vs-incorrect/user-case-study-question-type-correct-vs-incorrect.component';
 
 const routes: Routes = [
   //home route
@@ -111,8 +114,23 @@ const routes: Routes = [
     canActivate: [AuthGuard,AdminGuard],
   },
   {
+    path: 'user-scores-over-time-graph',
+    component: UserScoresOverTimeGraphComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'userscore-score-over-time',
     component: UserscoreScoreOverTimeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'user-case-study-correct-vs-oncorrect',
+    component: UserCaseStudyCorrectVsOncorrectComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'user-case-study-question-type-correct-vs-incorrect',
+    component: UserCaseStudyQuestionTypeCorrectVsIncorrectComponent,
     canActivate: [AuthGuard],
   },
   {

@@ -1,0 +1,112 @@
+<div class="container-fluid d-flex flex-md-row flex-column">
+  <!--navbar partial-->
+  <div class="d-flex justify-content-left text-center">
+      <app-navbar-userscore></app-navbar-userscore>
+  </div>
+  <!-- Main Content -->
+  <div class="main-content-container flex-grow-1">
+      <main role="main" class="px-4">
+          <h1>Average correct and incorrect answers across the different case studies</h1>
+          
+          <!-- Case Study Dropdown and Update Button -->
+          <div class="mt-3">
+            <select #dropdown [(ngModel)]="selectedCaseStudy" (change)="onCaseStudyChange(dropdown.value)">
+              <option value="all">All Case Studies</option>
+              <option *ngFor="let cs of caseStudies" [value]="cs._id">{{ cs.name }}</option>
+            </select>
+            <button (click)="updateChartAndTable()">Update Chart & Table</button>
+            
+          </div>
+
+          <div class="chart-container mt-3">
+              <canvas id="MyChart">{{ chart }}</canvas>
+          </div>
+
+     <div class="btn-group mt-3" role="group">
+       <button
+         type="button"
+         class="btn btn-outline-secondary"
+         (click)="dateRangeChanged(1)"
+       >
+         Last 1 Day
+       </button>
+       <button
+         type="button"
+         class="btn btn-outline-secondary"
+         (click)="dateRangeChanged(3)"
+       >
+         Last 3 Days
+       </button>
+       <button
+         type="button"
+         class="btn btn-outline-secondary"
+         (click)="dateRangeChanged(7)"
+       >
+         Last 7 Days
+       </button>
+       <button
+         type="button"
+         class="btn btn-outline-secondary"
+         (click)="dateRangeChanged(30)"
+       >
+         Last 1 Month
+       </button>
+       <button
+         type="button"
+         class="btn btn-outline-secondary"
+         (click)="dateRangeChanged(180)"
+       >
+         Last 6 Months
+       </button>
+       <button
+         type="button"
+         class="btn btn-outline-secondary"
+         (click)="dateRangeChanged(365)"
+       >
+         Last 1 Year
+       </button>
+     </div>
+
+     <!--Table-->
+<div class="mt-3">
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th scope="col">Case Study</th>
+              <th scope="col">Test Type</th>
+              <th scope="col">Correct (%)</th>
+              <th scope="col">Incorrect (%)</th>
+              <th scope="col">Total Percentage</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <th colspan="5">Selected Date Range: {{ dateRange }} day(s)</th>
+          </tr>
+          <!-- Loop through case studies instead of labels -->
+          <ng-container *ngFor="let cs of caseStudies; let idx=index">
+              <tr *ngFor="let type of ['eyetest', 'investigations', 'diagnosis']; let first = first">
+                  <th scope="row" *ngIf="first">{{ cs.name }}</th>
+                  <!-- If it's not the first row for the case study, don't repeat the name -->
+                  <td *ngIf="!first"></td>
+                  <td>{{ type | titlecase }}</td>
+                  <td>{{ $any(correctPercentages[idx])[type] | number:"1.2-2" }}%</td>
+                  <td>{{ $any(incorrectPercentages[idx])[type] | number:"1.2-2" }}%</td>
+                  <td>{{ ($any(correctPercentages[idx])[type] + $any(incorrectPercentages[idx])[type]) | number:"1.2-2" }}%</td>
+                  
+              </tr>
+          </ng-container>
+          <!-- Add the Average row -->
+          <tr>
+              <th scope="row" colspan="2">Average</th>
+              <td>{{ calculateAverages().avgCorrect | number:"1.2-2" }}%</td>
+              <td>{{ calculateAverages().avgIncorrect | number:"1.2-2" }}%</td>
+              <td>{{ (calculateAverages().avgCorrect + calculateAverages().avgIncorrect) | number:"1.2-2" }}%</td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+   </main>
+ </div>
+</div>

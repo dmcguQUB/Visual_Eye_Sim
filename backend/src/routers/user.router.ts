@@ -38,7 +38,7 @@ router.get(
   })
 );
 
-// API endpoint for user login
+//1) API endpoint for user login
 router.post(
   "/login",
   expressAsyncHandler(async (req, res) => {
@@ -67,7 +67,7 @@ router.post(
   })
 );
 
-// API endpoint for user registration
+//2) API endpoint for user registration
 router.post(
   "/register",
   expressAsyncHandler(async (req, res) => {
@@ -99,7 +99,7 @@ router.post(
   })
 );
 
-// API endpoint to get user registration data
+//3) API endpoint to get user registration data
 router.get('/user-registrations', async (req, res) => {
   try {
     // Aggregate user registrations by date
@@ -119,7 +119,7 @@ router.get('/user-registrations', async (req, res) => {
   }
 });
 
-// API endpoint to get user information by ID
+//4) API endpoint to get user information by ID
 router.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
@@ -161,7 +161,8 @@ const generateTokenResponse = (user: User) => {
   };
 };
 
-// API endpoint to update user's avatar information
+
+//5) API endpoint to update user's avatar information
 router.patch(
   "/:id/avatar",
   expressAsyncHandler(async (req, res) => {
@@ -179,7 +180,7 @@ router.patch(
   })
 );
 
-// API endpoint to update user's name
+//6 API endpoint to update user's name
 router.patch(
   "/:id/name",
   expressAsyncHandler(async (req, res) => {
@@ -195,7 +196,7 @@ router.patch(
   })
 );
 
-// API endpoint to update user's address
+//7) API endpoint to update user's address
 router.patch(
   "/:id/address",
   expressAsyncHandler(async (req, res) => {
