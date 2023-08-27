@@ -11,7 +11,6 @@ import { DirectOphthalmoscopyTestComponent } from './components/pages/eye-tests/
 import { WelcomeComponent } from './components/pages/QA/welcome/welcome.component';
 import { LoginPageComponent } from './components/pages/login-page/login-page.component';
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
-import { AdminPageComponent } from './components/pages/graphs/userscores/admin-page/admin-page.component'; 
 import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
 import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/userscores/admin-avg-score-vs-time/admin-avg-score-vs-time.component'; 
 import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/userscores/admin-registrations-over-time/admin-registrations-over-time.component';
@@ -28,6 +27,7 @@ import { UserScoresComponent } from './components/pages/graphs/userscores/user-s
 import { UserScoresOverTimeGraphComponent } from './components/pages/graphs/user/user-scores-over-time-graph/user-scores-over-time-graph.component';
 import { UserCaseStudyCorrectVsOncorrectComponent } from './components/pages/graphs/user/user-case-study-correct-vs-oncorrect/user-case-study-correct-vs-oncorrect.component';
 import { UserCaseStudyQuestionTypeCorrectVsIncorrectComponent } from './components/pages/graphs/user/user-case-study-question-type-correct-vs-incorrect/user-case-study-question-type-correct-vs-incorrect.component';
+import { AdminCaseStudyCorrectVsIncorrectComponent } from './components/pages/graphs/admin/admin-case-study-correct-vs-incorrect/admin-case-study-correct-vs-incorrect.component';
 
 const routes: Routes = [
   //home route
@@ -98,10 +98,7 @@ const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: 'register', component: RegisterPageComponent },
   ///user-scores.component
-  { path: 'user-scores', component: UserScoresComponent, canActivate: [AuthGuard] },
-  //can only access if authenticated and admin
-  { path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard,AdminGuard] },
-    //can only access if authenticated and admin
+  { path: 'user-scores', component: UserScoresComponent, canActivate: [AuthGuard] },    //can only access if authenticated and admin
   {
     path: 'admin-avg-score-vs-time',
     component: AdminAvgScoreVsTimeComponent,
@@ -111,6 +108,11 @@ const routes: Routes = [
   {
     path: 'admin-registrations-over-time',
     component: AdminRegistrationsOverTimeComponent,
+    canActivate: [AuthGuard,AdminGuard],
+  },
+  {
+    path: 'admin-case-study-correct-vs-incorrect',
+    component: AdminCaseStudyCorrectVsIncorrectComponent,
     canActivate: [AuthGuard,AdminGuard],
   },
   {

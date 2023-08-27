@@ -41,7 +41,6 @@ import { InputValidationComponent } from './components/partials/text/input-valid
 import { TextInputComponent } from './components/partials/text/text-input/text-input.component'; 
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { FooterComponent } from './components/partials/footer/footer.component';
-import { AdminPageComponent } from './components/pages/graphs/userscores/admin-page/admin-page.component'; 
 import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
 import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/userscores/admin-avg-score-vs-time/admin-avg-score-vs-time.component'; 
 import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/userscores/admin-registrations-over-time/admin-registrations-over-time.component'; 
@@ -62,6 +61,7 @@ import { UserScoresComponent } from './components/pages/graphs/userscores/user-s
 import { UserScoresOverTimeGraphComponent } from './components/pages/graphs/user/user-scores-over-time-graph/user-scores-over-time-graph.component';
 import { UserCaseStudyCorrectVsOncorrectComponent } from './components/pages/graphs/user/user-case-study-correct-vs-oncorrect/user-case-study-correct-vs-oncorrect.component';
 import { UserCaseStudyQuestionTypeCorrectVsIncorrectComponent } from './components/pages/graphs/user/user-case-study-question-type-correct-vs-incorrect/user-case-study-question-type-correct-vs-incorrect.component';
+import { AdminCaseStudyCorrectVsIncorrectComponent } from './components/pages/graphs/admin/admin-case-study-correct-vs-incorrect/admin-case-study-correct-vs-incorrect.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +89,6 @@ import { UserCaseStudyQuestionTypeCorrectVsIncorrectComponent } from './componen
     LoadingComponent,
     RegisterPageComponent,
     FooterComponent,
-    AdminPageComponent,
     AdminAvgScoreVsTimeComponent,
     AdminRegistrationsOverTimeComponent,
     AdminNavbarComponent,
@@ -109,6 +108,7 @@ import { UserCaseStudyQuestionTypeCorrectVsIncorrectComponent } from './componen
     UserScoresOverTimeGraphComponent,
     UserCaseStudyCorrectVsOncorrectComponent,
     UserCaseStudyQuestionTypeCorrectVsIncorrectComponent,
+    AdminCaseStudyCorrectVsIncorrectComponent,
   ],
   imports: [
     BrowserModule,
