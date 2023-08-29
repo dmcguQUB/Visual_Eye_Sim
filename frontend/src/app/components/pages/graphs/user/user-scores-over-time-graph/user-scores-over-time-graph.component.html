@@ -1,82 +1,83 @@
-<div class="full-container">
-  <div class="parent-container">
-    <!--navbar partial-->
-    <div class="d-flex justify-content-left text-center">
-      <app-navbar-userscore></app-navbar-userscore>
-    </div>
-    <!-- Scores Section -->
-    <div class="card-container scores-container">
-      <h1 class="card-container title">Scores over time</h1>
+<!-- Container -->
+<div class="container-fluid d-flex flex-md-row flex-column">
 
-
-      <!-- Dropdown for selecting number of tests -->
-<div class="card-container scores-instructions">
-  <h2>Select Test Ranges:</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Case Study</th>
-        <th>Start Test Number</th>
-        <th>End Test Number</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let caseStudy of caseStudies">
-        <td *ngIf="selectedTestCounts[caseStudy._id]">
-          <select [(ngModel)]="selectedTestCounts[caseStudy._id].start" (change)="onDropdownChange()">
-            <option *ngFor="let num of availableTestCounts" [value]="num">{{ num }}</option>
-          </select>
-        </td>
-        <td *ngIf="selectedTestCounts[caseStudy._id]">
-          <select [(ngModel)]="selectedTestCounts[caseStudy._id].end" (change)="onDropdownChange()">
-            <option *ngFor="let num of availableTestCounts" [value]="num">{{ num }}</option>
-          </select>
-          <td *ngIf="selectedTestCounts[caseStudy._id]">
-          </td>
-        
-      </tr>
-    </tbody>
-  </table>
-  <button (click)="applyAllFilters()">Apply Filters</button>
-</div>
-
-<div *ngIf="areFiltersApplied()">
-  <!-- Chart canvas -->
-  <div class="chart-container" style="position: relative; height:60vh; width:80vw">
-    <canvas #myChart></canvas>
+  <!-- Navbar Section -->
+  <div class="sidebar-container d-flex justify-content-left text-center">
+    <app-navbar-userscore></app-navbar-userscore>
   </div>
+  
+  <!-- Main Content -->
+  <div class="main-content-container flex-grow-1 px-4">
 
-  <div *ngFor="let caseStudy of caseStudies">
-    <div *ngIf="filtersApplied[caseStudy._id]">
-      <h3>{{ caseStudy.name }} (Case Study #{{ caseStudy.caseStudyNumber }})</h3>
+    <!-- Scores Section -->
+    <h1>Scores over time</h1>
 
-      <table>
+    <!-- Dropdown for selecting number of tests -->
+    <div>
+      <h2>Select Test Ranges:</h2>
+      <table class="table table-striped">
         <thead>
           <tr>
-            <th>Test Number</th>
-            <th>Test Taken at</th>
-            <th>Test Score</th>
-            <th>Total Questions</th>
-            <th>Percentage score</th>
+            <th>Case Study</th>
+            <th>Start Test Number</th>
+            <th>End Test Number</th>
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let test of getTestsForCaseStudy(caseStudy._id); let index = index">
-            <tr>
-              <td>{{ index + 1 }}</td>
-              <td>{{ test.createdAt | date }}</td>
-              <td>{{ test.totalScore }}</td>
-              <td>{{ totalQuestionsForCaseStudies[test.caseStudyId] }}</td>
-              <td>{{ test.totalPercentage }}%</td>
-            </tr>
-          </ng-container>
+          <tr *ngFor="let caseStudy of caseStudies">
+            <!--Case study name-->
+            <td>{{ caseStudy.name }}</td>
+            <!--Start test number-->
+            <td *ngIf="selectedTestCounts[caseStudy._id]">
+              <select [(ngModel)]="selectedTestCounts[caseStudy._id].start" (change)="onDropdownChange()">
+                <option *ngFor="let num of availableTestCounts[caseStudy._id]" [value]="num">{{ num }}</option>
+              </select>
+            </td>
+            <!--End selected test number-->       
+            <td *ngIf="selectedTestCounts[caseStudy._id]">
+              <select (change)="onDropdownChange()" [(ngModel)]="selectedTestCounts[caseStudy._id].end">
+                <option *ngFor="let count of availableTestCounts[caseStudy._id]" [value]="count">{{ count }}</option>
+            </select>            
+            </td>
+          </tr>
         </tbody>
       </table>
+      <button class="btn btn-outline-secondary" (click)="applyAllFilters()">Apply Filters</button>
+    </div>
+
+    <!-- Chart canvas -->
+    <div *ngIf="areFiltersApplied()">
+      <div class="chart-container mt-3">
+        <canvas #myChart></canvas>
+      </div>
+
+      <div *ngFor="let caseStudy of caseStudies">
+        <div *ngIf="filtersApplied[caseStudy._id]">
+          <h3>{{ caseStudy.name }} (Case Study #{{ caseStudy.caseStudyNumber }})</h3>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Test Number</th>
+                <th>Test Taken at</th>
+                <th>Test Score</th>
+                <th>Total Questions</th>
+                <th>Percentage score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let test of getTestsForCaseStudy(caseStudy._id); let index = index">
+                <tr>
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ test.createdAt | date }}</td>
+                  <td>{{ test.totalScore }}</td>
+                  <td>{{ totalQuestionsForCaseStudies[test.caseStudyId] }}</td>
+                  <td>{{ test.totalPercentage }}%</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-  </div>
-</div>
-</div>
-

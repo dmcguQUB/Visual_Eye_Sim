@@ -17,7 +17,7 @@ export class UserScoresOverTimeGraphComponent {
   caseStudies: CaseStudies[] = []; // store all case studies here
   chartData: ChartDataSets[] = [];
   chart!: Chart;
-  availableTestCounts: number[] = []; // This will be populated dynamically
+  availableTestCounts: { [key: string]: number[] } = {};
   dataMap: { [key: string]: number[] } = {}; // <-- Declare it here
   testScores: Test[] = []; // to store all test scores fetched
   totalQuestionsForCaseStudies: { [key: string]: number } = {};
@@ -54,6 +54,11 @@ export class UserScoresOverTimeGraphComponent {
     this.useCaseService.getAll().subscribe((cases) => {
         this.caseStudies = cases;
 
+        // Initialize filtersApplied for each case study
+        this.caseStudies.forEach((caseStudy) => {
+            this.filtersApplied[caseStudy._id] = false;
+        });
+
         // Once caseStudies is populated, then fetch total questions
         this.caseStudies.forEach((caseStudy) => {
             this.questionService
@@ -78,27 +83,24 @@ export class UserScoresOverTimeGraphComponent {
                     this.selectedTestCounts[caseStudy._id] = { start: 1, end: 0, max: 0 };
                 }
 
-                this.selectedTestCounts[caseStudy._id].max =
-                    scoresForCaseStudy.length;
-                this.selectedTestCounts[caseStudy._id].end =
-                    scoresForCaseStudy.length; // set the initial end value to max tests available
+                this.selectedTestCounts[caseStudy._id].max = scoresForCaseStudy.length;
+                this.selectedTestCounts[caseStudy._id].end = scoresForCaseStudy.length; // set the initial end value to max tests available
+                
+                // Populate availableTestCounts for each case study
+                this.availableTestCounts[caseStudy._id] = Array.from(
+                    { length: scoresForCaseStudy.length },
+                    (_, i) => i + 1
+                );
+           
             });
-
-            // This should be inside this callback to ensure it runs after testScores is populated
-            this.availableTestCounts = Array.from(
-                {
-                    length: Math.max(
-                        ...Object.values(this.selectedTestCounts).map((test) => test.max)
-                    ),
-                },
-                (_, i) => i + 1
-            );
 
             this.prepareChartData();
             this.createOrUpdateChart();
+            this.applyAllFilters(); // load chart when page loads
         });
     });
 }
+
 
 
 

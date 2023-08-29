@@ -23,7 +23,3 @@
 .chart-container {
   height: 40vh; /* or any other percentage */
 }
-
-.app-navbar {
-  width: 100%; /* To make the navbar full width in the sidebar */
-}

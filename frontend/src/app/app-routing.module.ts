@@ -13,7 +13,7 @@ import { LoginPageComponent } from './components/pages/login-page/login-page.com
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
 import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/userscores/admin-avg-score-vs-time/admin-avg-score-vs-time.component'; 
-import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/userscores/admin-registrations-over-time/admin-registrations-over-time.component';
+import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/admin/admin-registrations-over-time/admin-registrations-over-time.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';

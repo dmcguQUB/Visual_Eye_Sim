@@ -43,7 +43,7 @@ import { RegisterPageComponent } from './components/pages/register-page/register
 import { FooterComponent } from './components/partials/footer/footer.component';
 import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
 import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/userscores/admin-avg-score-vs-time/admin-avg-score-vs-time.component'; 
-import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/userscores/admin-registrations-over-time/admin-registrations-over-time.component'; 
+import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/admin/admin-registrations-over-time/admin-registrations-over-time.component'; 
 import { AdminNavbarComponent } from './components/partials/navbars/admin-navbar/admin-navbar.component';
 import { PatientConvoComponent } from './components/partials/text/patient-convo/patient-convo.component';
 import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';
