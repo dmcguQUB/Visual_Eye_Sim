@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { Subscription } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { UserService } from 'src/app/services/user.service';
@@ -14,7 +15,7 @@ type TestType = 'test1' | 'test2' | 'test3';
   templateUrl: './user-case-study-question-type-correct-vs-incorrect.component.html',
   styleUrls: ['./user-case-study-question-type-correct-vs-incorrect.component.css']
 })
-export class UserCaseStudyQuestionTypeCorrectVsIncorrectComponent {
+export class UserCaseStudyQuestionTypeCorrectVsIncorrectComponent implements OnInit, OnDestroy {
   public chart: any;
   caseStudies: CaseStudies[] = [];
   labels: string[] = [];
@@ -29,10 +30,11 @@ export class UserCaseStudyQuestionTypeCorrectVsIncorrectComponent {
       investigations: number,
       diagnosis: number
   }[] = [];
-  
   dateRange: number = 1;
   originalUserTests: Test[] = [];
   public selectedCaseStudy: string | null = null;
+
+  private subscriptions: Subscription[] = []; // Collects all subscriptions
 
 
   constructor(
@@ -44,34 +46,42 @@ export class UserCaseStudyQuestionTypeCorrectVsIncorrectComponent {
   ngOnInit(): void {
     const currentUser = this.userService.currentUser;
     const userId = currentUser ? currentUser._id : null;
-
+  
     if (!userId) {
         console.log('No user is logged in');
         return;
     }
-
-    this.useCaseService.getAll().subscribe((caseStudies: CaseStudies[]) => {
+  
+    const caseStudySubscription = this.useCaseService.getAll().subscribe((caseStudies: CaseStudies[]) => {
       this.caseStudies = caseStudies;
       this.labels = [];
- // Do this
-this.caseStudies.forEach(caseStudy => {
-  this.labels.push(`${caseStudy.caseStudyNumber} - ${caseStudy.name} - Eye Test`);
-  this.labels.push(`${caseStudy.caseStudyNumber} - ${caseStudy.name} - Investigation`);
-  this.labels.push(`${caseStudy.caseStudyNumber} - ${caseStudy.name} - Diagnosis`);
-});
-
-      
+  
+      this.caseStudies.forEach(caseStudy => {
+        this.labels.push(`${caseStudy.caseStudyNumber} - ${caseStudy.name} - Eye Test`);
+        this.labels.push(`${caseStudy.caseStudyNumber} - ${caseStudy.name} - Investigation`);
+        this.labels.push(`${caseStudy.caseStudyNumber} - ${caseStudy.name} - Diagnosis`);
+      });
+  
       this.correctPercentages = Array(this.caseStudies.length).fill({ eyetest: 0, investigations: 0, diagnosis: 0 });
       this.incorrectPercentages = Array(this.caseStudies.length).fill({ eyetest: 0, investigations: 0, diagnosis: 0 });
-      
-
-      this.testService.getUserTestScores(userId).subscribe((tests: Test[]) => {
+  
+      const testScoresSubscription = this.testService.getUserTestScores(userId).subscribe((tests: Test[]) => {
         this.originalUserTests = tests;
         this.updateChartAndTable();
       });
-      
+  
+      this.subscriptions.push(testScoresSubscription);
     });
+  
+    this.subscriptions.push(caseStudySubscription);
   }
+  
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all active subscriptions
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
   calculatePercentages() {
     // Initialize with default values
     this.correctPercentages = this.caseStudies.map(cs => ({ eyetest: 0, investigations: 0, diagnosis: 0 }));

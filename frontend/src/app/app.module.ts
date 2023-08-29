@@ -42,13 +42,11 @@ import { TextInputComponent } from './components/partials/text/text-input/text-i
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { FooterComponent } from './components/partials/footer/footer.component';
 import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
-import { AdminAvgScoreVsTimeComponent } from './components/pages/graphs/userscores/admin-avg-score-vs-time/admin-avg-score-vs-time.component'; 
 import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/admin/admin-registrations-over-time/admin-registrations-over-time.component'; 
 import { AdminNavbarComponent } from './components/partials/navbars/admin-navbar/admin-navbar.component';
 import { PatientConvoComponent } from './components/partials/text/patient-convo/patient-convo.component';
 import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';
 import { NavbarUserscoreComponent } from './components/partials/navbars/navbar-userscore/navbar-userscore.component';
-import { UserscoreScoreOverTimeComponent } from './components/pages/graphs/userscores/userscore-score-over-time/userscore-score-over-time.component';
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 import { AvatarComponent } from './components/partials/avatar/avatar.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -57,13 +55,13 @@ import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/e
 import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
 import { InvestigationsQuestionsComponent } from './components/pages/QA/abstract-test/investigations-questions/investigations-questions.component';
 import { DirectOphthalmoscopyTestRightComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test-right/direct-ophthalmoscopy-test-right.component';
-import { UserScoresComponent } from './components/pages/graphs/userscores/user-scores/user-scores.component';
 import { UserScoresOverTimeGraphComponent } from './components/pages/graphs/user/user-scores-over-time-graph/user-scores-over-time-graph.component';
 import { UserCaseStudyCorrectVsOncorrectComponent } from './components/pages/graphs/user/user-case-study-correct-vs-oncorrect/user-case-study-correct-vs-oncorrect.component';
 import { UserCaseStudyQuestionTypeCorrectVsIncorrectComponent } from './components/pages/graphs/user/user-case-study-question-type-correct-vs-incorrect/user-case-study-question-type-correct-vs-incorrect.component';
 import { AdminCaseStudyCorrectVsIncorrectComponent } from './components/pages/graphs/admin/admin-case-study-correct-vs-incorrect/admin-case-study-correct-vs-incorrect.component';
 import { AdminAvgScoreOverTimeComponent } from './components/pages/graphs/admin/admin-global-avg-score-over-time/admin-avg-score-over-time.component';
 import { AdminCaseStudyAvgScoreOverTimeComponent } from './components/pages/graphs/admin/admin-case-study-avg-score-over-time/admin-case-study-avg-score-over-time.component';
+import { UserScoresComponent } from './components/pages/graphs/user/user-scores/user-scores.component';
 
 @NgModule({
   declarations: [
@@ -91,14 +89,12 @@ import { AdminCaseStudyAvgScoreOverTimeComponent } from './components/pages/grap
     LoadingComponent,
     RegisterPageComponent,
     FooterComponent,
-    AdminAvgScoreVsTimeComponent,
     AdminRegistrationsOverTimeComponent,
     AdminNavbarComponent,
     PatientConvoComponent,
     VisualAcuityTestComponent,
     TestVisualFieldsTestComponent,
     NavbarUserscoreComponent,
-    UserscoreScoreOverTimeComponent,
     UserProfilePageComponent,
     AvatarComponent,
     QaComponent,
@@ -106,13 +102,13 @@ import { AdminCaseStudyAvgScoreOverTimeComponent } from './components/pages/grap
     DiagnosisQuestionsComponent,
     InvestigationsQuestionsComponent,
     DirectOphthalmoscopyTestRightComponent,
-    UserScoresComponent,
     UserScoresOverTimeGraphComponent,
     UserCaseStudyCorrectVsOncorrectComponent,
     UserCaseStudyQuestionTypeCorrectVsIncorrectComponent,
     AdminCaseStudyCorrectVsIncorrectComponent,
     AdminAvgScoreOverTimeComponent,
     AdminCaseStudyAvgScoreOverTimeComponent,
+    UserScoresComponent
   ],
   imports: [
     BrowserModule,

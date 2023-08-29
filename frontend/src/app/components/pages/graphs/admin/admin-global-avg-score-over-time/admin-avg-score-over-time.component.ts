@@ -1,16 +1,17 @@
 // Import required dependencies and services
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
+import { Subscription } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { Score } from 'src/app/shared/interfaces/IScore';
-
 
 @Component({
   selector: 'app-admin-avg-score-over-time',
   templateUrl: './admin-avg-score-over-time.component.html',
-  styleUrls: ['./admin-avg-score-over-time.component.css']
+  styleUrls: ['./admin-avg-score-over-time.component.css'],
 })
-export class AdminAvgScoreOverTimeComponent implements OnInit {
+export class AdminAvgScoreOverTimeComponent implements OnInit, OnDestroy {
+  // Implementing OnDestroy
   // Variables to hold the chart and data
   public chart: any;
   allResults: any[] = []; // This will hold the unfiltered results
@@ -23,41 +24,37 @@ export class AdminAvgScoreOverTimeComponent implements OnInit {
   dateRange: number = 0; // stores the number of days in the selected date range
   labels: string[] = [];
   averageEyeTests: number[] = [];
-averageInvestigationsTests: number[] = [];
-averageDiagnosisTests: number[] = [];
-overallAveragePercentages: number[] = [];
+  averageInvestigationsTests: number[] = [];
+  averageDiagnosisTests: number[] = [];
+  overallAveragePercentages: number[] = [];
 
+  private subscription: Subscription = new Subscription(); // Initialize a subscription object to hold all subscriptions
 
-  constructor(
-    private testService: TestService,
-  ) {}
+  constructor(private testService: TestService) {}
   // Initialization method called when the component is loaded
   async ngOnInit(): Promise<void> {
     this.loadChartData();
+  }
+
+  loadChartData() {
+    const chartDataSubscription = this.testService.getAverageTestPercentageForAllCaseStudies().subscribe(results => {
+        if (results && results.scoresOverTime) {
+            this.allResults = results.scoresOverTime;
+            this.labels = results.scoresOverTime.map((score: { date: string; }) => score.date.split('T')[0]);
+            this.averageEyeTests = results.scoresOverTime.map((score: { averageEyeTestPercentage: any; }) => score.averageEyeTestPercentage);
+            this.averageInvestigationsTests = results.scoresOverTime.map((score: { averageInvestigationsTestPercentage: any; }) => score.averageInvestigationsTestPercentage);
+            this.averageDiagnosisTests = results.scoresOverTime.map((score: { averageDiagnosisTestPercentage: any; }) => score.averageDiagnosisTestPercentage);
+            this.overallAveragePercentages = results.scoresOverTime.map((score: { overallAveragePercentage: any; }) => score.overallAveragePercentage);
+            this.testsCount = results.scoresOverTime.map((score: { testCount: any; }) => score.testCount);
+
+            this.createChart(this.labels, this.overallAveragePercentages, this.testsCount);
+        }
+    });
+
+    this.subscription.add(chartDataSubscription); // Store the subscription for later cleanup
 }
 
 
-
-
-async loadChartData() {
-  const results = await this.testService.getAverageTestPercentageForAllCaseStudies().toPromise();
-
-    if (results && results.scoresOverTime) {
-        this.allResults = results.scoresOverTime;
-        this.labels = results.scoresOverTime.map((score: any) => score.date.split("T")[0]);
-        this.averageEyeTests = results.scoresOverTime.map((score: any) => score.averageEyeTestPercentage);
-        this.averageInvestigationsTests = results.scoresOverTime.map((score: any) => score.averageInvestigationsTestPercentage);
-        this.averageDiagnosisTests = results.scoresOverTime.map((score: any) => score.averageDiagnosisTestPercentage);
-        this.overallAveragePercentages = results.scoresOverTime.map((score: any) => score.overallAveragePercentage);
-        this.testsCount = results.scoresOverTime.map((score: any) => score.testCount); // Add this line
-
-        this.createChart(this.labels, this.overallAveragePercentages, this.testsCount);
-    }
-}
-
-  
-  
-  
   updateChartWithResults(results: any[]) {
     const labels = results.map((result) => {
       const date = new Date(result.date);
@@ -71,64 +68,61 @@ async loadChartData() {
     const userCounts = results.map((result) => result.testCount); // Adjusted to use testCount
 
     this.createChart(labels, averages, userCounts);
-}
-
+  }
 
   dateRangeChanged(days: number) {
-    // Create a date object representing the start date of the range
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-  
-    // Filter the results based on the selected date range
-    const filteredResults = this.allResults.filter((result) => {
-      const resultDate = new Date(result.date);
-      return resultDate >= startDate;
-    });
-  
-    // Update properties with filtered results
-    this.averageEyeTests = filteredResults.map((result) => result.averageEyeTestPercentage);
-    this.averageInvestigationsTests = filteredResults.map((result) => result.averageInvestigationsTestPercentage);
-    this.averageDiagnosisTests = filteredResults.map((result) => result.averageDiagnosisTestPercentage);
-    this.overallAveragePercentages = filteredResults.map((result) => result.overallAveragePercentage);
-    
+    // Get the start date as a timestamp for efficient comparison
+    const startTimestamp = new Date().setDate(new Date().getDate() - days);
 
+    // Filter results where the result date is after or equal to the start date
+    const filteredResults = this.allResults.filter(result => new Date(result.date).getTime() >= startTimestamp);
+
+    // Update the chart and other properties with the filtered results
     this.updateChartWithResults(filteredResults);
-    this.dateRange = days; // update the dateRange property
+
+    // Update the dateRange property to reflect the selected date range
+    this.dateRange = days;
 }
 
-  
 
   //calculate averages required for table
-calculateAverages() {
-  let avgCorrect = 0;
-  let avgIncorrect = 0;
+  calculateAverages() {
+    let avgCorrect = 0;
+    let avgIncorrect = 0;
 
-  if (this.correctCounts && this.correctCounts.length) {
-    let totalAnswers = this.correctCounts.reduce((a, b) => a + b, 0) + this.incorrectCounts.reduce((a, b) => a + b, 0);
-    if (totalAnswers != 0) {
-      avgCorrect = (this.correctCounts.reduce((a, b) => a + b, 0) / totalAnswers) * 100;
+    if (this.correctCounts && this.correctCounts.length) {
+      let totalAnswers =
+        this.correctCounts.reduce((a, b) => a + b, 0) +
+        this.incorrectCounts.reduce((a, b) => a + b, 0);
+      if (totalAnswers != 0) {
+        avgCorrect =
+          (this.correctCounts.reduce((a, b) => a + b, 0) / totalAnswers) * 100;
+      }
     }
-  }
 
-  if (this.incorrectCounts && this.incorrectCounts.length) {
-    let totalAnswers = this.correctCounts.reduce((a, b) => a + b, 0) + this.incorrectCounts.reduce((a, b) => a + b, 0);
-    if (totalAnswers != 0) {
-      avgIncorrect = (this.incorrectCounts.reduce((a, b) => a + b, 0) / totalAnswers) * 100;
+    if (this.incorrectCounts && this.incorrectCounts.length) {
+      let totalAnswers =
+        this.correctCounts.reduce((a, b) => a + b, 0) +
+        this.incorrectCounts.reduce((a, b) => a + b, 0);
+      if (totalAnswers != 0) {
+        avgIncorrect =
+          (this.incorrectCounts.reduce((a, b) => a + b, 0) / totalAnswers) *
+          100;
+      }
     }
+
+    return {
+      avgCorrect: avgCorrect.toFixed(2),
+      avgIncorrect: avgIncorrect.toFixed(2),
+    };
   }
-
-  return {
-    avgCorrect: avgCorrect.toFixed(2),
-    avgIncorrect: avgIncorrect.toFixed(2),
-  };
-}
-
-  
 
   //get average scores
   getAverageScore() {
-    return this.averageScores.reduce((a, b) => a + b, 0) / this.averageScores.length;
-}
+    return (
+      this.averageScores.reduce((a, b) => a + b, 0) / this.averageScores.length
+    );
+  }
 
   //calculate number of tests for table
   totalTests() {
@@ -207,6 +201,7 @@ calculateAverages() {
     });
   }
 
-
-  
+  ngOnDestroy(): void { // Implement ngOnDestroy lifecycle hook
+    this.subscription.unsubscribe(); // Unsubscribe from all subscriptions when component is destroyed
+  }
 }

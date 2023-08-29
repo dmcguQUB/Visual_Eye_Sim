@@ -1,6 +1,7 @@
 // Import required dependencies and services
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
+import { Subject, takeUntil } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { Score } from 'src/app/shared/interfaces/IScore';
@@ -9,9 +10,9 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
 @Component({
   selector: 'app-admin-case-study-avg-score-over-time',
   templateUrl: './admin-case-study-avg-score-over-time.component.html',
-  styleUrls: ['./admin-case-study-avg-score-over-time.component.css']
+  styleUrls: ['./admin-case-study-avg-score-over-time.component.css'],
 })
-export class AdminCaseStudyAvgScoreOverTimeComponent implements OnInit {
+export class AdminCaseStudyAvgScoreOverTimeComponent implements OnInit, OnDestroy {
   // Variables to hold the chart and data
   public chart: any;
   caseStudies: CaseStudies[] = [];
@@ -24,7 +25,9 @@ export class AdminCaseStudyAvgScoreOverTimeComponent implements OnInit {
   incorrectCounts: number[] = [];
   testsCount: number[] = [];
   dateRange: number = 0; // stores the number of days in the selected date range
-  labels?: any[];  // use appropriate type instead of 'any'
+  labels?: any[]; // use appropriate type instead of 'any'
+  // To manage subscriptions
+  private onDestroy = new Subject<void>();
 
   constructor(
     private testService: TestService,
@@ -32,16 +35,16 @@ export class AdminCaseStudyAvgScoreOverTimeComponent implements OnInit {
   ) {}
   // Initialization method called when the component is loaded
   async ngOnInit(): Promise<void> {
-    // Retrieve all case studies from the UseCaseService using await to handle the asynchronous nature
-    const caseStudies = await this.useCaseService.getAll().toPromise();
-    this.caseStudies = caseStudies ? caseStudies : [];
-
-    // If there are case studies, select the first one by default
-    if (this.caseStudies.length > 0) {
-      this.selectedCaseStudy = this.caseStudies[0];
-      // Load chart data for the selected case study
-      this.loadChartData(this.selectedCaseStudy._id);
-    }
+    this.useCaseService
+      .getAll()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((caseStudies) => {
+        this.caseStudies = caseStudies ? caseStudies : [];
+        if (this.caseStudies.length > 0) {
+          this.selectedCaseStudy = this.caseStudies[0];
+          this.loadChartData(this.selectedCaseStudy._id);
+        }
+      });
   }
 
   // Event handler for the case study selection change
@@ -54,21 +57,25 @@ export class AdminCaseStudyAvgScoreOverTimeComponent implements OnInit {
     }
   }
 
-  async loadChartData(caseStudyId: string) {
-    const results = await this.testService.getAverageTestPercentageForAllCaseStudies().toPromise();
-
-    if (results && results.scoresOverTime) {
-        const labels = results.scoresOverTime.map((score:Score) => score.date.split("T")[0]);
-        this.averageScores = results.scoresOverTime.map((score:Score) => score.overallAveragePercentage);
-        this.testsCount = results.scoresOverTime.map((score:Score) => score.testCount);
-
-        this.createChart(labels, this.averageScores, this.testsCount);
-    }
-}
-
-  
-  
-  
+  loadChartData(caseStudyId: string): void {
+    this.testService
+      .getAverageTestPercentageForAllCaseStudies()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((results) => {
+        if (results && results.scoresOverTime) {
+          const labels = results.scoresOverTime.map(
+            (score: Score) => score.date.split('T')[0]
+          );
+          this.averageScores = results.scoresOverTime.map(
+            (score: Score) => score.overallAveragePercentage
+          );
+          this.testsCount = results.scoresOverTime.map(
+            (score: Score) => score.testCount
+          );
+          this.createChart(labels, this.averageScores, this.testsCount);
+        }
+      });
+  }
 
   updateChartWithResults(results: any[]) {
     const labels = results.map((result) => {
@@ -96,7 +103,6 @@ export class AdminCaseStudyAvgScoreOverTimeComponent implements OnInit {
       return resultDate >= startDate;
     });
 
-    
     // update properties with filtered results
     this.averageScores = filteredResults.map((result) => result.averageScore);
     this.correctCounts = filteredResults.map((result) => result.correctCount);
@@ -110,36 +116,43 @@ export class AdminCaseStudyAvgScoreOverTimeComponent implements OnInit {
   }
 
   //calculate averages required for table
-calculateAverages() {
-  let avgCorrect = 0;
-  let avgIncorrect = 0;
+  calculateAverages() {
+    let avgCorrect = 0;
+    let avgIncorrect = 0;
 
-  if (this.correctCounts && this.correctCounts.length) {
-    let totalAnswers = this.correctCounts.reduce((a, b) => a + b, 0) + this.incorrectCounts.reduce((a, b) => a + b, 0);
-    if (totalAnswers != 0) {
-      avgCorrect = (this.correctCounts.reduce((a, b) => a + b, 0) / totalAnswers) * 100;
+    if (this.correctCounts && this.correctCounts.length) {
+      let totalAnswers =
+        this.correctCounts.reduce((a, b) => a + b, 0) +
+        this.incorrectCounts.reduce((a, b) => a + b, 0);
+      if (totalAnswers != 0) {
+        avgCorrect =
+          (this.correctCounts.reduce((a, b) => a + b, 0) / totalAnswers) * 100;
+      }
     }
-  }
 
-  if (this.incorrectCounts && this.incorrectCounts.length) {
-    let totalAnswers = this.correctCounts.reduce((a, b) => a + b, 0) + this.incorrectCounts.reduce((a, b) => a + b, 0);
-    if (totalAnswers != 0) {
-      avgIncorrect = (this.incorrectCounts.reduce((a, b) => a + b, 0) / totalAnswers) * 100;
+    if (this.incorrectCounts && this.incorrectCounts.length) {
+      let totalAnswers =
+        this.correctCounts.reduce((a, b) => a + b, 0) +
+        this.incorrectCounts.reduce((a, b) => a + b, 0);
+      if (totalAnswers != 0) {
+        avgIncorrect =
+          (this.incorrectCounts.reduce((a, b) => a + b, 0) / totalAnswers) *
+          100;
+      }
     }
+
+    return {
+      avgCorrect: avgCorrect.toFixed(2),
+      avgIncorrect: avgIncorrect.toFixed(2),
+    };
   }
-
-  return {
-    avgCorrect: avgCorrect.toFixed(2),
-    avgIncorrect: avgIncorrect.toFixed(2),
-  };
-}
-
-  
 
   //get average scores
   getAverageScore() {
-    return this.averageScores.reduce((a, b) => a + b, 0) / this.averageScores.length;
-}
+    return (
+      this.averageScores.reduce((a, b) => a + b, 0) / this.averageScores.length
+    );
+  }
 
   //calculate number of tests for table
   totalTests() {
@@ -218,6 +231,9 @@ calculateAverages() {
     });
   }
 
-
-  
+  ngOnDestroy(): void {
+    // Important: Unsubscribe from all observables to prevent memory leaks
+    this.onDestroy.next();
+    this.onDestroy.complete();
+  }
 }

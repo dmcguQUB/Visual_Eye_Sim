@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
+import { Subject, takeUntil } from 'rxjs';
 import { QuestionService } from 'src/app/services/questions.service';
 import { TestService } from 'src/app/services/test.service';
 import { UseCaseService } from 'src/app/services/usecases.service';
@@ -13,7 +14,7 @@ type ChartDataSets = { label: string; data: number[] };
   templateUrl: './user-scores-over-time-graph.component.html',
   styleUrls: ['./user-scores-over-time-graph.component.css'],
 })
-export class UserScoresOverTimeGraphComponent {
+export class UserScoresOverTimeGraphComponent implements OnDestroy {
   caseStudies: CaseStudies[] = []; // store all case studies here
   chartData: ChartDataSets[] = [];
   chart!: Chart;
@@ -30,6 +31,7 @@ export class UserScoresOverTimeGraphComponent {
 
 
   @ViewChild('myChart') myChart!: ElementRef;
+  private destroy$ = new Subject<void>();
 
   //inject services into code
   constructor(
@@ -49,9 +51,10 @@ export class UserScoresOverTimeGraphComponent {
         return;
     }
 
-    console.log(`User is logged in, user ID: ${userId}`);
-
-    this.useCaseService.getAll().subscribe((cases) => {
+    // First, fetch all case studies.
+    this.useCaseService.getAll()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((cases) => {
         this.caseStudies = cases;
 
         // Initialize filtersApplied for each case study
@@ -59,17 +62,19 @@ export class UserScoresOverTimeGraphComponent {
             this.filtersApplied[caseStudy._id] = false;
         });
 
-        // Once caseStudies is populated, then fetch total questions
+        // Once caseStudies is populated, fetch total questions for each case study.
         this.caseStudies.forEach((caseStudy) => {
-            this.questionService
-                .getTotalQuestionsForCaseStudy(caseStudy._id)
-                .subscribe((total) => {
-                    this.totalQuestionsForCaseStudies[caseStudy._id] = total;
-                });
+            this.questionService.getTotalQuestionsForCaseStudy(caseStudy._id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((total) => {
+                this.totalQuestionsForCaseStudies[caseStudy._id] = total;
+            });
         });
 
-        // Then fetch the test scores
-        this.testService.getUserTestScores(userId).subscribe((scores) => {
+        // After fetching the case studies, fetch the user's test scores.
+        this.testService.getUserTestScores(userId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((scores) => {
             this.testScores = scores;
 
             // Here we populate the filter dropdowns
@@ -91,7 +96,6 @@ export class UserScoresOverTimeGraphComponent {
                     { length: scoresForCaseStudy.length },
                     (_, i) => i + 1
                 );
-           
             });
 
             this.prepareChartData();
@@ -102,6 +106,10 @@ export class UserScoresOverTimeGraphComponent {
 }
 
 
+ngOnDestroy(): void {
+  this.destroy$.next();
+  this.destroy$.complete();
+}
 
 
   createChart(): void {
@@ -153,14 +161,19 @@ export class UserScoresOverTimeGraphComponent {
         return;
     }
     
+    // If a chart instance already exists, destroy it to avoid memory leaks.
     if (this.chart) {
         this.chart.destroy();
     }
 
+    const labels = this.testScores.map((score, index) => 
+    score.createdAt ? new Date(score.createdAt).toLocaleDateString() : 'N/A'
+);
+
     this.chart = new Chart(this.myChart.nativeElement, {
       type: 'line',
       data: {
-        labels: this.testScores.map((score, index) => index + 1),
+        labels: labels,
         datasets: this.chartData,
       },
       options: {
@@ -183,13 +196,21 @@ export class UserScoresOverTimeGraphComponent {
           x: {
             title: {
               display: true,
-              text: 'Number of Tests',
+              text: 'Date of Test',
             },
+            type: 'time',
+            time: {
+              unit: 'day',
+              displayFormats: {
+                day: 'MMM D',
+              }
+            }
           },
         },
       },
     });
-  }
+}
+
 
  
 

@@ -1,29 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { finalize, Subscription, switchMap } from 'rxjs';
 import { TestService } from 'src/app/services/test.service';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 import { Test } from 'src/app/shared/models/test';
 Chart.register(...registerables);
 
-
 @Component({
   selector: 'app-admin-case-study-correct-vs-incorrect',
   templateUrl: './admin-case-study-correct-vs-incorrect.component.html',
-  styleUrls: ['./admin-case-study-correct-vs-incorrect.component.css']
+  styleUrls: ['./admin-case-study-correct-vs-incorrect.component.css'],
 })
-export class AdminCaseStudyCorrectVsIncorrectComponent implements OnInit {
+export class AdminCaseStudyCorrectVsIncorrectComponent
+  implements OnInit, OnDestroy
+{
   public chart: any;
   caseStudies: CaseStudies[] = [];
   labels: string[] = [];
-  correctPercentages: number[] = []; 
+  correctPercentages: number[] = [];
   incorrectPercentages: number[] = [];
   dateRange: number = 1;
   public originalAllTests: any[] = [];
   public allTests: any[] = [];
   numberOfTests: number[] = [];
 
-
+  private subscriptions: Subscription[] = []; // Track all component subscriptions
 
   constructor(
     private useCaseService: UseCaseService,
@@ -31,29 +33,36 @@ export class AdminCaseStudyCorrectVsIncorrectComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.useCaseService.getAll().subscribe((caseStudies: CaseStudies[]) => {
-      this.caseStudies = caseStudies;
-      this.labels = this.caseStudies.map(
-        (caseStudy) => `${caseStudy.caseStudyNumber} - ${caseStudy.name}`
-      );
-
-      this.correctPercentages = Array(this.caseStudies.length).fill(0);
-      this.incorrectPercentages = Array(this.caseStudies.length).fill(0);
-
-      this.testService.getAllTestScores().subscribe(
-        (tests: any[]) => {
-          this.originalAllTests = tests;
-          this.allTests = [...this.originalAllTests];  // Create a copy of the original data
+    const subscription = this.useCaseService
+      .getAll()
+      .pipe(
+        switchMap((caseStudies: CaseStudies[]) => {
+          this.caseStudies = caseStudies;
+          this.labels = this.caseStudies.map(
+            (caseStudy) => `${caseStudy.caseStudyNumber} - ${caseStudy.name}`
+          );
+          this.correctPercentages = Array(this.caseStudies.length).fill(0);
+          this.incorrectPercentages = Array(this.caseStudies.length).fill(0);
+          return this.testService.getAllTestScores();
+        })
+      )
+      .pipe(
+        finalize(() => {
           this.calculatePercentages();
           this.createChart();
+        })
+      )
+      .subscribe(
+        (tests: any[]) => {
+          this.originalAllTests = tests;
+          this.allTests = [...this.originalAllTests];
         },
-        error => {
+        (error) => {
           console.error('Error fetching tests:', error);
         }
       );
-      
-      
-    });
+
+    this.subscriptions.push(subscription);
   }
 
   calculatePercentages() {
@@ -61,33 +70,43 @@ export class AdminCaseStudyCorrectVsIncorrectComponent implements OnInit {
     this.incorrectPercentages = Array(this.caseStudies.length).fill(0);
     this.numberOfTests = Array(this.caseStudies.length).fill(0);
 
-
     this.caseStudies.forEach((caseStudy, index) => {
-        const testsForCaseStudy = this.allTests.filter(test => test.caseStudyId === caseStudy._id);
-        
-        if (testsForCaseStudy.length === 0) return; // No tests for this case study.
+      const testsForCaseStudy = this.allTests.filter(
+        (test) => test.caseStudyId === caseStudy._id
+      );
 
-        let totalCorrectPercentage = 0;
-        let totalIncorrectPercentage = 0;
+      if (testsForCaseStudy.length === 0) return; // No tests for this case study.
 
-        testsForCaseStudy.forEach(test => {
-            const eyeTestCorrect = (test.eyeTest.correctAnswers / test.eyeTest.totalQuestions) * 100 || 0;
-            const investigationsTestCorrect = (test.investigationsTest.correctAnswers / test.investigationsTest.totalQuestions) * 100 || 0;
-            const diagnosisTestCorrect = (test.diagnosisTest.correctAnswers / test.diagnosisTest.totalQuestions) * 100 || 0;
+      let totalCorrectPercentage = 0;
+      let totalIncorrectPercentage = 0;
 
-            const avgCorrect = (eyeTestCorrect + investigationsTestCorrect + diagnosisTestCorrect) / 3;
-            totalCorrectPercentage += avgCorrect;
-            totalIncorrectPercentage += (100 - avgCorrect);
-        });
+      testsForCaseStudy.forEach((test) => {
+        const eyeTestCorrect =
+          (test.eyeTest.correctAnswers / test.eyeTest.totalQuestions) * 100 ||
+          0;
+        const investigationsTestCorrect =
+          (test.investigationsTest.correctAnswers /
+            test.investigationsTest.totalQuestions) *
+            100 || 0;
+        const diagnosisTestCorrect =
+          (test.diagnosisTest.correctAnswers /
+            test.diagnosisTest.totalQuestions) *
+            100 || 0;
 
-        this.correctPercentages[index] = totalCorrectPercentage / testsForCaseStudy.length;
-        this.incorrectPercentages[index] = totalIncorrectPercentage / testsForCaseStudy.length;
-        this.numberOfTests[index] = testsForCaseStudy.length;
+        const avgCorrect =
+          (eyeTestCorrect + investigationsTestCorrect + diagnosisTestCorrect) /
+          3;
+        totalCorrectPercentage += avgCorrect;
+        totalIncorrectPercentage += 100 - avgCorrect;
+      });
 
+      this.correctPercentages[index] =
+        totalCorrectPercentage / testsForCaseStudy.length;
+      this.incorrectPercentages[index] =
+        totalIncorrectPercentage / testsForCaseStudy.length;
+      this.numberOfTests[index] = testsForCaseStudy.length;
     });
-}
-
-  
+  }
 
   createChart() {
     this.chart = new Chart('MyChart', {
@@ -150,21 +169,24 @@ export class AdminCaseStudyCorrectVsIncorrectComponent implements OnInit {
     this.createChart();
   }
 
-  calculateAverages(): { avgCorrect: number, avgIncorrect: number } {
+  calculateAverages(): { avgCorrect: number; avgIncorrect: number } {
     let totalCorrect = 0;
     let totalIncorrect = 0;
     let totalTests = 0;
 
-    for(let i = 0; i < this.correctPercentages.length; i++) {
-        totalCorrect += this.correctPercentages[i] * this.numberOfTests[i];
-        totalIncorrect += this.incorrectPercentages[i] * this.numberOfTests[i];
-        totalTests += this.numberOfTests[i];
+    for (let i = 0; i < this.correctPercentages.length; i++) {
+      totalCorrect += this.correctPercentages[i] * this.numberOfTests[i];
+      totalIncorrect += this.incorrectPercentages[i] * this.numberOfTests[i];
+      totalTests += this.numberOfTests[i];
     }
 
     return {
       avgCorrect: totalTests ? totalCorrect / totalTests : 0,
-      avgIncorrect: totalTests ? totalIncorrect / totalTests : 0
+      avgIncorrect: totalTests ? totalIncorrect / totalTests : 0,
     };
-}
-
+  }
+  ngOnDestroy(): void {
+    // Clean up all component subscriptions to avoid memory leaks
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
 }

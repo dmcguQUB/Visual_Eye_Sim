@@ -71,10 +71,10 @@ export class UserScoresComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Ensure all subscriptions are unsubscribed from
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-
   fetchUserScores() {
     // Check if currentUser is defined and has a valid _id property
     if (this.userService.currentUser && this.userService.currentUser._id) {
