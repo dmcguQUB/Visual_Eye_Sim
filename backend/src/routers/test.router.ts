@@ -400,7 +400,8 @@ router.get(
             averageEyeTestPercentage: { $avg: "$eyeTest.percentage" },
             averageInvestigationsTestPercentage: { $avg: "$investigationsTest.percentage" },
             averageDiagnosisTestPercentage: { $avg: "$diagnosisTest.percentage" },
-            overallAveragePercentage: { $avg: "$totalPercentage" }
+            overallAveragePercentage: { $avg: "$totalPercentage" },
+            testCount: { $sum: 1 }  // Counting the tests for each day
           },
         },
         {
@@ -415,7 +416,8 @@ router.get(
             averageEyeTestPercentage: { $round: ["$averageEyeTestPercentage", 0] },
             averageInvestigationsTestPercentage: { $round: ["$averageInvestigationsTestPercentage", 0] },
             averageDiagnosisTestPercentage: { $round: ["$averageDiagnosisTestPercentage", 0] },
-            overallAveragePercentage: { $round: ["$overallAveragePercentage", 0] }
+            overallAveragePercentage: { $round: ["$overallAveragePercentage", 0] },
+            testCount: 1 // Projecting the test count
           },
         },
         { $sort: { date: 1 } }, // Sorting by date
@@ -459,7 +461,8 @@ router.get(
             averageEyeTestPercentage: { $avg: "$eyeTest.percentage" },
             averageInvestigationsTestPercentage: { $avg: "$investigationsTest.percentage" },
             averageDiagnosisTestPercentage: { $avg: "$diagnosisTest.percentage" },
-            overallAveragePercentage: { $avg: "$totalPercentage" }
+            overallAveragePercentage: { $avg: "$totalPercentage" },
+            testCount: { $sum: 1 }  // Counting the tests for each day
           },
         },
         {
@@ -474,7 +477,8 @@ router.get(
             averageEyeTestPercentage: { $round: ["$averageEyeTestPercentage", 0] },
             averageInvestigationsTestPercentage: { $round: ["$averageInvestigationsTestPercentage", 0] },
             averageDiagnosisTestPercentage: { $round: ["$averageDiagnosisTestPercentage", 0] },
-            overallAveragePercentage: { $round: ["$overallAveragePercentage", 0] }
+            overallAveragePercentage: { $round: ["$overallAveragePercentage", 0] },
+            testCount: 1 // Projecting the test count
           },
         },
         { $sort: { date: 1 } }, // Sorting by date

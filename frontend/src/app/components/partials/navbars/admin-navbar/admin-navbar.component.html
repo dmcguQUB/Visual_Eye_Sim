@@ -1,24 +1,29 @@
-<!-- Sidebar -->
-<div class="col-md-2 d-none d-md-block bg-light sidebar">
-    <nav class="navbar navbar-expand-md navbar-light flex-md-column flex-row align-items-start py-2"[class.d-none]="isMobile">
-    <div class="collapse navbar-collapse">
-      <ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
-        <li class="nav-item">
-          <a class="nav-link pl-0 text-nowrap" href="/admin-case-study-correct-vs-incorrect">
-            <i class="fa fa-bullseye fa-fw"></i> User Scores per
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link pl-0 text-nowrap" href="/admin-avg-score-vs-time">
-            <i class="fa fa-bar-chart fa-fw"></i> Average Scores and User Count Over Time for Selected Case Study
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link pl-0 text-nowrap" href="/admin-registrations-over-time">
-            <i class="fa fa-bar-chart fa-fw"></i>Registrations Over Time
-          </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+<div class="navbar navbar-default">
+  <h1 class="case-study-header">
+    <a href="/admin-case-study-correct-vs-incorrect">Admin Page</a>
+  </h1>
+  <div class="navbar-inner">
+    <ul class="nav navbar-nav">
+      <li class="nav-link pl-0 text-nowrap active">
+        <a routerLink="/admin-avg-score-vs-time"
+          > <i class="fa fa-bar-chart fa-fw"></i>All Test Percentages Across All Case Studies</a
+        >
+      </li>
+      <li class="active" >
+        <a routerLink="/admin-avg-score-vs-time"
+          > <i class="fa fa-bar-chart fa-fw"></i>Average Scores and User Count vs Time</a
+        >
+      </li>
+      <li class="nav-link pl-0 text-nowrap active">
+        <a routerLink="/admin-registrations-over-time"
+          > <i class="fa fa-bar-chart fa-fw"></i>User Registrations Over Time</a
+        >
+      </li>
+      <li class="nav-link pl-0 text-nowrap active">
+        <a routerLink="/admin-avg-score-over-time"
+          > <i class="fa fa-bar-chart fa-fw"></i>NEW TEST - AVG SCORE OVER TIME</a
+        >
+      </li>
+    </ul>
+  </div>
 </div>

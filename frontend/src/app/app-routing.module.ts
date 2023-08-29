@@ -28,6 +28,7 @@ import { UserScoresOverTimeGraphComponent } from './components/pages/graphs/user
 import { UserCaseStudyCorrectVsOncorrectComponent } from './components/pages/graphs/user/user-case-study-correct-vs-oncorrect/user-case-study-correct-vs-oncorrect.component';
 import { UserCaseStudyQuestionTypeCorrectVsIncorrectComponent } from './components/pages/graphs/user/user-case-study-question-type-correct-vs-incorrect/user-case-study-question-type-correct-vs-incorrect.component';
 import { AdminCaseStudyCorrectVsIncorrectComponent } from './components/pages/graphs/admin/admin-case-study-correct-vs-incorrect/admin-case-study-correct-vs-incorrect.component';
+import { AdminAvgScoreOverTimeComponent } from './components/pages/graphs/admin/admin-global-avg-score-over-time/admin-avg-score-over-time.component';
 
 const routes: Routes = [
   //home route
@@ -108,6 +109,12 @@ const routes: Routes = [
   {
     path: 'admin-registrations-over-time',
     component: AdminRegistrationsOverTimeComponent,
+    canActivate: [AuthGuard,AdminGuard],
+  },
+
+  {
+    path: 'admin-avg-score-over-time',
+    component: AdminAvgScoreOverTimeComponent,
     canActivate: [AuthGuard,AdminGuard],
   },
   {

@@ -41,7 +41,12 @@ getTestScoresAllTestsAllCaseStudies(): Observable<any> {
 
 // 5) Average percentage score for each case study over time
 getAverageTestPercentageForCaseStudyOverTime(caseStudyId: string): Observable<any> {
-  const url = `${CASE_STUDY_BY_ID_URL}${caseStudyId}/average-score-over-time`;
+  const url = `${TEST_FOR_CASE_STUDY}${caseStudyId}/average-score-over-time`;
+  return this.http.get<any>(url);
+}
+// 6) Average percentage score for all case studies
+getAverageTestPercentageForAllCaseStudies(): Observable<any> {
+  const url = `${TEST_URL}average-percentage-over-time`;
   return this.http.get<any>(url);
 }
 

@@ -62,6 +62,8 @@ import { UserScoresOverTimeGraphComponent } from './components/pages/graphs/user
 import { UserCaseStudyCorrectVsOncorrectComponent } from './components/pages/graphs/user/user-case-study-correct-vs-oncorrect/user-case-study-correct-vs-oncorrect.component';
 import { UserCaseStudyQuestionTypeCorrectVsIncorrectComponent } from './components/pages/graphs/user/user-case-study-question-type-correct-vs-incorrect/user-case-study-question-type-correct-vs-incorrect.component';
 import { AdminCaseStudyCorrectVsIncorrectComponent } from './components/pages/graphs/admin/admin-case-study-correct-vs-incorrect/admin-case-study-correct-vs-incorrect.component';
+import { AdminAvgScoreOverTimeComponent } from './components/pages/graphs/admin/admin-global-avg-score-over-time/admin-avg-score-over-time.component';
+import { AdminCaseStudyAvgScoreOverTimeComponent } from './components/pages/graphs/admin/admin-case-study-avg-score-over-time/admin-case-study-avg-score-over-time.component';
 
 @NgModule({
   declarations: [
@@ -109,6 +111,8 @@ import { AdminCaseStudyCorrectVsIncorrectComponent } from './components/pages/gr
     UserCaseStudyCorrectVsOncorrectComponent,
     UserCaseStudyQuestionTypeCorrectVsIncorrectComponent,
     AdminCaseStudyCorrectVsIncorrectComponent,
+    AdminAvgScoreOverTimeComponent,
+    AdminCaseStudyAvgScoreOverTimeComponent,
   ],
   imports: [
     BrowserModule,

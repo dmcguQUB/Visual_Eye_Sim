@@ -1,0 +1,98 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="sidebar-container d-flex flex-column">
+      <admin-navbar></admin-navbar>
+    </div>
+
+    <div class="col-md-9 ml-sm-auto col-lg-10 px-4">
+
+      <!-- Main Content -->
+      <main role="main" >
+        <h1>Average Scores and User Count Over Time for Selected Case Study</h1>
+        <div class="chart-container">
+          <canvas id="MyChart">{{ chart }}</canvas>
+        </div>
+
+        <div class="btn-group mt-3" role="group">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="dateRangeChanged(1)"
+          >
+            Last 1 Day
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="dateRangeChanged(3)"
+          >
+            Last 3 Days
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="dateRangeChanged(7)"
+          >
+            Last 7 Days
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="dateRangeChanged(30)"
+          >
+            Last 1 Month
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="dateRangeChanged(180)"
+          >
+            Last 6 Months
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="dateRangeChanged(365)"
+          >
+            Last 1 Year
+          </button>
+        </div>
+
+        <!--Table of results below-->
+        <table class="table table-striped mt-3">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Average Percentage (%)</th>
+              <th scope="col">Avg Eye Test Percentage (%)</th>
+              <th scope="col">Avg Investigations Percentage(%)</th>
+              <th scope="col">Number of Tests</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let label of labels; index as i">
+              <th scope="row">{{ label }}</th>
+              <td>{{ overallAveragePercentages[i] | number : "1.2-2" }}</td>
+              <td>
+                {{
+                  averageEyeTests[i]
+                    ? (averageEyeTests[i] / testsCount[i]) * 100
+                    : (0 | number : "1.2-2")
+                }}
+              </td>
+              <td>
+                {{
+                  averageInvestigationsTests[i]
+                    ? (averageInvestigationsTests[i] / testsCount[i]) * 100
+                    : (0 | number : "1.2-2")
+                }}
+              </td>
+              <td>{{ testsCount[i] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </main>
+    </div>
+  </div>
+</div>
