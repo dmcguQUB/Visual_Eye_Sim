@@ -7,6 +7,9 @@ import { UseCaseService } from 'src/app/services/usecases.service';
 import { UserService } from 'src/app/services/user.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 import { Test } from 'src/app/shared/models/test';
+import 'chartjs-adapter-moment';
+import * as moment from 'moment';
+
 
 type ChartDataSets = { label: string; data: number[] };
 @Component({
@@ -17,7 +20,7 @@ type ChartDataSets = { label: string; data: number[] };
 export class UserScoresOverTimeGraphComponent implements OnDestroy {
   caseStudies: CaseStudies[] = []; // store all case studies here
   chartData: ChartDataSets[] = [];
-  chart!: Chart;
+  chart: Chart | null = null;
   availableTestCounts: { [key: string]: number[] } = {};
   dataMap: { [key: string]: number[] } = {}; // <-- Declare it here
   testScores: Test[] = []; // to store all test scores fetched
@@ -27,7 +30,9 @@ export class UserScoresOverTimeGraphComponent implements OnDestroy {
   } = {};
   displayedTests: Test[] = [];
    // Track which case studies have filters applied
+   private filteredScores: Test[] = [];
    filtersApplied: { [key: string]: boolean } = {};
+
 
 
   @ViewChild('myChart') myChart!: ElementRef;
@@ -101,7 +106,10 @@ export class UserScoresOverTimeGraphComponent implements OnDestroy {
             this.prepareChartData();
             this.createOrUpdateChart();
             this.applyAllFilters(); // load chart when page loads
+        },   (error) => {
+          console.error('There was an error!', error);
         });
+        
     });
 }
 
@@ -155,61 +163,86 @@ ngOnDestroy(): void {
       });
     });
   }
-  
-  createOrUpdateChart(): void {
-    if (!this.myChart || !this.myChart.nativeElement) {
-        return;
-    }
+  updateTestView(caseStudyId: string): void {
+    const selectedRange = this.selectedTestCounts[caseStudyId];
+    const allScoresForCaseStudy = this.testScores.filter(score => score.caseStudyId === caseStudyId);
+    const endRange = Math.min(selectedRange.end, selectedRange.max);
+    const scoresForSelectedRange = allScoresForCaseStudy.slice(selectedRange.start - 1, endRange);
+
+    // Update only the filteredScores of the current case study, keep the rest intact
+    this.filteredScores = this.filteredScores.filter(score => score.caseStudyId !== caseStudyId);
+    this.filteredScores.push(...scoresForSelectedRange);
+
+    this.dataMap[caseStudyId] = scoresForSelectedRange.map(score => score.totalPercentage || 0);
+
+    // Update chart data and refresh the chart
+    this.prepareChartData();
+    this.createOrUpdateChart();
     
-    // If a chart instance already exists, destroy it to avoid memory leaks.
-    if (this.chart) {
-        this.chart.destroy();
-    }
+    // Update the table view
+    this.displayedTests = this.getFilteredTestsData();
+}
 
-    const labels = this.testScores.map((score, index) => 
-    score.createdAt ? new Date(score.createdAt).toLocaleDateString() : 'N/A'
-);
 
-    this.chart = new Chart(this.myChart.nativeElement, {
-      type: 'line',
-      data: {
+
+createOrUpdateChart(): void {
+  if (!this.myChart || !this.myChart.nativeElement) {
+      return;
+  }
+
+  if (!this.filteredScores || this.filteredScores.length === 0) {
+      console.warn('No filtered test scores available to plot');
+      return;
+  }
+
+  if (this.chart && typeof this.chart.destroy === 'function') {
+      this.chart.destroy();
+      this.chart = null;
+  }
+
+  // Use filteredScores here for the chart labels
+  const labels = this.filteredScores.map((_, index) => index + 1);
+ 
+  this.chart = new Chart(this.myChart.nativeElement, {
+    type: 'line',
+    data: {
         labels: labels,
         datasets: this.chartData,
-      },
-      options: {
+    },
+    options: {
         scales: {
-          y: {
-            min: 0,
-            max: 100,
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Score (%)',
+            y: {
+                min: 0,
+                max: 100,
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Score (%)',
+                },
+                ticks: {
+                    callback: function (tickValue) {
+                        return tickValue + '%';
+                    },
+                    stepSize: 10,
+                },
             },
-            ticks: {
-              callback: function (tickValue) {
-                return tickValue + '%';
-              },
-              stepSize: 10,
+            x: {
+                type: 'linear',
+                title: {
+                    display: true,
+                    text: 'Test Number',
+                },
+                min: 1, // Moved out of ticks
+                max: this.filteredScores.length, // Moved out of ticks
             },
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Date of Test',
-            },
-            type: 'time',
-            time: {
-              unit: 'day',
-              displayFormats: {
-                day: 'MMM D',
-              }
-            }
-          },
         },
-      },
-    });
+    },
+});
 }
+
+
+
+
 
 
  
@@ -228,21 +261,7 @@ ngOnDestroy(): void {
     });
   }
 
-  updateTestView(caseStudyId: string): void {
-    // Only update data for the selected case study
-    const selectedRange = this.selectedTestCounts[caseStudyId];
-    const allScoresForCaseStudy = this.testScores.filter(score => score.caseStudyId === caseStudyId);
-    const endRange = Math.min(selectedRange.end, selectedRange.max);
-    const scoresForSelectedRange = allScoresForCaseStudy.slice(selectedRange.start - 1, endRange);
-    this.dataMap[caseStudyId] = scoresForSelectedRange.map(score => score.totalPercentage || 0);
 
-    // Update chart data and refresh the chart
-    this.prepareChartData();
-    this.createOrUpdateChart();
-
-    // Update the table view
-    this.displayedTests = this.getFilteredTestsData();
-  }
 
   getFilteredTestsData(): Test[] {
     const filteredTests: Test[] = [];
