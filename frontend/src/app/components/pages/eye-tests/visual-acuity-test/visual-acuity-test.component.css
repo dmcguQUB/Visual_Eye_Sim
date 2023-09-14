@@ -1,125 +1,105 @@
-/* Canvas container */
-#canvasContainer {
-  position: relative;
-  height: 100%;
-  width: auto;
-  border: 1px solid black;
-  overflow: auto;
+.full-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-/* Snellen Chart CSS */
-#snellenChart {
-  position: relative;
-  width: 100%;
-  height: auto;
+
+.right-container {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin-right: 5%;
 }
-.right-container{
-  background-color: rgb(238, 234, 234);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-   border-radius: 10px;
-  color: #9c88ff;
-}
-/* Card container styles */
+
 .card-container {
-  background-color: rgb(238, 234, 234);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  margin: 20px;
+  margin: 10px 0; /* Only vertical margins */
   padding: 20px;
   color: #9c88ff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 70%;
-}
-
-.row{
-  background-color: rgb(238, 234, 234);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  margin: 20px;
-  padding: 20px;
-  color: #9c88ff;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
   width: 100%;
 }
 
-/* Parent Container */
-.parent-container {
-  display: flex;
+.visual-acuity-container {
+  position: relative;
 }
 
-/* Navbar Styles */
-.app-navbar {
-  width: 25%;
-}
-
-/* Pupil Reflexes Test Styles */
-.eye-movements-container {
-  width: 75%;
+#snellenChart {
+  max-width: 100%;
+  height: auto;
 }
 
 .title {
+  margin: 0;
+}
+
+.name {
+  font-size: 1.5em;
+}
+
+.message-container {
+  width: 100%;
+}
+
+.btn {
+  background-color: #9c88ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 10px 5px;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(156, 136, 255, 0.7);
+}
+
+.qa-section select.form-control {
+  width: 80%; 
+  margin: 0 auto;
+  margin-bottom: 10px;
+  color: #333; /* Darker text for better readability */
+}
+
+.text-center {
   text-align: center;
 }
 
-/* Button Styles */
-.btn-primary, .btn-secondary, .btn-tert {
-  margin-top: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.25rem;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
+@media screen and (max-width: 600px) {
+  .full-container {
+      flex-direction: column;
+  }
 
-.btn-primary {
-  background-color: #9c88ff;
-  color: white;
-}
+  .right-container {
+      width: 100%;
+      margin-right: 0;
+  }
 
-.btn-primary:hover, .btn-tert:hover {
-  background-color: #495057;
-  cursor: pointer;
-}
+  .card-container {
+      margin: 10px 2%; /* Tiny horizontal margin for small screens */
+  }
 
-.btn-secondary {
-  background-color: greenyellow;
-  color: black;
-}
-
-.btn-tert {
-  background-color: lightgray;
-  color: black;
-}
-
-.container-fluid {
-  display: flex;
-}
-
-.layout-wrapper {
-  display: flex;
-  height: 100vh;
-  align-items: center;
-
-}
-
-/* Styles for the navbar to make it span the full width */
-.navbar {
-  height: 100%;
-  width: 25%;
-}
-
-
-.main-content {
-  width: 75%;
-  justify-content: center;
-  align-items: center;
+  .text-center {
+      max-width: 800px;
+      margin: 0 auto;
+  }
 }

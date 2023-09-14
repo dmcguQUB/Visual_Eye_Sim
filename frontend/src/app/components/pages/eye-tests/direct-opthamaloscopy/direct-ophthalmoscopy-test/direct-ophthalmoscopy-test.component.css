@@ -1,23 +1,47 @@
 /* Parent Container allows for a row layout */
+
+.full-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Taking up full viewport height */
+  background-color: #f5f5f5; /* light background color for contrast */
+}
 .parent-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-
+  width: 95%; /* Keeping some margin on the sides for breathing room */
+  max-width: 1200px; /* Max width to avoid too wide layouts on large screens */
 }
 
-/* Navbar Styles */
+
 .app-navbar {
-  width: 25%; /* Adjust width according to your needs */
+  width: 25%;
+  background: linear-gradient(to right, #9c88ff, #8e44ad);
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px; /* Consistent rounding */
+ 
 }
 
-/* Right Container allows for a column layout */
 .right-container {
   display: flex;
   flex-direction: column;
-  width: 75%; /* Adjust width according to your needs */
-  background-color: rgb(238, 234, 234);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  width: 70%;
+  margin-right: 5%; /* As from template */
+}
+
+.card-container {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin: 10px;
+  padding: 20px;
+  color: #9c88ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Title Container */
@@ -31,10 +55,72 @@
   margin: 0; /* Reset the margin */
 }
 
+.button {
+  background-color: #9c88ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 10px 5px;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(156, 136, 255, 0.7);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px; /* some margin to separate the button groups */
+}
+
+@media screen and (max-width: 600px) {
+  .parent-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .app-navbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px; /* Space between navbar and main content on mobile */
+  }
+
+  .right-container {
+    width: 100%;
+  }
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .button-group .button {
+    margin-bottom: 10px; /* Provide space between buttons when stacked vertically */
+  }
+}
 /* Direct Ophthalmoscopy Test Styles */
 .ophthalmoscopy-container {
   position: relative;
   flex-grow: 1; /* Allows the ophthalmoscopy container to take up the rest of the space in the right container */
+  overflow: hidden; /* Added to ensure child elements/effects don't extend*/
 }
 
 /* Direct Ophthalmoscopy layers */
@@ -69,32 +155,4 @@
   text-align: center;
 }
 
-.card-container {
-  background-color: rgb(238, 234, 234);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  margin: 20px;
-  padding: 20px;
-  color: #9c88ff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 70%;
-}
 
-.button {
-  background-color: #4CAF50; /* Green */
-  color: white;
-  text-align: center;
-  transition-duration: 0.4s;
-  cursor: pointer;
-  margin-top: 5px;
-}
-
-.button:hover {
-  background-color: #45a049;
-}
-.text-center {
-  text-align: center;
-}

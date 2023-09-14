@@ -11,13 +11,15 @@
 .right-container {
   display: flex;
   flex-direction: column;
-  width: 75%;
+  width: 70%;  /* Reduced from 75% */
+  margin-right: 5%; /* 5% margin to the right side */
 }
 
+
 .card-container {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  margin: 20px;
+  margin: 10px;
   padding: 20px;
   color: #9c88ff;
   display: flex;
@@ -32,6 +34,7 @@
   height: 50%;
   border-radius: 10px;
   height: auto;
+  
 }
 
 .title {
@@ -41,6 +44,11 @@
 .name {
   font-size: 1.5em;
 }
+
+button, .card-container {
+  transition: all 0.3s ease;
+}
+
 
 .text-center {
   text-align: center;
@@ -55,5 +63,31 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+  
+      background: linear-gradient(to right, #9c88ff, #8e44ad);
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
   }
+
+  button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  button:active {
+    transform: scale(0.98);
+  }
+  
+  button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(156, 136, 255, 0.7);
+  }
+
+  .text-center {
+    max-width: 800px;
+    margin: 0 auto; /* centering it if it's less than 100% width */
+  }
+  
+  
 }

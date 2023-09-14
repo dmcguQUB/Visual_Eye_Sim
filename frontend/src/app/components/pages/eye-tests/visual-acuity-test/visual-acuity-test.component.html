@@ -1,190 +1,134 @@
-<div class="container-fluid">
-  <div class="layout-wrapper">
-    <!-- Layout Wrapper -->
+<div class="full-container">
 
-    <!-- Navbar -->
-    <div class="d-flex justify-content-left text-center">
-    <app-navbar></app-navbar>
-  </div>
+  <!-- Navbar Component -->
+  <app-navbar></app-navbar>
 
-    <!-- Main Content -->
-    <div class="main-content">
-      <!-- Instructions: Full Width -->
-      <div class="card-container row mb-4 text-center">
-        <h1 class="title">Visual Acuity Test</h1>
-        <div class="col-12">
-          <h2>Instructions:</h2>
-          <p>
-            Please start the conversation with the patient to understand more
-            about their visual acuity reading the Snellen chart.
-          </p>
-        </div>
-      </div>
-
-      <!-- Main Content: Two Columns -->
-      <div class="row">
-        <!-- Left Column: Visual Acuity Test -->
-        <div class="col-lg-6 col-md-12 col-sm-12">
-          <div class="container visual-acuity-container mr-2 text-center">
-            <!-- Canvas Container -->
-            <div id="canvasContainer">
-              <img
-                id="snellenChart"
-                #snellenChart
-                src="/assets/Snellen_chart (metric).png"
-              />
-            </div>
-
-            <!-- Buttons: Zoom In and Out -->
-            <div class="d-flex justify-content-center mt-2">
-              <button class="btn btn-tert mr-3" (click)="zoom(1.1)">
-                Zoom In
-              </button>
-              <button class="btn btn-tert" (click)="zoom(0.9)">Zoom Out</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column: Conversations and Questions -->
-        <div
-          class="col-lg-6 col-md-12 col-sm-12 text-center justify-content-center right-container"
-        >
-          <!-- Conversation 1 -->
-          <div
-            *ngIf="currentConvo === 1"
-            class="container justify-content-center"
-            id="convo-1"
-          >
-            <h2>Conversation with patient</h2>
-
-            <!-- Message Container -->
-            <div class="message-container d-flex justify-content-center">
-              <button
-                *ngIf="showStartButton"
-                class="btn btn-primary mt-2"
-                (click)="onDisplayMessages(0)"
-              >
-                Start Convo
-              </button>
-              <app-patient-convo
-                [messages]="displayedMessages"
-              ></app-patient-convo>
-            </div>
-
-            <!-- Questions and Answers Section -->
-            <div class="qa-section" *ngIf="showNavButtons">
-              <h2>Questions and Answers</h2>
-              <div *ngFor="let qa of qas1; let i = index">
-                <h3>{{ qa.question }}</h3>
-                <select [(ngModel)]="answers[i]" class="form-control">
-                  <option *ngFor="let answer of qa.answers">
-                    {{ answer }}
-                  </option>
-                </select>
-              </div>
-              <!-- Navigation Buttons -->
-              <a class="btn btn-primary mt-2">Submit</a>
-              <a
-                class="btn btn-secondary mt-2"
-                (click)="nextConvo(); clearConvo()"
-                >Next</a
-              >
-            </div>
-          </div>
-
-          <!-- Conversation 2 -->
-          <div
-            *ngIf="currentConvo === 2"
-            class="container justify-content-center"
-            id="convo-2"
-          >
-            <h2>Conversation with patient</h2>
-
-            <!-- Message Container -->
-            <div class="message-container d-flex justify-content-center">
-              <button
-                *ngIf="showStartButton"
-                class="btn btn-primary mt-2"
-                (click)="onDisplayMessages(1)"
-              >
-                Start Convo
-              </button>
-              <app-patient-convo
-                [messages]="displayedMessages"
-              ></app-patient-convo>
-            </div>
-
-            <!-- Questions and Answers Section -->
-            <div class="qa-section" *ngIf="showNavButtons">
-              <h2>Questions and Answers</h2>
-              <div *ngFor="let qa of qas2; let i = index">
-                <h3>{{ qa.question }}</h3>
-                <select [(ngModel)]="answers[i]" class="form-control">
-                  <option *ngFor="let answer of qa.answers">
-                    {{ answer }}
-                  </option>
-                </select>
-              </div>
-              <a class="btn btn-primary mt-2">Submit</a>
-              <!-- Navigation Buttons -->
-              <a
-                class="btn btn-secondary mt-2"
-                (click)="prevConvo(); clearConvo()"
-                >Previous</a
-              >
-              <a
-                class="btn btn-secondary mt-2"
-                (click)="nextConvo(); clearConvo()"
-                >Next</a
-              >
-            </div>
-          </div>
-
-          <!-- Conversation 3 -->
-          <div *ngIf="currentConvo === 3" class="container" id="convo-3">
-            <h2>Conversation with patient</h2>
-
-            <!-- Message Container -->
-            <div class="message-container d-flex justify-content-center">
-              <button
-                *ngIf="showStartButton"
-                class="btn btn-primary mt-2"
-                (click)="onDisplayMessages(2)"
-              >
-                Start Convo
-              </button>
-              <app-patient-convo
-                [messages]="displayedMessages"
-              ></app-patient-convo>
-            </div>
-
-            <!-- Questions and Answers Section -->
-            <div class="qa-section" *ngIf="showNavButtons">
-              <h2>Questions and Answers</h2>
-              <div *ngFor="let qa of qas3; let i = index">
-                <h3>{{ qa.question }}</h3>
-                <select [(ngModel)]="answers[i]" class="form-control">
-                  <option *ngFor="let answer of qa.answers">
-                    {{ answer }}
-                  </option>
-                </select>
-              </div>
-              <a class="btn btn-primary mt-2">Submit</a>
-              <!-- Navigation Button -->
-              <a
-                class="btn btn-secondary mt-2"
-                (click)="prevConvo(); clearConvo()"
-                >Previous</a
-              >
-            </div>
-          </div>
-        </div>
-        <!-- End of Right Column -->
-      </div>
-      <!-- End of Main Content Row -->
+  <!-- Right Container -->
+  <div class="right-container">
+    
+    <!-- Instructions for Visual Acuity Test -->
+    <div class="card-container text-center">
+      <h2>Instructions:</h2>
+      <p>
+        Please start the conversation with the patient to understand more
+        about their visual acuity reading the Snellen chart.
+      </p>
     </div>
-    <!-- End of Main Content -->
-  </div>
-  <!-- End of Layout Wrapper -->
-</div>
-<!-- End of Container Fluid -->
+
+    <!-- Main Content Area -->
+    <div class="row">
+      
+      <!-- Left Column: Visual Acuity Test -->
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="card-container visual-acuity-container text-center">
+          <!-- Snellen Chart Image -->
+          <img id="snellenChart" #snellenChart src="/assets/Snellen_chart (metric).png" />
+
+          <!-- Zoom In and Out Buttons -->
+          <div class="d-flex justify-content-center mt-2">
+            <button class="btn btn-tert mr-3" (click)="zoom(1.1)">Zoom In</button>
+            <button class="btn btn-tert" (click)="zoom(0.9)">Zoom Out</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Conversations and Questions -->
+      <div class="col-lg-6 col-md-12 col-sm-12 text-center">
+        <!-- Conversation 1 -->
+        <div *ngIf="currentConvo === 1" class="card-container" id="convo-1">
+          <!-- Patient Conversation Header -->
+          <h5 class="title name">Conversation with patient</h5>
+
+          <!-- Message Container -->
+          <div class="message-container d-flex justify-content-center">
+            <button *ngIf="showStartButton" class="btn btn-primary mt-2" (click)="onDisplayMessages(0)">
+              Start Convo
+            </button>
+            <app-patient-convo [messages]="displayedMessages"></app-patient-convo>
+          </div>
+
+          <!-- Questions and Answers Section -->
+          <div class="qa-section" *ngIf="showNavButtons">
+            <h5 class="title">Questions and Answers</h5>
+            <div *ngFor="let qa of qas1; let i = index">
+              <p><strong>{{ qa.question }}</strong></p>
+              <select [(ngModel)]="answers[i]" class="form-control">
+                <option *ngFor="let answer of qa.answers">{{ answer }}</option>
+              </select>
+            </div>
+            <!-- Navigation Buttons -->
+            <div class="card-container text-center">
+              <button class="btn btn-success mt-2">Submit</button>
+              <a class="btn btn-secondary mt-2" (click)="nextConvo(); clearConvo()">Next</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conversation 2 -->
+        <div *ngIf="currentConvo === 2" class="card-container" id="convo-2">
+          <!-- Patient Conversation Header -->
+          <h5 class="title name">Conversation with patient</h5>
+
+          <!-- Message Container -->
+          <div class="message-container d-flex justify-content-center">
+            <button *ngIf="showStartButton" class="btn btn-primary mt-2" (click)="onDisplayMessages(1)">
+              Start Convo
+            </button>
+            <app-patient-convo [messages]="displayedMessages"></app-patient-convo>
+          </div>
+
+          <!-- Questions and Answers Section -->
+          <div class="qa-section" *ngIf="showNavButtons">
+            <h5 class="title">Questions and Answers</h5>
+            <div *ngFor="let qa of qas2; let i = index">
+              <p><strong>{{ qa.question }}</strong></p>
+              <select [(ngModel)]="answers[i]" class="form-control">
+                <option *ngFor="let answer of qa.answers">{{ answer }}</option>
+              </select>
+            </div>
+            <!-- Navigation Buttons -->
+            <div class="card-container text-center">
+              <button class="btn btn-primary mt-2">Submit</button>
+              <a class="btn btn-secondary mt-2" (click)="prevConvo(); clearConvo()">Previous</a>
+              <a class="btn btn-secondary mt-2" (click)="nextConvo(); clearConvo()">Next</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conversation 3 -->
+        <div *ngIf="currentConvo === 3" class="card-container" id="convo-3">
+          <!-- Patient Conversation Header -->
+          <h5 class="title name">Conversation with patient</h5>
+
+          <!-- Message Container -->
+          <div class="message-container d-flex justify-content-center">
+            <button *ngIf="showStartButton" class="btn btn-primary mt-2" (click)="onDisplayMessages(2)">
+              Start Convo
+            </button>
+            <app-patient-convo [messages]="displayedMessages"></app-patient-convo>
+          </div>
+
+          <!-- Questions and Answers Section -->
+          <div class="qa-section" *ngIf="showNavButtons">
+            <h5 class="title">Questions and Answers</h5>
+            <div *ngFor="let qa of qas3; let i = index">
+              <p><strong>{{ qa.question }}</strong></p>
+              <select [(ngModel)]="answers[i]" class="form-control">
+                <option *ngFor="let answer of qa.answers">{{ answer }}</option>
+              </select>
+            </div>
+            <!-- Navigation Button -->
+            <div class="card-container text-center">
+              <button class="btn btn-primary mt-2">Submit</button>
+              <a class="btn btn-secondary mt-2" (click)="prevConvo(); clearConvo()">Previous</a>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- End of Right Column -->
+
+    </div> <!-- End of Main Content Area -->
+
+  </div> <!-- End of Right Container -->
+
+</div> <!-- End of Full Container -->
