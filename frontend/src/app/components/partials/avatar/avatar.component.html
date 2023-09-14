@@ -4,20 +4,21 @@
 
   <ng-template #placeholder>
     <div class="image-container avatar-placeholder">
-      <img [src]="currentUserAvatar" onerror="this.onerror=null; this.src='assets/Avatar/default.png';">
+      <img [src]="'assets/Avatar/default.png'"> <!-- set default directly -->
     </div>
   </ng-template>
 
   <div class="icon-wrapper" (click)="showAvatars = !showAvatars">
-    <mat-icon class="icon" fontIcon="edit"></mat-icon>
+    <i *ngIf="!showAvatars" class="icon fa-solid fa-edit"></i> <!-- Edit icon -->
+    <i *ngIf="showAvatars" class="icon fa-solid fa-xmark fa-xl" style="color: red;"></i> <!-- Close icon -->
   </div>
 
   <div *ngIf="showAvatars">
     <img [src]="avatars[currentAvatarIndex]">
     <div class="avatar-button-container">
-      <button class="btn btn-primary" (click)="previousAvatar()">Previous</button>
-      <button class="btn btn-primary" (click)="nextAvatar()">Next</button>
-      <button class="btn btn-primary" (click)="confirmAvatar()">Confirm</button>
+      <button class="btn btn-primary mx-1" (click)="previousAvatar()">Previous</button>
+      <button class="btn btn-primary mx-1" (click)="nextAvatar()">Next</button>
+      <button class="btn btn-success mx-1" (click)="confirmAvatar()">Confirm</button> <!-- Green confirm button -->
     </div>
   </div>
 </div>

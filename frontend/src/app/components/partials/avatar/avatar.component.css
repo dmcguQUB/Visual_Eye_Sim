@@ -44,3 +44,12 @@
   background-color: #9c88ff;
   border-color: #9c88ff;
 }
+
+
+/* For placeholder default image */
+.avatar-placeholder img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
