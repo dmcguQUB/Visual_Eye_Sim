@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { VisualFieldsComponent } from '../visual-fields/visual-fields.component';
+import { VisualFieldsComponent } from '../visual-fields-abstract/visual-fields.component';
 
 @Component({
   selector: 'app-visual-fields-test-right',

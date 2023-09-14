@@ -21,7 +21,7 @@ import { ChangeBgDirective } from './shared/directives/change-bg.directive';
 import { HomeComponent } from './components/pages/home/home.component';
 import { CaseStudyDetailComponent } from './components/pages/case-study-detail/case-study-detail.component';
 import { PupilReflexesTestComponent } from './components/pages/eye-tests/pupil-reflexes-test/pupil-reflexes-test.component';
-import { VisualFieldsTestLeftComponent } from './components/pages/eye-tests/visual-fields-test-left/visual-fields-test-left.component';
+import { VisualFieldsTestLeftComponent } from './components/pages/eye-tests/visual-fields-all/visual-fields-test-left/visual-fields-test-left.component';
 import { VisualAcuityTestComponent } from './components/pages/eye-tests/visual-acuity-test/visual-acuity-test.component';
 import { EyeMovementsTestComponent } from './components/pages/eye-tests/eye-movements-test/eye-movements-test.component';
 import { DirectOphthalmoscopyTestComponent } from './components/pages/eye-tests/direct-opthamaloscopy/direct-ophthalmoscopy-test/direct-ophthalmoscopy-test.component';
@@ -41,7 +41,7 @@ import { InputValidationComponent } from './components/partials/text/input-valid
 import { TextInputComponent } from './components/partials/text/text-input/text-input.component'; 
 import { RegisterPageComponent } from './components/pages/register-page/register-page.component';
 import { FooterComponent } from './components/partials/footer/footer.component';
-import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-test-right/visual-fields-test-right.component';
+import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/visual-fields-all/visual-fields-test-right/visual-fields-test-right.component';
 import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/admin/admin-registrations-over-time/admin-registrations-over-time.component'; 
 import { AdminNavbarComponent } from './components/partials/navbars/admin-navbar/admin-navbar.component';
 import { PatientConvoComponent } from './components/partials/text/patient-convo/patient-convo.component';

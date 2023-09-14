@@ -1,20 +1,22 @@
 <div class="full-container">
-  <div class="parent-container">
-    <!--navbar partial-->
-    <div class="d-flex justify-content-left text-center">
+      <!--navbar partial-->
       <app-navbar></app-navbar>
-    </div>
+  <div class="parent-container">
     <!--Visual fields test-->
-    <div class="card-container eye-movements-container">
-      <h1 class="card-container title">Visual Fields Test</h1>
+    <div class="right-container">
+        <!--Title-->
+        <div class="card-container title-container">
+          <h1 class="title">Visual Fields Test</h1>
+        </div>
       <!--Instructions-->
-      <div class="card-container case-study-instructions">
+      <div class="card-container case-study-instructions text-center">
         <h2>Instructions:</h2>
         <p>
           Click the corner buttons to detect visual field defects. Switch eyes
           using the button below.
         </p>
       </div>
+
       <!--Canvas container-->
       <div class="card-container" id="canvasContainer">
         <canvas #myCanvas width="600" height="700"></canvas>
@@ -68,10 +70,11 @@
             />
           </svg>
           <h2>{{ buttonMessage }}</h2>
-          <!--Display button message-->
         </div>
       </div>
-      <div class="card-container d-flex align-items-center">
+            <!--Switch to other eye-->
+
+      <div class="card-container">
         <default-button
           [type]="'button'"
           [text]="'Switch to ' + otherEye + ' Eye'"
