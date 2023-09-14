@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { USER_LOGIN_URL,USER_REGISTER_URL, USER_REGISTRATION_OVER_TIME, USER_URL  } from '../shared/constants/url';
 import { IUserLogin } from '../shared/interfaces/ILoginAndRegistration/IUserLogin';
 import { IUserRegister } from '../shared/interfaces/ILoginAndRegistration/IUserRegister'; 
@@ -167,6 +167,10 @@ export class UserService {
         error: (errorResponse) => {
           this.toastrService.error(errorResponse.error, 'Address Update Failed');
         }
+      }),
+      catchError(error => {
+        console.error('There was an error during the request:', error);
+        return throwError(error);
       })
     );
   }
@@ -190,6 +194,13 @@ updateName(name: string): Observable<User> {
       error: (errorResponse) => {
         this.toastrService.error(errorResponse.error, 'Name Update Failed');
       }
+
+      
+    }),
+
+    catchError(error => {
+      console.error('There was an error during the request:', error);
+      return throwError(error);
     })
   );
 }

@@ -1,23 +1,24 @@
 <div class="container">
-  <div class="row">
+  <div class="row mt-4">
     <div class="col-md-4 mb-4">
       <div class="card custom-card-height">
-        <div class="card-body text-center"> <!-- Added text-center class here -->
-        <h3 class="card-title text-center">Profile Picture</h3>
-        <app-avatar></app-avatar>
+        <div class="card-body text-center">
+          <h3 class="card-title text-center">Profile Picture</h3>
+          <app-avatar></app-avatar>
+        </div>
       </div>
     </div>
-  </div>
 
-
-    <div class="col-md-4 mb-4">
+    <div class="col-md-4 mb-4" [formGroup]="profileForm"> <!-- Added formGroup here -->
       <div class="card custom-card-height">
-        <div class="card-body text-center"> <!-- Added text-center class here -->
+        <div class="card-body text-center">
           <h3 class="card-title">Name</h3>
-          <!-- Name Section content -->
           <p *ngIf="!isNameEditMode" class="card-text">{{currentUser.name}}</p>
-          <input *ngIf="isNameEditMode" [(ngModel)]="tempName" class="form-control">
-          <!-- Toggles based on edit mode -->
+          <input *ngIf="isNameEditMode" formControlName="name" class="form-control">
+          <div *ngIf="isNameEditMode && profileForm.get('name')?.errors">
+            <small class="text-danger" *ngIf="profileForm.get('name')?.hasError('required')">Name is required.</small>
+            <small class="text-danger" *ngIf="profileForm.get('name')?.hasError('minlength')">Name must be at least 3 characters.</small>
+          </div>
           <default-button
             *ngIf="!isNameEditMode"
             [type]="'button'"
@@ -26,7 +27,7 @@
             (click)="toggleNameEditMode()"
             class="mx-auto"
           ></default-button>
-          <div *ngIf="isNameEditMode" class="d-flex justify-content-center"> <!-- Center-align the buttons -->
+          <div *ngIf="isNameEditMode" class="d-flex justify-content-center">
             <button class="btn btn-success" (click)="saveName()">Save</button>
             <button class="btn btn-danger" (click)="cancelNameEdit()">Cancel</button>
           </div>
@@ -36,7 +37,7 @@
 
     <div class="col-md-4 mb-4">
       <div class="card custom-card-height">
-        <div class="card-body text-center"> <!-- Added text-center class here -->
+        <div class="card-body text-center">
           <h3 class="card-title">Email</h3>
           <p class="card-text">{{currentUser.email}}</p>
         </div>
@@ -45,23 +46,25 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4 mb-4">
+    <div class="col-md-4 mb-4" [formGroup]="profileForm"> <!-- Added formGroup here -->
       <div class="card custom-card-height">
-        <div class="card-body text-center"> <!-- Added text-center class here -->
+        <div class="card-body text-center">
           <h3 class="card-title">Address</h3>
-          <!-- Address Section content -->
           <p *ngIf="!isAddressEditMode" class="card-text">{{currentUser.address}}</p>
-          <input *ngIf="isAddressEditMode" [(ngModel)]="tempAddress" class="form-control">
-          <!-- Toggles based on edit mode -->
+          <input *ngIf="isAddressEditMode" formControlName="address" class="form-control">
+          <div *ngIf="isAddressEditMode && profileForm.get('address')?.errors">
+            <small class="text-danger" *ngIf="profileForm.get('address')?.hasError('required')">Address is required.</small>
+            <small class="text-danger" *ngIf="profileForm.get('address')?.hasError('minlength')">Address must be at least 5 characters.</small>
+          </div>
           <default-button
             *ngIf="!isAddressEditMode"
             [type]="'button'"
             [text]="'Edit'"
             [bgColor]="'#9c88ff'"
             (click)="toggleAddressEditMode()"
-            class="mx-auto" 
+            class="mx-auto"
           ></default-button>
-          <div *ngIf="isAddressEditMode" class="d-flex justify-content-center"> <!-- Center-align the buttons -->
+          <div *ngIf="isAddressEditMode" class="d-flex justify-content-center">
             <button class="btn btn-success mt-5 mr-3" (click)="saveAddress()">Save</button>
             <button class="btn btn-danger mt-5" (click)="cancelAddressEdit()">Cancel</button>
           </div>
@@ -71,7 +74,7 @@
 
     <div class="col-md-4 mb-4">
       <div class="card custom-card-height">
-        <div class="card-body text-center"> <!-- Added text-center class here -->
+        <div class="card-body text-center">
           <h3 class="card-title">Admin Status</h3>
           <p class="card-text">
             <i class="fas" [ngClass]="{'fa-check': currentUser.isAdmin, 'fa-times': !currentUser.isAdmin}"></i>

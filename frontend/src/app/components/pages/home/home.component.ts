@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   case_studies: CaseStudies[] = [];
   isLoggedIn: boolean = false;
   private userSubscription!: Subscription;
+  homepageImageUrl: string = 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Queen%E2%80%99s_Red_Log.svg/1280px-Queen%E2%80%99s_Red_Log.svg.png';
 
 
   constructor(private useCaseService: UseCaseService, private userService: UserService) {

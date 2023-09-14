@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/shared/models/User';
 import { takeUntil } from 'rxjs/operators';  // Import takeUntil
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // adding validators to code
 
 
 @Component({
@@ -16,22 +17,27 @@ export class UserProfilePageComponent  implements OnInit {
   // Variables to manage the edit mode of Name and Address
   isNameEditMode: boolean = false;
   isAddressEditMode: boolean = false;
-
   // Temporary holders for values during edit mode
   tempName: string = '';
   tempAddress: string = '';
-
   //create to destroy all subscriptions
   private destroy$: Subject<boolean> = new Subject<boolean>();  // Subject to manage component's observables
+// create forms for validators
+profileForm: FormGroup = new FormGroup({});
 
-
-  constructor(private userService: UserService) { }
+//create constructor
+constructor(private userService: UserService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.currentUser = this.userService.currentUser;
-    this.tempName = this.currentUser.name;
-    this.tempAddress = this.currentUser.address;
-  }
+
+    // Initialize the form
+    this.profileForm = this.formBuilder.group({
+      name: [this.currentUser.name, [Validators.required, Validators.minLength(3)]],
+      address: [this.currentUser.address, [Validators.required, Validators.minLength(5)]]
+    });
+}
+
 
   // Name section methods
   toggleNameEditMode(): void {
@@ -40,13 +46,16 @@ export class UserProfilePageComponent  implements OnInit {
   }
 
   saveName(): void {
-    this.userService.updateName(this.tempName)
-      .pipe(takeUntil(this.destroy$))  // Unsubscribe when component is destroyed
+    if (this.profileForm.get('name')?.invalid) return;
+
+    this.userService.updateName(this.profileForm.get('name')?.value)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((updatedUser) => {
         this.currentUser.name = updatedUser.name;
         this.isNameEditMode = false;
       });
-  }
+}
+
 
   cancelNameEdit(): void {
     this.isNameEditMode = false;
@@ -59,13 +68,15 @@ export class UserProfilePageComponent  implements OnInit {
   }
 
   saveAddress(): void {
-    this.userService.updateAddress(this.tempAddress)
-      .pipe(takeUntil(this.destroy$))  // Unsubscribe when component is destroyed
+    if (this.profileForm.get('address')?.invalid) return;
+
+    this.userService.updateAddress(this.profileForm.get('address')?.value)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((updatedUser) => {
         this.currentUser.address = updatedUser.address;
         this.isAddressEditMode = false;
       });
-  }
+}
 
 
   cancelAddressEdit(): void {
