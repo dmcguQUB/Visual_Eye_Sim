@@ -1,6 +1,3 @@
-// shared service to store the state of whether the eye examination test is finished. This service will act as a bridge between the QuestionComponent and the NavbarComponent
-
-// exam-state.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -8,24 +5,38 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ExamStateService {
-  private _isEyeTestFinished = new BehaviorSubject<boolean>(false);
-  private _isInvestigationsTestFinished = new BehaviorSubject<boolean>(false);
+  // Using objects to maintain state for each case study by ID
+  private _eyeTestStates: { [key: string]: BehaviorSubject<boolean> } = {};
+  private _investigationTestStates: { [key: string]: BehaviorSubject<boolean> } = {};
   
-  // ... you can add more stages as needed
+  // ... more stages as needed
+
+  // Helper function to get or initialize BehaviorSubject for a specific useCaseId
+  private getOrCreateSubject(map: { [key: string]: BehaviorSubject<boolean> }, useCaseId: string): BehaviorSubject<boolean> {
+    if (!map[useCaseId]) {
+      map[useCaseId] = new BehaviorSubject<boolean>(false);
+    }
+    return map[useCaseId];
+  }
 
   // For Eye Test
-  set isEyeTestFinished(value: boolean) {
-    this._isEyeTestFinished.next(value);
+  setEyeTestFinished(useCaseId: string, value: boolean): void {
+    const subject = this.getOrCreateSubject(this._eyeTestStates, useCaseId);
+    subject.next(value);
   }
-  get isEyeTestFinished$() {
-    return this._isEyeTestFinished.asObservable();
+
+  isEyeTestFinished$(useCaseId: string) {
+    return this.getOrCreateSubject(this._eyeTestStates, useCaseId).asObservable();
   }
 
   // For Investigations Test
-  set isInvestigationsTestFinished(value: boolean) {
-    this._isInvestigationsTestFinished.next(value);
+  setInvestigationsTestFinished(useCaseId: string, value: boolean): void {
+    const subject = this.getOrCreateSubject(this._investigationTestStates, useCaseId);
+    subject.next(value);
   }
-  get isInvestigationsTestFinished$() {
-    return this._isInvestigationsTestFinished.asObservable();
+
+  isInvestigationsTestFinished$(useCaseId: string) {
+    return this.getOrCreateSubject(this._investigationTestStates, useCaseId).asObservable();
   }
+
 }

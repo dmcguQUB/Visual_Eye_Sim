@@ -6,6 +6,7 @@ import { ButtonStateService } from 'src/app/services/buttonState.service';
 import { Observable, EMPTY, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
+import { PatientConvoStateService } from 'src/app/services/patient-convo-state.service';
 
 @Component({
   selector: 'app-case-study-detail',
@@ -25,7 +26,9 @@ export class CaseStudyDetailComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private useCaseService: UseCaseService,
     private buttonStateService: ButtonStateService,
-    @Inject(DOCUMENT) private _document: Document
+    @Inject(DOCUMENT) private _document: Document,
+    private patientConvoStateService: PatientConvoStateService
+
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +78,7 @@ export class CaseStudyDetailComponent implements OnInit, OnDestroy {
   
   handleClick(): void {
     this.buttonStateService.changeButtonState(true);
+    this.patientConvoStateService.isPatientConvoFinished = true; // set the state
     this.showButton = false;
   }
 }

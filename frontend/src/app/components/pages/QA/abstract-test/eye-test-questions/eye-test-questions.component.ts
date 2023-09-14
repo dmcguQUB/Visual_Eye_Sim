@@ -171,7 +171,7 @@ export class EyeTestQuestionsComponent
     this.incorrectAnswer = this.totalQuestions - this.correctAnswer;
 
     // Once the results are loaded successfully, set the state to true
-    this.examStateService.isEyeTestFinished = true;
+    this.examStateService.setEyeTestFinished(this.useCaseId, true);
   }
 
   getTotalScore(): number {

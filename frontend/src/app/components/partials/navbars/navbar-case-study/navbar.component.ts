@@ -1,9 +1,10 @@
-import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core'; // Import OnDestroy
+import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs'; // Import Subscription
+import { Subscription } from 'rxjs';
 import { ButtonStateService } from 'src/app/services/buttonState.service';
 import { ExamStateService } from 'src/app/services/examStateService.service';
+import { PatientConvoStateService } from 'src/app/services/patient-convo-state.service';
 import { UseCaseService } from 'src/app/services/usecases.service';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
 
@@ -12,61 +13,67 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, OnDestroy { // Implement OnDestroy
-  //vars for propagating the user conversation
+export class NavbarComponent implements OnInit, OnDestroy {
   isPatientConvoFinished: boolean = false;
   isEyeTestFinished: boolean = false;
   isInvestigationsTestFinished: boolean = false;
 
-  caseStudy: CaseStudies = new CaseStudies(); // Set to a default value
+  caseStudy: CaseStudies = new CaseStudies();
 
-  private subscriptions: Subscription[] = []; // Array to store multiple subscriptions
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private useCaseService: UseCaseService,
     private buttonStateService: ButtonStateService,
-    private examStateService: ExamStateService
+    private examStateService: ExamStateService,
+    private patientConvoStateService: PatientConvoStateService
+
   ) { }
 
   ngOnInit(): void {
-    // Store the subscription
     this.subscriptions.push(
-      //find the case study
       this.activatedRoute.params.subscribe(params => {
-        console.log(params);
         if (params['useCaseId']) {
+          const useCaseId = params['useCaseId'];
+
           this.subscriptions.push(
-            this.useCaseService.getUseCaseById(params['useCaseId']).subscribe(serverCaseStudy => {
+            this.useCaseService.getUseCaseById(useCaseId).subscribe(serverCaseStudy => {
               this.caseStudy = serverCaseStudy;
             }, error => {
               console.log('An error occurred:', error);
             })
           );
-          //see if eye test is finished
+
+          // Modified the following two subscriptions to use the useCaseId
           this.subscriptions.push(
-            this.examStateService.isEyeTestFinished$.subscribe(isFinished => {
+            this.examStateService.isEyeTestFinished$(useCaseId).subscribe(isFinished => {
               this.isEyeTestFinished = isFinished;
             })
           );
-          //see if investigations finished
+
           this.subscriptions.push(
-            this.examStateService.isInvestigationsTestFinished$.subscribe(isFinished => {
+            this.examStateService.isInvestigationsTestFinished$(useCaseId).subscribe(isFinished => {
               this.isInvestigationsTestFinished = isFinished;
             })
           );
         }
       })
     );
-    //change the button state for the background info once the user is finished speaking with patient
+
     this.subscriptions.push(
       this.buttonStateService.currentButtonState.subscribe(state => this.isPatientConvoFinished = state)
     );
+
+    this.subscriptions.push(
+      this.patientConvoStateService.isPatientConvoFinished$.subscribe(isFinished => {
+        this.isPatientConvoFinished = isFinished;
+      }))
   }
 
   @ViewChild(MatMenuTrigger) menu!: MatMenuTrigger;
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe()); // Unsubscribe from all subscriptions
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

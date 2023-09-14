@@ -7,10 +7,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
-//import interfaces
+// Import interfaces
 import { Eye, EyeBallOrPupil } from 'src/app/shared/interfaces/IDrawings.ts/IEye';
-
-
 
 @Component({
   selector: 'app-eye-movements-test',
@@ -38,14 +36,20 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit, OnDestr
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
+    // Load a background image
     this.backgroundImg.src = 'assets/woman close up.png';
-    this.mouseMoveEvent$.pipe(
-      debounceTime(10), // adjust this time as needed
-      takeUntil(this.destroy$)
-    ).subscribe(e => this.processMouseMove(e));
+    
+    // Subscribe to mouse move events with debounce and unsubscribe onDestroy
+    this.mouseMoveEvent$
+      .pipe(
+        debounceTime(10), // Debounce time to reduce event handling frequency
+        takeUntil(this.destroy$) // Unsubscribe when the component is destroyed
+      )
+      .subscribe(e => this.processMouseMove(e));
   }
 
   ngAfterViewInit(): void {
+    // Initialize the canvas context after the view is initialized
     this.ctx = this.canvas.nativeElement.getContext('2d');
     this.backgroundImg.onload = () => {
       this.draw();
@@ -53,11 +57,13 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    // Cleanup on component destruction
+    this.destroy$.next(); // Notify observers to unsubscribe
+    this.destroy$.complete(); // Complete the subject
   }
 
   draw(): void {
+    // Draw the background image and eyes on the canvas
     if (this.ctx) {
       this.ctx.clearRect(
         0,
@@ -101,7 +107,7 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit, OnDestr
     // Draw the outer circle (iris)
     this.ctx.beginPath();
     this.ctx.arc(pupil.x, pupil.y, pupil.radius, 0, Math.PI * 2);
-    this.ctx.fillStyle = 'green'; // green colour
+    this.ctx.fillStyle = 'green'; // Set the color to green
     this.ctx.fill();
     this.ctx.stroke();
     this.ctx.closePath();
@@ -109,17 +115,18 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit, OnDestr
     // Draw the inner circle (pupil)
     this.ctx.beginPath();
     this.ctx.arc(pupil.x, pupil.y, pupil.radius / 2, 0, Math.PI * 2); // Use pupil.radius / 2 to make the pupil half the size of the iris
-    this.ctx.fillStyle = 'black'; // black colour
+    this.ctx.fillStyle = 'black'; // Set the color to black
     this.ctx.fill();
     this.ctx.stroke();
     this.ctx.closePath();
   }
 
-
   mouseMoveHandler(e: MouseEvent): void {
-    this.mouseMoveEvent$.next(e);
+    this.mouseMoveEvent$.next(e); // Forward mouse move events to the observable
   }
+
   private processMouseMove(e: MouseEvent): void {
+    // Calculate the movement of the pupils based on mouse position
     const mouseX = e.clientX - this.canvas.nativeElement.offsetLeft;
     const mouseY = e.clientY - this.canvas.nativeElement.offsetTop;
 
@@ -138,26 +145,23 @@ export class EyeMovementsTestComponent implements OnInit, AfterViewInit, OnDestr
     const normalizedY = dy / distance;
 
     for (let eye of this.eyes) {
-        // Calculate the max distance the pupil can move inside the eyeball
-        const maxPupilDistance = eye.eyeball.radius - eye.pupil.radius;
+      // Calculate the max distance the pupil can move inside the eyeball
+      const maxPupilDistance = eye.eyeball.radius - eye.pupil.radius;
 
-        // If the distance is less than the eyeball's radius, let's move the pupil proportionally
-        let movementDistance = distance < eye.eyeball.radius ? distance : maxPupilDistance;
+      // If the distance is less than the eyeball's radius, let's move the pupil proportionally
+      let movementDistance = distance < eye.eyeball.radius ? distance : maxPupilDistance;
 
-        // Apply Lerp for smoother movement
-        const lerpFactor = 0.9; // Adjust this value for faster/slower interpolation
-        eye.pupil.x = this.lerp(eye.pupil.x, eye.eyeball.x + normalizedX * movementDistance, lerpFactor);
-        eye.pupil.y = this.lerp(eye.pupil.y, eye.eyeball.y + normalizedY * movementDistance, lerpFactor);
+      // Apply Lerp for smoother movement
+      const lerpFactor = 0.9; // Adjust this value for faster/slower interpolation
+      eye.pupil.x = this.lerp(eye.pupil.x, eye.eyeball.x + normalizedX * movementDistance, lerpFactor);
+      eye.pupil.y = this.lerp(eye.pupil.y, eye.eyeball.y + normalizedY * movementDistance, lerpFactor);
     }
 
-    this.draw();
-}
+    this.draw(); // Redraw the canvas with updated pupil positions
+  }
 
-
-  //lerp function to allow for linear interpolation and smooth eye movements
+  // Linear interpolation function to allow for smooth eye movements
   lerp(start: number, end: number, t: number): number {
     return start * (1 - t) + end * t;
   }
-  
-  
 }

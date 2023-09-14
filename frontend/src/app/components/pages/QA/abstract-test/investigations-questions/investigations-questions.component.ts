@@ -54,8 +54,8 @@ export class InvestigationsQuestionsComponent
 
     //just adding this for now but will update. Should be called onced test complete
     // Use a Subscription to manage the observable and prevent memory leaks
-    const sub = this.examStateService.isInvestigationsTestFinished$.subscribe(
-      (isFinished) => {
+    const sub = this.examStateService.isInvestigationsTestFinished$(this.useCaseId).subscribe(
+      (isFinished: boolean) =>  {
         this.isInvestigationsTestFinished = isFinished;
       }
     );
