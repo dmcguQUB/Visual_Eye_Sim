@@ -15,7 +15,6 @@ import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/vis
 import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/admin/admin-registrations-over-time/admin-registrations-over-time.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
-import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 import { EyeTestQuestionsComponent } from './components/pages/QA/abstract-test/eye-test-questions/eye-test-questions.component';
 import { DiagnosisQuestionsComponent } from './components/pages/QA/abstract-test/diagnosis-questions/diagnosis-questions.component';
@@ -60,10 +59,6 @@ const routes: Routes = [
     path: 'eye-movements-test/:useCaseId',
     component: EyeMovementsTestComponent,
     canActivate: [AuthGuard],
-  },
-  {
-    path: 'test',
-    component: TestVisualFieldsTestComponent,
   },
   {
     path: 'direct-ophthalmoscopy-test-left/:useCaseId',

@@ -45,7 +45,6 @@ import { VisualFieldsTestRightComponent } from './components/pages/eye-tests/vis
 import { AdminRegistrationsOverTimeComponent } from './components/pages/graphs/admin/admin-registrations-over-time/admin-registrations-over-time.component'; 
 import { AdminNavbarComponent } from './components/partials/navbars/admin-navbar/admin-navbar.component';
 import { PatientConvoComponent } from './components/partials/text/patient-convo/patient-convo.component';
-import { TestVisualFieldsTestComponent } from './components/pages/eye-tests/test-visual-fields-test/test-visual-fields-test.component';
 import { NavbarUserscoreComponent } from './components/partials/navbars/navbar-userscore/navbar-userscore.component';
 import { UserProfilePageComponent } from './components/pages/user-profile-page/user-profile-page.component';
 import { AvatarComponent } from './components/partials/avatar/avatar.component';
@@ -93,7 +92,6 @@ import { UserScoresComponent } from './components/pages/graphs/user/user-scores/
     AdminNavbarComponent,
     PatientConvoComponent,
     VisualAcuityTestComponent,
-    TestVisualFieldsTestComponent,
     NavbarUserscoreComponent,
     UserProfilePageComponent,
     AvatarComponent,
