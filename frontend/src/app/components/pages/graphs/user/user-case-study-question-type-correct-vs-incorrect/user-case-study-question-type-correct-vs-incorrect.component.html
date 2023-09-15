@@ -6,8 +6,11 @@
   <!-- Main Content -->
   <div class="main-content-container flex-grow-1">
       <main role="main" class="px-4">
-          <h1>Average correct and incorrect answers across the different case studies</h1>
-          
+          <!-- Scores Section -->
+    <div class="title-container mt-2">
+      <h1 class="title">Scores over time</h1>
+      <p class="graph-description">This visualization showcases the progression of test scores over different time intervals for various case studies. By selecting a specific case study, users can obtain a detailed breakdown of scores by test type, including 'eyetest', 'investigations', and 'diagnosis'.</p>
+    </div>
           <!-- Case Study Dropdown and Update Button -->
           <div class="mt-3">
             <select #dropdown [(ngModel)]="selectedCaseStudy" (change)="onCaseStudyChange(dropdown.value)">
@@ -90,18 +93,18 @@
                   <!-- If it's not the first row for the case study, don't repeat the name -->
                   <td *ngIf="!first"></td>
                   <td>{{ type | titlecase }}</td>
-                  <td>{{ $any(correctPercentages[idx])[type] | number:"1.2-2" }}%</td>
-                  <td>{{ $any(incorrectPercentages[idx])[type] | number:"1.2-2" }}%</td>
-                  <td>{{ ($any(correctPercentages[idx])[type] + $any(incorrectPercentages[idx])[type]) | number:"1.2-2" }}%</td>
+                  <td>{{ $any(correctPercentages[idx])[type] | number:"1.0-0" }}%</td>
+                  <td>{{ $any(incorrectPercentages[idx])[type] | number:"1.0-0" }}%</td>
+                  <td>{{ ($any(correctPercentages[idx])[type] + $any(incorrectPercentages[idx])[type]) | number:"1.0-0" }}%</td>
                   
               </tr>
           </ng-container>
           <!-- Add the Average row -->
           <tr>
               <th scope="row" colspan="2">Average</th>
-              <td>{{ calculateAverages().avgCorrect | number:"1.2-2" }}%</td>
-              <td>{{ calculateAverages().avgIncorrect | number:"1.2-2" }}%</td>
-              <td>{{ (calculateAverages().avgCorrect + calculateAverages().avgIncorrect) | number:"1.2-2" }}%</td>
+              <td>{{ calculateAverages().avgCorrect | number:"1.0-0" }}%</td>
+              <td>{{ calculateAverages().avgIncorrect | number:"1.0-0" }}%</td>
+              <td>{{ (calculateAverages().avgCorrect + calculateAverages().avgIncorrect) | number:"1.0-0" }}%</td>
           </tr>
       </tbody>
   </table>
