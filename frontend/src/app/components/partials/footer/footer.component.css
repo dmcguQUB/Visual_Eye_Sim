@@ -25,6 +25,7 @@ footer .container {
   justify-content: space-between;
   font-size: 10px;
   text-align: center;
+  z-index: 0;
 }
 
 footer h5 {

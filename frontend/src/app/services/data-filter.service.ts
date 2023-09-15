@@ -19,4 +19,8 @@ export class DataFilterService {
     return data.slice(start, start + pageSize);
   }
 
+  filterByKeyword(data: any[], keyword: string, field: string): any[] {
+    return data.filter(item => item[field].toLowerCase().includes(keyword.toLowerCase()));
+  }
+
 }

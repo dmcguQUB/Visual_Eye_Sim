@@ -23,3 +23,99 @@
 .chart-container {
   height: 40vh; /* or any other percentage */
 }
+
+.date-range-button {
+  margin: 5px;
+  background-color: #9c88ff; 
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.date-range-button:hover {
+  background-color: #bfc4ca; 
+}
+
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable-header:hover {
+  text-decoration: underline !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.sortable-header:active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.sortable-header:hover .sort-icon {
+  color: #9c88ff;
+}
+
+.table{
+  border-color: black;
+  color: inherit; 
+}
+
+.body {
+  color: #9c88ff;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.title-container {
+  text-align: center; 
+  padding: 20px 0; 
+  color: #9c88ff;
+  font-weight: bolder;
+}
+
+.title {
+  text-decoration: underline;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  padding: 5px 15px;
+  margin: 0 10px;
+  background-color: #9c88ff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 5px;
+}
+
+.pagination-button:hover {
+  background-color: #0056b3;
+}
+
+.pagination-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

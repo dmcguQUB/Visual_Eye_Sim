@@ -2,6 +2,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { Subscription } from 'rxjs';
+import { DataFilterService } from 'src/app/services/data-filter.service';
 import { TestService } from 'src/app/services/test.service';
 import { Score } from 'src/app/shared/interfaces/IScore';
 
@@ -28,32 +29,79 @@ export class AdminAvgScoreOverTimeComponent implements OnInit, OnDestroy {
   averageDiagnosisTests: number[] = [];
   overallAveragePercentages: number[] = [];
 
+  // Pagination and sorting properties
+  public currentPage: number = 1;
+  public pageSize: number = 5;
+  public sortDirection: string = 'asc';
+  public sortColumn: string = 'date';
+  public maxPage: number = 5;
+  public totalPages: number = 1;
+  COLUMN_MAP: { [key: string]: string } = {};
+
+
+
   private subscription: Subscription = new Subscription(); // Initialize a subscription object to hold all subscriptions
 
-  constructor(private testService: TestService) {}
+  constructor(
+    private testService: TestService,
+    private dataFilterService: DataFilterService
+  ) {}
+
   // Initialization method called when the component is loaded
   async ngOnInit(): Promise<void> {
+     // Maps the header to the actual property in the results data
+  this.COLUMN_MAP = {
+    'date': 'date',
+    'average': 'overallAveragePercentage',
+    'avgEyeTest': 'averageEyeTestPercentage',
+    'avgInvestigations': 'averageInvestigationsTestPercentage',
+    'avgDiagnosis': 'averageDiagnosisTestPercentage',
+    'testCount': 'testCount'
+  };
     this.loadChartData();
   }
 
-  loadChartData() {
-    const chartDataSubscription = this.testService.getAverageTestPercentageForAllCaseStudies().subscribe(results => {
-        if (results && results.scoresOverTime) {
-            this.allResults = results.scoresOverTime;
-            this.labels = results.scoresOverTime.map((score: { date: string; }) => score.date.split('T')[0]);
-            this.averageEyeTests = results.scoresOverTime.map((score: { averageEyeTestPercentage: any; }) => score.averageEyeTestPercentage);
-            this.averageInvestigationsTests = results.scoresOverTime.map((score: { averageInvestigationsTestPercentage: any; }) => score.averageInvestigationsTestPercentage);
-            this.averageDiagnosisTests = results.scoresOverTime.map((score: { averageDiagnosisTestPercentage: any; }) => score.averageDiagnosisTestPercentage);
-            this.overallAveragePercentages = results.scoresOverTime.map((score: { overallAveragePercentage: any; }) => score.overallAveragePercentage);
-            this.testsCount = results.scoresOverTime.map((score: { testCount: any; }) => score.testCount);
+ 
 
-            this.createChart(this.labels, this.overallAveragePercentages, this.testsCount);
+  loadChartData() {
+    const chartDataSubscription = this.testService
+      .getAverageTestPercentageForAllCaseStudies()
+      .subscribe((results) => {
+        if (results && results.scoresOverTime) {
+          this.allResults = results.scoresOverTime;
+          this.labels = results.scoresOverTime.map(
+            (score: { date: string }) => score.date.split('T')[0]
+          );
+          this.averageEyeTests = results.scoresOverTime.map(
+            (score: { averageEyeTestPercentage: any }) =>
+              score.averageEyeTestPercentage
+          );
+          this.averageInvestigationsTests = results.scoresOverTime.map(
+            (score: { averageInvestigationsTestPercentage: any }) =>
+              score.averageInvestigationsTestPercentage
+          );
+          this.averageDiagnosisTests = results.scoresOverTime.map(
+            (score: { averageDiagnosisTestPercentage: any }) =>
+              score.averageDiagnosisTestPercentage
+          );
+          this.overallAveragePercentages = results.scoresOverTime.map(
+            (score: { overallAveragePercentage: any }) =>
+              score.overallAveragePercentage
+          );
+          this.testsCount = results.scoresOverTime.map(
+            (score: { testCount: any }) => score.testCount
+          );
+
+          this.createChart(
+            this.labels,
+            this.overallAveragePercentages,
+            this.testsCount
+          );
         }
-    });
+      });
 
     this.subscription.add(chartDataSubscription); // Store the subscription for later cleanup
-}
-
+  }
 
   updateChartWithResults(results: any[]) {
     const labels = results.map((result) => {
@@ -75,15 +123,19 @@ export class AdminAvgScoreOverTimeComponent implements OnInit, OnDestroy {
     const startTimestamp = new Date().setDate(new Date().getDate() - days);
 
     // Filter results where the result date is after or equal to the start date
-    const filteredResults = this.allResults.filter(result => new Date(result.date).getTime() >= startTimestamp);
+    const filteredResults = this.allResults.filter(
+      (result) => new Date(result.date).getTime() >= startTimestamp
+    );
 
     // Update the chart and other properties with the filtered results
     this.updateChartWithResults(filteredResults);
 
     // Update the dateRange property to reflect the selected date range
     this.dateRange = days;
-}
 
+    // Redraw the table based on filteredResults:
+    this.sortAndPaginateUsing(filteredResults);
+  }
 
   //calculate averages required for table
   calculateAverages() {
@@ -201,7 +253,87 @@ export class AdminAvgScoreOverTimeComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void { // Implement ngOnDestroy lifecycle hook
+  ngOnDestroy(): void {
+    // Implement ngOnDestroy lifecycle hook
     this.subscription.unsubscribe(); // Unsubscribe from all subscriptions when component is destroyed
   }
+
+  // Methods related to sorting and pagination:
+  sortAndPaginateUsing(dataArray: any[]) {
+    let sortedData = this.dataFilterService.sort(dataArray, this.sortColumn, this.sortDirection);
+  
+    // Update the properties used to render the table with the sorted data
+    this.labels = sortedData.map(score => score.date.split('T')[0]);
+    this.averageEyeTests = sortedData.map(score => score.averageEyeTestPercentage);
+    this.averageInvestigationsTests = sortedData.map(score => score.averageInvestigationsTestPercentage);
+    this.averageDiagnosisTests = sortedData.map(score => score.averageDiagnosisTestPercentage);
+    this.overallAveragePercentages = sortedData.map(score => score.overallAveragePercentage);
+    this.testsCount = sortedData.map(score => score.testCount);
+  // Pagination: Calculate the total number of pages and set the currentPage to 1
+this.totalPages = Math.ceil(sortedData.length / this.pageSize);
+this.currentPage = 1;
+
+// Slice the data for the first page
+let pageData = sortedData.slice(0, this.pageSize);
+
+// Call a separate function to update the displayed data for the current page
+this.updateDisplayedData(pageData);
+    // If you need to further update table properties based on paginated data, do so here
+  }
+  
+  updateDisplayedData(pageData: any[]) {
+    // Assign the data from the pageData to the properties used to render the table
+    this.labels = pageData.map(score => score.date.split('T')[0]);
+    this.averageEyeTests = pageData.map(score => score.averageEyeTestPercentage);
+    this.averageInvestigationsTests = pageData.map(score => score.averageInvestigationsTestPercentage);
+    this.averageDiagnosisTests = pageData.map(score => score.averageDiagnosisTestPercentage);
+    this.overallAveragePercentages = pageData.map(score => score.overallAveragePercentage);
+    this.testsCount = pageData.map(score => score.testCount);
+    }
+    
+
+  computeTotalPagesUsing(dataArray: any[]) {
+    this.totalPages = Math.ceil(dataArray.length / this.pageSize);
+  }
+
+  onHeaderClick(columnKey: string) {
+    if (this.sortColumn === columnKey) {
+    // If the column is already being sorted, reverse the sort direction
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+    // Otherwise, set the new column as the sort column and reset the direction to ascending
+    this.sortColumn = this.COLUMN_MAP[columnKey];
+    this.sortDirection = 'asc';
+    }
+    
+    // Reapply sorting and pagination
+    this.sortAndPaginateUsing(this.allResults);
+    }
+  
+  
+
+    prevPage() {
+      if (this.currentPage > 1) {
+      this.currentPage--;
+      // Get the data for the previous page
+      let start = (this.currentPage - 1) * this.pageSize;
+      let end = start + this.pageSize;
+      let pageData = this.allResults.slice(start, end);
+      
+      this.updateDisplayedData(pageData);
+      }
+      }
+      
+      nextPage() {
+      if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      // Get the data for the next page
+      let start = (this.currentPage - 1) * this.pageSize;
+      let end = start + this.pageSize;
+      let pageData = this.allResults.slice(start, end);
+      
+      this.updateDisplayedData(pageData);
+      }
+      }
+      
 }

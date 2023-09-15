@@ -6,6 +6,7 @@
 .main-content-container {
   width: 100%;
   overflow-y: auto;
+  
 }
 
 @media (min-width: 768px) { /* 'md' breakpoint in Bootstrap */
@@ -22,4 +23,113 @@
 
 .chart-container {
   height: 40vh; /* or any other percentage */
+}
+
+.date-range-button {
+  margin: 5px;
+  background-color: #9c88ff; /* A default blue color, you can change this to match your theme */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.date-range-button:hover {
+  background-color: #9c88ff; /* A darker shade of blue for hover */
+}
+
+
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable-header:hover {
+  text-decoration: underline;
+}
+
+.sort-icon {
+  margin-left: 5px;
+}
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  padding: 5px 15px;
+  margin: 0 10px;
+  background-color: #9c88ff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 5px;
+}
+
+.pagination-button:hover {
+  background-color: #0056b3;
+}
+
+.pagination-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.button {
+  background-color: #9c88ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 10px 5px;
+  transition: all 0.3s ease;
+}
+.sortable-header:hover {
+  text-decoration: underline !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.sortable-header:active {
+  background-color: rgba(0, 0, 0, 0.1); /* Slightly darker gray when active (clicked) */
+}
+.sortable-header:hover .sort-icon {
+  color: #9c88ff; /* Color change on hover */
+}
+.table{
+  border-color: black;
+  color: inherit; /* This will make the header text color consistent with its parent */
+
+}
+
+.body {
+  color: #9c88ff; /* Example color: dark grey. You can replace it with your desired color. */
+}
+.text-center {
+  text-align: center;
+}
+/* Title Container */
+.title-container {
+  text-align: center; /* Center the title */
+  padding: 20px 0; /* Add some vertical padding */
+  color: #9c88ff;
+  font-weight: bolder;
+  
+}
+.title {
+  text-decoration: underline;
+}
+
+.body{
+  text-align: center;
+  align-items: center;
 }

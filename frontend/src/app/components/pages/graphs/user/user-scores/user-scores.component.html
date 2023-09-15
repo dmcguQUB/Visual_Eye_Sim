@@ -1,24 +1,20 @@
-<div class="full-container">
-  <div class="parent-container">
-    <!--navbar partial-->
-    <div class="d-flex justify-content-left text-center">
-      <app-navbar-userscore></app-navbar-userscore>
-    </div>
+<div class="container-fluid d-flex flex-md-row flex-column">
+  <!-- Sidebar -->
+  <div class="d-flex justify-content-left text-center">
+    <app-navbar-userscore></app-navbar-userscore>
+  </div>
 
-    <!--Right Container-->
-    <div class="card-container right-container">
-      <!--Title-->
-      <div class="card-container title-container">
+  <!-- Main Content -->
+  <div class="main-content-container flex-grow-1">
+    <div class="right-container">
+      <!-- Title -->
+      <div class="title-container mt-2">
         <h1 class="title">User Test Scores</h1>
-      </div>
-
-      <!--Instructions-->
-      <div class="card-container case-study-instructions text-center">
         <h2>Instructions:</h2>
         <p>View your past scores on tests for each case study.</p>
       </div>
 
-      <div class="card-container ">
+      <div class="card-container">
         <ng-container *ngIf="loading">Loading...</ng-container>
         <ng-container *ngIf="!loading && paginatedUserTests?.length">
           <table class="table table-bordered">
@@ -36,14 +32,18 @@
                 <td>{{ caseStudies[test.caseStudyId]?.name }}</td>
                 <td>{{ test.createdAt | date : "medium" }}</td>
                 <td>
-                  <button (click)="showDetails(test)">Show Details</button>
+                  <button class="showdetailsbutton" (click)="showDetails(test)">
+                    Show Details
+                  </button>
                 </td>
               </tr>
             </tbody>
           </table>
-          <div class="">
-            <button (click)="previousPage()">Previous</button>
-            <button (click)="nextPage()">Next</button>
+          <div class="pagination-controls">
+            <button class="pagination-button" (click)="previousPage()">
+              Previous
+            </button>
+            <button class="pagination-button" (click)="nextPage()">Next</button>
           </div>
         </ng-container>
         <ng-container *ngIf="!loading && !paginatedUserTests?.length">
@@ -52,78 +52,183 @@
       </div>
 
       <!--More details-->
-      <div class="card-container" *ngIf="showDetailsSection">
-          <div class="container mt-5 card-container" *ngIf="selectedUserTest">
-            <div class="card-container">
-              <h2>User Test Details</h2>
+      <!--More details-->
+      <div
+        class="modal"
+        [ngClass]="{ 'show-modal': showDetailsSection }"
+        tabindex="-1"
+        role="dialog"
+      >
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close"
+                (click)="closeDetails()"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-            <p>Case Study Number: {{ caseStudies[selectedUserTest.caseStudyId]?.caseStudyNumber }}</p>
-            <p>Case Subject: {{ caseStudies[selectedUserTest.caseStudyId]?.name }}</p>
-            <p>Score: {{ selectedUserTest.totalScore }}</p>
-            <p>Percentage: {{ selectedUserTest.totalPercentage }}%</p>
-            <p>Test Taken At: {{ selectedUserTest.createdAt| date : "medium" }}</p>
-          </div>
-    
-          <!-- Chart container -->
-          <div class="container mb-5 card-container" style="height: 400px">
-            <canvas id="scoreChart"></canvas>
-          </div>
-    
-          <!-- Table to display detailed info about each question -->
-          <table class="table table-bordered card-container">
-            <thead>
-              <tr>
-                <th>Number</th>
-                <th>Question</th>
-                <th>User Answer</th>
-                <th>Correct Answer</th>
-                <th>Correct</th>
-                <th>Explanation</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!--Eye tests-->
-              <ng-container *ngIf="selectedUserTest && selectedUserTest.eyeTest?.answers">
-                <tr *ngFor="let answer of selectedUserTest?.eyeTest?.answers; let i = index">
-                  <td>{{ i + 1 }}</td>
-                  <td>{{ questionsMap[answer.questionId]?.questionText }}</td>
-                  <td>{{ answer.answer }}</td>
-                  <td>{{ getCorrectAnswer(questionsMap[answer.questionId]) }}</td>
-                  <td>{{ answer.correct ? "Yes" : "No" }}</td>
-                  <td>{{ questionsMap[answer.questionId]?.explanation }}</td>
-                </tr>
-              </ng-container> 
-              
-              <!-- For investigationsTest -->
-<ng-container *ngIf="selectedUserTest && selectedUserTest.investigationsTest?.answers">
-  <tr *ngFor="let answer of selectedUserTest.investigationsTest?.answers; let i = index">
-      <td>{{ i + 1 }}</td>
-      <td>{{ questionsMap[answer.questionId]?.questionText }}</td>
-      <td>{{ answer.userAnswers.join(', ') }}</td>
-      <td>{{ getCorrectAnswer(questionsMap[answer.questionId]) }}</td>
-      <td>{{ answer.userAnswers.toString() === answer.correctAnswers.toString() ? "Yes" : "No" }}</td>
-      <td>Explanation not available for InvestigationsTest</td> <!-- Assuming no explanation for this test -->
-  </tr>
-</ng-container>
+            <div class="modal-body">
+              <div
+                class="container mt-5 card-container"
+                *ngIf="selectedUserTest"
+              >
+                <!--Title-->
+                <div class="title-container">
+                  <h2 class="title">User Test Details</h2>
+                </div>
+                <p>
+                  Case Study Number:
+                  {{
+                    caseStudies[selectedUserTest.caseStudyId]?.caseStudyNumber
+                  }}
+                </p>
+                <p>
+                  Case Subject:
+                  {{ caseStudies[selectedUserTest.caseStudyId]?.name }}
+                </p>
+                <p>Score: {{ selectedUserTest.totalScore }}</p>
+                <p>Percentage: {{ selectedUserTest.totalPercentage }}%</p>
+                <p>
+                  Test Taken At:
+                  {{ selectedUserTest.createdAt | date : "medium" }}
+                </p>
 
-<!-- For diagnosisTest -->
-<ng-container *ngIf="selectedUserTest && selectedUserTest.diagnosisTest?.answers">
-  <tr *ngFor="let answer of selectedUserTest.diagnosisTest?.answers; let i = index">
-      <td>{{ i + 1 }}</td>
-      <td>{{ questionsMap[answer.questionId]?.questionText }}</td>
-      <td>{{ answer.answer }}</td>
-      <td>{{ getCorrectAnswer(questionsMap[answer.questionId]) }}</td>
-      <td>{{ answer.correct ? "Yes" : "No" }}</td>
-      <td>{{ questionsMap[answer.questionId]?.explanation }}</td>
-  </tr>
-</ng-container>
+                <!-- Chart container -->
+                <div
+                  class="container mb-5 card-container"
+                  style="height: 400px"
+                >
+                  <canvas id="scoreChart"></canvas>
+                </div>
 
-            </tbody>
-          </table>
-          <div class="text-center">
-            <button (click)="closeDetails()">Close</button>
+                <!-- Table to display detailed info about each question -->
+                <div class="mt-3">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Number</th>
+                        <th>Question</th>
+                        <th>User Answer</th>
+                        <th>Correct Answer</th>
+                        <th>Correct</th>
+                        <th>Explanation</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!--Eye tests-->
+                      <ng-container
+                        *ngIf="
+                          selectedUserTest && selectedUserTest.eyeTest?.answers
+                        "
+                      >
+                        <tr
+                          *ngFor="
+                            let answer of selectedUserTest?.eyeTest?.answers;
+                            let i = index
+                          "
+                        >
+                          <td>{{ i + 1 }}</td>
+                          <td>
+                            {{ questionsMap[answer.questionId]?.questionText }}
+                          </td>
+                          <td>{{ answer.answer }}</td>
+                          <td>
+                            {{
+                              getCorrectAnswer(questionsMap[answer.questionId])
+                            }}
+                          </td>
+                          <td>{{ answer.correct ? "Yes" : "No" }}</td>
+                          <td>
+                            {{ questionsMap[answer.questionId]?.explanation }}
+                          </td>
+                        </tr>
+                      </ng-container>
+
+                      <!-- For investigationsTest -->
+                      <ng-container
+                        *ngIf="
+                          selectedUserTest &&
+                          selectedUserTest.investigationsTest?.answers
+                        "
+                      >
+                        <tr
+                          *ngFor="
+                            let answer of selectedUserTest.investigationsTest
+                              ?.answers;
+                            let i = index
+                          "
+                        >
+                          <td>{{ i + 1 }}</td>
+                          <td>
+                            {{ questionsMap[answer.questionId]?.questionText }}
+                          </td>
+                          <td>{{ answer.userAnswers.join(", ") }}</td>
+                          <td>
+                            {{
+                              getCorrectAnswer(questionsMap[answer.questionId])
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              answer.userAnswers.toString() ===
+                              answer.correctAnswers.toString()
+                                ? "Yes"
+                                : "No"
+                            }}
+                          </td>
+                          <td>
+                            Explanation not available for InvestigationsTest
+                          </td>
+                        </tr>
+                      </ng-container>
+
+                      <!-- For diagnosisTest -->
+                      <ng-container
+                        *ngIf="
+                          selectedUserTest &&
+                          selectedUserTest.diagnosisTest?.answers
+                        "
+                      >
+                        <tr
+                          *ngFor="
+                            let answer of selectedUserTest.diagnosisTest
+                              ?.answers;
+                            let i = index
+                          "
+                        >
+                          <td>{{ i + 1 }}</td>
+                          <td>
+                            {{ questionsMap[answer.questionId]?.questionText }}
+                          </td>
+                          <td>{{ answer.answer }}</td>
+                          <td>
+                            {{
+                              getCorrectAnswer(questionsMap[answer.questionId])
+                            }}
+                          </td>
+                          <td>{{ answer.correct ? "Yes" : "No" }}</td>
+                          <td>
+                            {{ questionsMap[answer.questionId]?.explanation }}
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                  <div class="text-center">
+                    <button class="button" (click)="closeDetails()">
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </div>
