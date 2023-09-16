@@ -9,6 +9,7 @@ import { AbstractTestComponent } from '../abstract-test.component';
 import { QuestionType } from 'src/app/shared/models/question-type';
 import { Observable, Subscription, switchMap } from 'rxjs'; // Imported Subscription
 import { INVESTIGATION_QUESTION_SCORE } from 'src/app/shared/constants/points-per-question';
+import { SelectionStateServiceService } from 'src/app/services/selection-state-service.service';
 
 @Component({
   selector: 'app-investigations-questions',
@@ -22,11 +23,11 @@ export class InvestigationsQuestionsComponent
   // Implemented OnDestroy
 
   //selected answers
-  userScore?: number; // Add this property to store the fetched user score
-  correctAnswer?: number = 0;
-  incorrectAnswer?: number = 0;
-  totalQuestions?: number = 0;
-  pointsPerQuestion?: number = INVESTIGATION_QUESTION_SCORE;
+  userScore!: number; // Add this property to store the fetched user score
+  correctAnswer: number = 0;
+  incorrectAnswer: number = 0;
+  totalQuestions: number = 0;
+  pointsPerQuestion: number = INVESTIGATION_QUESTION_SCORE;
   typeOfTest: String = 'Investigations Test';
   isInvestigationsTestFinished: boolean = false;
   selectedAnswers: string[] = [];
@@ -34,18 +35,18 @@ export class InvestigationsQuestionsComponent
   // Added a subscription collection
   private subscriptions: Subscription[] = [];
 
-  //constructor with args
   constructor(
     questionsService: QuestionService,
     route: ActivatedRoute,
     userService: UserService,
-    examStateService: ExamStateService,
-    testService: TestService
+    examStateService: ExamStateService,  // Keep this for the parent class
+    testService: TestService,
+    public selectionStateService: SelectionStateServiceService // New service just for this component
   ) {
-    //call abstract class constructor
-    super(questionsService, route, userService, examStateService, testService);
+    super(questionsService, route, userService, examStateService, testService);  // Use examStateService for the parent class
     this.questionType = QuestionType.Investigations;
   }
+  
 
   override ngOnInit() {
     // console.log('Investigations QuestionsComponent initialized.');
@@ -230,11 +231,13 @@ export class InvestigationsQuestionsComponent
     if (this.selectedAnswers.includes(option.text)) {
       const index = this.selectedAnswers.indexOf(option.text);
       this.selectedAnswers.splice(index, 1);
+      this.selectionStateService.setSelectionState(""); 
     } else {
       this.selectedAnswers.push(option.text);
+      this.selectionStateService.setSelectionState("Blue"); 
     }
   }
-
+  
   isSelected(option: any): boolean {
     return this.selectedAnswers.includes(option.text);
   }

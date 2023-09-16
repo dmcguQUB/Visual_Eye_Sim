@@ -1,29 +1,21 @@
+<!-- Container -->
 <div class="container-fluid d-flex flex-md-row flex-column">
   <!--navbar partial-->
   <div class="d-flex justify-content-left text-center">
-      <app-navbar-userscore></app-navbar-userscore>
-  </div>
-  <!-- Main Content -->
-  <div class="main-content-container flex-grow-1">
-      <main role="main" class="px-4">
-          <!-- Scores Section -->
-    <div class="title-container mt-2">
-      <h1 class="title">Scores over time</h1>
-      <p class="graph-description">This visualization showcases the progression of test scores over different time intervals for various case studies. By selecting a specific case study, users can obtain a detailed breakdown of scores by test type, including 'eyetest', 'investigations', and 'diagnosis'.</p>
-    </div>
-          <!-- Case Study Dropdown and Update Button -->
-          <div class="mt-3">
-            <select #dropdown [(ngModel)]="selectedCaseStudy" (change)="onCaseStudyChange(dropdown.value)">
-              <option value="all">All Case Studies</option>
-              <option *ngFor="let cs of caseStudies" [value]="cs._id">{{ cs.name }}</option>
-            </select>
-            <button (click)="updateChartAndTable()">Update Chart & Table</button>
-            
-          </div>
+   <app-navbar-userscore></app-navbar-userscore>
+ </div>
+ <!-- Main Content -->
+ <div class="main-content-container flex-grow-1">
+   <main role="main" class="px-4">
+     <div class="card-container title-container">
+      <h1 class="title">Case Study Performance Averages</h1>
+       <p class="graph-description">Average scores of Eye, Investigations, and Diagnosis tests over selected date range.</p>
+       </div>
+     
 
-          <div class="chart-container mt-3">
-              <canvas id="MyChart">{{ chart }}</canvas>
-          </div>
+     <div class="chart-container">
+       <canvas id="MyChart">{{ chart }}</canvas>
+     </div>
 
      <div class="btn-group mt-3" role="group">
        <button
@@ -71,45 +63,35 @@
      </div>
 
      <!--Table-->
-<div class="mt-3">
-  <table class="table table-striped">
-      <thead>
-          <tr>
-              <th scope="col">Case Study</th>
-              <th scope="col">Test Type</th>
-              <th scope="col">Correct (%)</th>
-              <th scope="col">Incorrect (%)</th>
-              <th scope="col">Total Percentage</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr>
-              <th colspan="5">Selected Date Range: {{ dateRange }} day(s)</th>
-          </tr>
-          <!-- Loop through case studies instead of labels -->
-          <ng-container *ngFor="let cs of caseStudies; let idx=index">
-              <tr *ngFor="let type of ['eyetest', 'investigations', 'diagnosis']; let first = first">
-                  <th scope="row" *ngIf="first">{{ cs.name }}</th>
-                  <!-- If it's not the first row for the case study, don't repeat the name -->
-                  <td *ngIf="!first"></td>
-                  <td>{{ type | titlecase }}</td>
-                  <td>{{ $any(correctPercentages[idx])[type] | number:"1.0-0" }}%</td>
-                  <td>{{ $any(incorrectPercentages[idx])[type] | number:"1.0-0" }}%</td>
-                  <td>{{ ($any(correctPercentages[idx])[type] + $any(incorrectPercentages[idx])[type]) | number:"1.0-0" }}%</td>
-                  
-              </tr>
-          </ng-container>
-          <!-- Add the Average row -->
-          <tr>
-              <th scope="row" colspan="2">Average</th>
-              <td>{{ calculateAverages().avgCorrect | number:"1.0-0" }}%</td>
-              <td>{{ calculateAverages().avgIncorrect | number:"1.0-0" }}%</td>
-              <td>{{ (calculateAverages().avgCorrect + calculateAverages().avgIncorrect) | number:"1.0-0" }}%</td>
-          </tr>
-      </tbody>
-  </table>
-</div>
+     <div class="mt-3">
+       <table class="table table-striped">
+    <!-- Added columns for Eye Test, Investigations, and Diagnosis percentages -->
+    <thead>
+      <tr>
+          <th scope="col">Case Study</th>
+          <th scope="col">Eye Test (%)</th>
+          <th scope="col">Investigations Test (%)</th>
+          <th scope="col">Diagnosis Test (%)</th>
+          <th scope="col">Average Percentage</th>
+      </tr>
+    </thead>
+        
+<tbody>
+  <tr>
+      <th colspan="5">Selected Date Range: {{ dateRange }} day(s)</th>
+  </tr>
+  <tr *ngFor="let label of labels; index as i">
+    <th scope="row">{{ label }}</th>
+    <td>{{ eyeTestPercentages[i] | number:"1.2-2" }}%</td>
+    <td>{{ investigationsTestPercentages[i] | number:"1.2-2" }}%</td>
+    <td>{{ diagnosisTestPercentages[i] | number:"1.2-2" }}%</td>
+    <td>{{ (eyeTestPercentages[i] + investigationsTestPercentages[i] + diagnosisTestPercentages[i]) / 3 | number:"1.2-2" }}%</td>
+  </tr> 
+</tbody>
 
+
+       </table>
+   </div>
    </main>
  </div>
 </div>

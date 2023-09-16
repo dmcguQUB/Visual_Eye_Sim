@@ -1,18 +1,13 @@
 <!-- Container -->
 <div class="container-fluid d-flex flex-md-row flex-column">
-   <!--navbar partial-->
-   <div class="d-flex justify-content-left text-center">
-    <app-navbar-userscore></app-navbar-userscore>
+  <!-- Sidebar -->
+  <div class="sidebar-container d-flex flex-column">
+    <admin-navbar></admin-navbar>
   </div>
   <!-- Main Content -->
   <div class="main-content-container flex-grow-1">
     <main role="main" class="px-4">
-      <div class="card-container title-container">
-        <h1 class="title">Average correct and incorrect answers across the different case studies</h1>
-          <!-- Description of the graph -->
-          <p class="graph-description">Displays average results of various case studies based on the selected date range.</p>
-        </div>
-      
+      <h1>Average Scores and User Count Over Time for Selected Case Study</h1>
 
       <div class="chart-container">
         <canvas id="MyChart">{{ chart }}</canvas>
@@ -63,31 +58,49 @@
         </button>
       </div>
 
-      <!--Table-->
       <div class="mt-3">
         <table class="table table-striped">
           <thead>
             <tr>
-                <th scope="col">Case Study</th>
-                <th scope="col">Correct (%)</th>
-                <th scope="col">Incorrect (%)</th>
-                <th scope="col">Total Percentage</th>
+              <th scope="col">Case Study</th>
+              <th scope="col">Correct (%)</th>
+              <th scope="col">Incorrect (%)</th>
+              <th scope="col">Number of Tests</th>
+              <!-- Add this line -->
             </tr>
-        </thead>      
-            <tbody>
-                <tr>
-                    <th colspan="4">Selected Date Range: {{ dateRange }} day(s)</th>
-                </tr>
-                <tr *ngFor="let label of labels; index as i">
-                  <th scope="row">{{ label }}</th>
-                  <td>{{ correctPercentages[i] | number:"1.2-2" }}%</td>
-                  <td>{{ incorrectPercentages[i] | number:"1.2-2" }}%</td>
-                  <td>{{ (correctPercentages[i] + incorrectPercentages[i]) | number:"1.2-2" }}%</td>
-              </tr>              
-               
-            </tbody>
+          </thead>
+          <tbody>
+            <tr>
+              <th colspan="4">Selected Date Range: {{ dateRange }} day(s)</th>
+            </tr>
+            <tr *ngFor="let label of labels; index as i">
+              <th scope="row">{{ label }}</th>
+              <td>
+                {{
+                  (correctCounts[i] / (correctCounts[i] + incorrectCounts[i])) *
+                    100 | number : "1.2-2"
+                }}
+              </td>
+              <td>
+                {{
+                  (incorrectCounts[i] /
+                    (correctCounts[i] + incorrectCounts[i])) *
+                    100 | number : "1.2-2"
+                }}
+              </td>
+              <td>{{ testsCount[i] }}</td>
+              <!-- Add this line -->
+            </tr>
+            <!-- Add the Average row -->
+            <tr>
+              <th scope="row">Average</th>
+              <td>{{ calculateAverages().avgCorrect }}</td>
+              <td>{{ calculateAverages().avgIncorrect }}</td>
+              <td>{{ totalTests() }}</td>
+            </tr>
+          </tbody>
         </table>
-    </div>
+      </div>
     </main>
   </div>
 </div>

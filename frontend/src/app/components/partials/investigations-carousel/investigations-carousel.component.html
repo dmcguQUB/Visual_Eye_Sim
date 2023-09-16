@@ -1,0 +1,7 @@
+<div class="card-container image-carousel text-center">
+  <img [src]="images[currentIndex]" alt="Investigation Image" id="carouselImage" class="carousel-img">
+  <div class="carousel-controls">
+    <button (click)="changeImage(-1)">Previous</button>
+    <button (click)="changeImage(1)">Next</button>
+  </div>
+</div>

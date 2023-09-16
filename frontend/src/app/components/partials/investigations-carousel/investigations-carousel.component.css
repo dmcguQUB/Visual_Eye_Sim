@@ -1,0 +1,76 @@
+
+.blue-background {
+  background-color: white;
+  color: white;
+}
+
+.default-background {
+  background-color: white; /* or whatever default background you prefer */
+}
+button {
+  background-color: #9c88ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 10px 5px;
+  align-items: center;
+}
+
+button:hover {
+  background-color: #7b6bd4;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.submit{
+  justify-content: center;
+  align-items: center;
+}
+
+.card-container.image-carousel {
+  position: relative;
+  max-width: 500px;  /* You can adjust this value depending on your desired maximum width */
+  margin: 20px auto;
+}
+
+.carousel-img {
+  width: 100%;
+  height: 300px;  /* Adjust as needed for your desired height */
+  object-fit: cover;  /* Ensures the images are resized in a way that doesn't break their aspect ratio */
+  border-radius: 10px;
+}
+
+.carousel-controls {
+  margin-top: 10px;
+}
+
+button {
+  background-color: #9c88ff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #8e44ad;
+}
+
+@media screen and (max-width: 600px) {
+  .card-container.image-carousel {
+    max-width: 90%;
+  }
+
+  .carousel-img {
+    height: 200px;  /* Adjust as needed for mobile view */
+  }
+}

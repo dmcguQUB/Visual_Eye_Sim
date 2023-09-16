@@ -7,7 +7,13 @@
  <!-- Main Content -->
  <div class="main-content-container flex-grow-1">
    <main role="main" class="px-4">
-     <h1>Average correct and incorrect answers across the different case studies</h1>
+       <!--Title-->
+       <div class="card-container title-container">
+        <h1 class="title">Average Correct & Incorrect Answers Across Different Case Studies</h1>
+          <!-- Description of the graph -->
+          <p class="graph-description">This graph shows average scores for different case studies. Select a date range to see specific trends, and refer to the table for detailed results.</p>
+      </div>
+      
 
      <div class="chart-container">
        <canvas id="MyChart">{{ chart }}</canvas>
@@ -75,14 +81,14 @@
               </tr>
               <tr *ngFor="let label of labels; index as i">
                   <th scope="row">{{ label }}</th>
-                  <td>{{ correctPercentages[i] | number:"1.2-2" }}%</td>
-                  <td>{{ incorrectPercentages[i] | number:"1.2-2" }}%</td>
+                  <td>{{ correctPercentages[i] | number:"1.0-0" }}%</td>
+                  <td>{{ incorrectPercentages[i] | number:"1.0-0" }}%</td>
                   <td>{{ numberOfTests[i] }}</td> <!-- Display number of tests -->
               </tr>
               <tr>
                   <th scope="row">Average</th>
-                  <td>{{ calculateAverages().avgCorrect | number:"1.2-2" }}%</td>
-                  <td>{{ calculateAverages().avgIncorrect | number:"1.2-2" }}%</td>
+                  <td>{{ calculateAverages().avgCorrect | number:"1.0-0" }}%</td>
+                  <td>{{ calculateAverages().avgIncorrect | number:"1.0-0" }}%</td>
                   <td></td> <!-- Empty cell for the averages row -->
               </tr>
           </tbody>

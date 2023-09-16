@@ -61,6 +61,9 @@ import { AdminCaseStudyCorrectVsIncorrectComponent } from './components/pages/gr
 import { AdminAvgScoreOverTimeComponent } from './components/pages/graphs/admin/admin-global-avg-score-over-time/admin-avg-score-over-time.component';
 import { AdminCaseStudyAvgScoreOverTimeComponent } from './components/pages/graphs/admin/admin-case-study-avg-score-over-time/admin-case-study-avg-score-over-time.component';
 import { UserScoresComponent } from './components/pages/graphs/user/user-scores/user-scores.component';
+import { UserQtDeepdiveComponent } from './components/pages/graphs/user/user-qt-deepdive/user-qt-deepdive.component';
+import { InvestigationsReportComponent } from './components/pages/investigations-report/investigations-report.component';
+import { InvestigationsCarouselComponent } from './components/partials/investigations-carousel/investigations-carousel.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +109,10 @@ import { UserScoresComponent } from './components/pages/graphs/user/user-scores/
     AdminCaseStudyCorrectVsIncorrectComponent,
     AdminAvgScoreOverTimeComponent,
     AdminCaseStudyAvgScoreOverTimeComponent,
-    UserScoresComponent
+    UserScoresComponent,
+    UserQtDeepdiveComponent,
+    InvestigationsReportComponent,
+    InvestigationsCarouselComponent
   ],
   imports: [
     BrowserModule,

@@ -10,7 +10,7 @@ li{
   margin: 10px 0;
 }
 li .card:hover{
-  border: 1px solid blue;
+  border: 1px solid white;
 }
 
 ol{
@@ -40,4 +40,38 @@ ol{
 .title-container {
   text-align: center; /* Center the title */
   padding: 20px 0; /* Add some vertical padding */
+}
+
+.blue-background {
+  background-color: white;
+  color: white;
+}
+
+.default-background {
+  background-color: white; /* or whatever default background you prefer */
+}
+button {
+  background-color: #9c88ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 10px 5px;
+  align-items: center;
+}
+
+button:hover {
+  background-color: #7b6bd4;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.submit{
+  justify-content: center;
+  align-items: center;
 }

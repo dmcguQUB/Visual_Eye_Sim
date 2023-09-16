@@ -26,6 +26,7 @@ import { UserCaseStudyQuestionTypeCorrectVsIncorrectComponent } from './componen
 import { AdminCaseStudyCorrectVsIncorrectComponent } from './components/pages/graphs/admin/admin-case-study-correct-vs-incorrect/admin-case-study-correct-vs-incorrect.component';
 import { AdminAvgScoreOverTimeComponent } from './components/pages/graphs/admin/admin-global-avg-score-over-time/admin-avg-score-over-time.component';
 import { UserScoresComponent } from './components/pages/graphs/user/user-scores/user-scores.component';
+import { InvestigationsReportComponent } from './components/pages/investigations-report/investigations-report.component';
 
 const routes: Routes = [
   //home route
@@ -132,6 +133,11 @@ const routes: Routes = [
   {
     path: 'user-profile-page',
     component: UserProfilePageComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'investigations-report',
+    component: InvestigationsReportComponent,
     canActivate: [AuthGuard],
   },
 ];

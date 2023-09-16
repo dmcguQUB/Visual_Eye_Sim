@@ -101,3 +101,7 @@ text-align: center;}
   align-items: center; /* Horizontally centering content */
   text-align: center;  /* Text alignment */
 }
+/* New styles */
+body, h1, h2, p, th, td {
+  color: #9c88ff; /* Applying the purple color to all text elements */
+}

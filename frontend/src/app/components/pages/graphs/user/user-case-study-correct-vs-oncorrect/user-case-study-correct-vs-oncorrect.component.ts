@@ -63,23 +63,35 @@ export class UserCaseStudyCorrectVsOncorrectComponent implements OnInit, OnDestr
     this.subscriptions.push(subscription); // Track the subscription
   }
 
-
   calculatePercentages() {
+    let caseStudyCounts: number[] = Array(this.caseStudies.length).fill(0);  // Number of tests per case study
+  
     this.userTests.forEach((test) => {
-      const index = this.caseStudies.findIndex(cs => cs._id === test.caseStudyId);
-      if (index !== -1) {
-        if (typeof test.totalPercentage === 'number') {
-          this.correctPercentages[index] = test.totalPercentage;
-          this.incorrectPercentages[index] = 100 - test.totalPercentage;
-        } else {
-          // Handle the case where test.totalPercentage is undefined
-          this.correctPercentages[index] = 0;
-          this.incorrectPercentages[index] = 100;
+        const index = this.caseStudies.findIndex(cs => cs._id === test.caseStudyId);
+        if (index !== -1) {
+            if (typeof test.totalPercentage === 'number') {
+                this.correctPercentages[index] += test.totalPercentage;
+                this.incorrectPercentages[index] += (100 - test.totalPercentage);
+                caseStudyCounts[index]++;
+            } else {
+                // Handle the case where test.totalPercentage is undefined
+                this.incorrectPercentages[index] += 100;
+                caseStudyCounts[index]++;
+            }
         }
-        
-      }
     });
+  
+    // Convert total percentages to averages
+    for (let i = 0; i < this.caseStudies.length; i++) {
+        if (caseStudyCounts[i] !== 0) {
+            this.correctPercentages[i] /= caseStudyCounts[i];
+            this.incorrectPercentages[i] /= caseStudyCounts[i];
+        }
+    }
   }
+  
+
+
 
   createChart() {
     this.chart = new Chart('MyChart', {

@@ -57,14 +57,11 @@
               </div>
             </div>
             <div class="options">
-              <!--loop through question array list for the current question. Provide all the options available from array-->
               <ol *ngFor="let option of questionList[currentQuestion]?.options">
-                <!--Change to not submit answer until user has selected all the options they want-->
                 <li (click)="toggleAnswer(currentQuestion, option)">
-                  <!--call the appChangeBg directive depending on if the answer selected is correct or not-->
                   <div
-                    appChangeBg
-                    [isCorrect]="isSelected(option)"
+                    [class.blue-background]="isSelected(option)" 
+                    [class.default-background]="!isSelected(option)"
                     class="card"
                   >
                     {{ option.text }}
@@ -86,13 +83,13 @@
                 class="btn"
                 (click)="previousQuestion()"
               >
-                <i class="text-primary fa-solid fa-chevron-left fa-3x"></i>
+                <i class="fa-solid fa-chevron-left fa-3x"></i>
               </button>
               <button class="btn" (click)="resetQuiz()">
-                <i class="text-primary fa-solid fa-arrows-rotate fa-3x"></i>
+                <i class=" fa-solid fa-arrows-rotate fa-3x"></i>
               </button>
               <button class="btn" (click)="nextQuestion()">
-                <i class="text-primary fa-solid fa-chevron-right fa-3x"></i>
+                <i class=" fa-solid fa-chevron-right fa-3x"></i>
               </button>
             </div>
           </ng-container>
@@ -119,8 +116,8 @@
                   <h3>Your Score:</h3>
                   <p>{{ userScore }} / {{totalScore}}</p>
                   <p>Total Questions Attempted : {{ totalQuestions }}</p>
-                  <p>Total Correct Answers : {{ correctAnswer }}</p>
-                  <p>Total Incorrect Answers : {{ incorrectAnswer }}</p>
+                  <p>Total Correct Options : {{ userScore/ pointsPerQuestion }}</p>
+                  <p>Total Incorrect Options : {{ (totalScore / pointsPerQuestion) - (userScore / pointsPerQuestion) }}</p>                  
                 </div>
               </div>
             </div>
