@@ -18,6 +18,7 @@ import { CaseStudies } from 'src/app/shared/models/casestudies';
 export class DirectOphthalmoscopyTestComponent
   implements OnInit, AfterViewInit
 {
+  // ViewChild decorators to access elements in the template
   @ViewChild('maskSvg', { static: true })
   maskSvg!: ElementRef<SVGElement>;
 
@@ -29,11 +30,12 @@ export class DirectOphthalmoscopyTestComponent
 
   @Input() caseStudy!: CaseStudies;
 
-  // Add variables for size and resolution
+  // Variables for controlling size and resolution
   sizeIndex = 0; // Start at the smallest size
-  sizeArray = [30, 50, 70]; // Set the sizes you need
+  sizeArray = [30, 50, 70]; // Set the available sizes
   resolution = 3; // Initial resolution
-  //image to determine which iris it is
+
+  // Variables to determine which eye is being tested
   thisEye: string = 'Left';
   otherEye: string = 'Right';
 
@@ -42,16 +44,22 @@ export class DirectOphthalmoscopyTestComponent
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
+    // Bind the updateCirclePosition method to this instance of the component
     this.updateCirclePosition = this.updateCirclePosition.bind(this);
+
+    // Listen for mousemove events to update the circle's position
     document.addEventListener('mousemove', this.updateCirclePosition);
-    this.adjustResolution(0); // Apply initial blur
+
+    // Apply initial blur
+    this.adjustResolution(0);
   }
 
-  // Add HostListener to listen for keyboard events
+  // HostListener to handle keyboard events
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    event.preventDefault(); // Prevent default behavior
+    event.preventDefault(); // Prevent default keyboard behavior
 
+    // Adjust resolution and size based on arrow key inputs
     if (event.key === 'ArrowUp') {
       this.adjustResolution(1);
     } else if (event.key === 'ArrowDown') {
@@ -63,26 +71,35 @@ export class DirectOphthalmoscopyTestComponent
     }
   }
 
+  // Function to adjust the resolution (blur intensity)
   adjustResolution(value: number): void {
     this.resolution += value;
-    if (this.resolution < 1) this.resolution = 1; // Ensure resolution doesn't go below 1
 
-    // Update the image's blur
-    const blurValue = (this.resolution - 1) * 5; // Change '5' to adjust the blur intensity per resolution step
+    // Ensure resolution doesn't go below 1
+    if (this.resolution < 1) this.resolution = 1;
+
+    // Calculate blur intensity based on resolution
+    const blurValue = (this.resolution - 1) * 5; // Adjust the blur intensity per resolution step
     this.backgroundImage.nativeElement.style.filter = `blur(${blurValue}px)`;
   }
 
+  // Function to adjust the size of the circle
   adjustSize(value: number): void {
     this.sizeIndex += value;
-    if (this.sizeIndex < 0) this.sizeIndex = 0; // Ensure sizeIndex doesn't go below 0
-    if (this.sizeIndex > this.sizeArray.length - 1)
-      this.sizeIndex = this.sizeArray.length - 1; // Ensure sizeIndex doesn't exceed the array length
 
-    // Update the circle's size
+    // Ensure sizeIndex doesn't go below 0
+    if (this.sizeIndex < 0) this.sizeIndex = 0;
+
+    // Ensure sizeIndex doesn't exceed the array length
+    if (this.sizeIndex > this.sizeArray.length - 1)
+      this.sizeIndex = this.sizeArray.length - 1;
+
+    // Update the circle's size based on the selected size index
     const newSize = this.sizeArray[this.sizeIndex];
     this.maskCircle.nativeElement.setAttribute('r', `${newSize}px`);
   }
 
+  // Function to update the circle's position based on mouse movement
   updateCirclePosition(e: MouseEvent): void {
     // Get the bounding rectangle of the SVG.
     const svgRect = this.maskSvg.nativeElement.getBoundingClientRect();
@@ -91,20 +108,23 @@ export class DirectOphthalmoscopyTestComponent
     const x = e.clientX - svgRect.left;
     const y = e.clientY - svgRect.top;
 
-    // Update the circle's position.
+    // Update the circle's position using SVG attributes
     this.maskCircle.nativeElement.setAttribute('cx', `${x}px`);
     this.maskCircle.nativeElement.setAttribute('cy', `${y}px`);
   }
 
-  // Update your handleClick() method
+  // Function to handle button click (change tested eye and navigate to the corresponding route)
   handleClick(): void {
+    // Toggle between 'Left' and 'Right' eyes
     this.thisEye = this.thisEye === 'Left' ? 'Right' : 'Left';
   
+    // Determine the route base based on the tested eye
     let routeBase =
       this.thisEye === 'Right'
         ? 'direct-ophthalmoscopy-test-right/'
         : 'direct-ophthalmoscopy-test-left/';
   
+    // Get the useCaseId from the route parameters and navigate to the appropriate route
     this.activatedRoute.params.subscribe((params) => {
       if (params['useCaseId']) {
         this.router.navigate([routeBase + params['useCaseId']]);

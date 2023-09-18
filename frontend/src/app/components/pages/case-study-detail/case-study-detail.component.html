@@ -5,35 +5,35 @@
   <!-- Right Container -->
   <div class="right-container">
 
-     <!--instructions for this stage-->
+    <!-- Instructions for this stage -->
     <div class="card-container case-study-instructions text-center">
       <h2>Instructions:</h2>
       <p>Read the <strong>background</strong> of the patient for this case study. Use the <strong>icon in the bottom right of the page</strong> to ask them appropriate questions in order to gather as much detail as possible. Please remember that some information the patient says may not be useful.</p>
-      <p>Click the button below when you are finished speaking to the patient. Later you will conduct eye test examinations, investigations and provide diagnosis.</p>
+      <p>Click the button below when you are finished speaking to the patient. Later you will conduct eye test examinations, investigations, and provide a diagnosis.</p>
     </div>
 
-    <!-- case-study-detail.component.html -->
-<div class="card-container">
-  <ng-container *ngIf="caseStudy$ | async as caseStudy">
-    <img class="card-img-top case-study-image" [src]="caseStudy.imageUrl" [alt]="caseStudy.name" />
-    <h5 class="title name">{{caseStudy.name}}</h5>
-    <p><strong>Age:</strong> {{ caseStudy.age }}</p>
-    <p><strong>Gender:</strong> {{ caseStudy.gender }}</p>
-    <p><strong>Medical History:</strong> {{ caseStudy.medicalHistory }}</p>
-    <p><strong>Drug Information:</strong> {{ caseStudy.drugInfo }}</p>
-    <p><strong>Social Information:</strong> {{ caseStudy.socialInfo }}</p>
-    <p><strong>Family History:</strong> {{ caseStudy.familyHistory }}</p>
-  </ng-container>
-</div>
+    <!-- Display case study details -->
+    <div class="card-container">
+      <ng-container *ngIf="caseStudy$ | async as caseStudy">
+        <img class="card-img-top case-study-image" [src]="caseStudy.imageUrl" [alt]="caseStudy.name" />
+        <h5 class="title name">{{caseStudy.name}}</h5>
+        <p><strong>Age:</strong> {{ caseStudy.age }}</p>
+        <p><strong>Gender:</strong> {{ caseStudy.gender }}</p>
+        <p><strong>Medical History:</strong> {{ caseStudy.medicalHistory }}</p>
+        <p><strong>Drug Information:</strong> {{ caseStudy.drugInfo }}</p>
+        <p><strong>Social Information:</strong> {{ caseStudy.socialInfo }}</p>
+        <p><strong>Family History:</strong> {{ caseStudy.familyHistory }}</p>
+      </ng-container>
+    </div>
 
-
+    <!-- Display confirmation button if showButton is true -->
     <div *ngIf="showButton" class="card-container case-study-button text-center">
       <default-button 
-      [type]="'button'" 
-      [text]="'Confirm Finished'" 
-      [bgColor]="'#9c88ff'"
-      (onClick)="handleClick()"
-    ></default-button>
+        [type]="'button'" 
+        [text]="'Confirm Finished'" 
+        [bgColor]="'#9c88ff'"
+        (onClick)="handleClick()"
+      ></default-button>
     </div>
   </div>
 </div>

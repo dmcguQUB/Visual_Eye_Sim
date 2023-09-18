@@ -65,6 +65,7 @@ export class AdminCaseStudyCorrectVsIncorrectComponent
     this.subscriptions.push(subscription);
   }
 
+  // Calculate correct and incorrect percentages for each case study
   calculatePercentages() {
     this.correctPercentages = Array(this.caseStudies.length).fill(0);
     this.incorrectPercentages = Array(this.caseStudies.length).fill(0);
@@ -108,6 +109,7 @@ export class AdminCaseStudyCorrectVsIncorrectComponent
     });
   }
 
+  // Create and update the chart displaying correct vs. incorrect percentages
   createChart() {
     this.chart = new Chart('MyChart', {
       type: 'bar',
@@ -144,6 +146,7 @@ export class AdminCaseStudyCorrectVsIncorrectComponent
     });
   }
 
+  // Handle changes in the date range filter
   dateRangeChanged(days: number) {
     this.dateRange = days;
     const endDate = new Date();
@@ -169,6 +172,7 @@ export class AdminCaseStudyCorrectVsIncorrectComponent
     this.createChart();
   }
 
+  // Calculate average correct and incorrect percentages
   calculateAverages(): { avgCorrect: number; avgIncorrect: number } {
     let totalCorrect = 0;
     let totalIncorrect = 0;

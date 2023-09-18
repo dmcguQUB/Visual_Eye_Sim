@@ -8,34 +8,33 @@ import { UserService } from 'src/app/services/user.service';
   selector: 'app-admin-registrations-over-time',
   templateUrl: './admin-registrations-over-time.component.html',
   styleUrls: ['./admin-registrations-over-time.css'],
-
 })
 export class AdminRegistrationsOverTimeComponent implements OnInit, OnDestroy {
-  // Implement OnDestroy
-
-  public dateRange: number = 30; // Default to 1 month
+  public dateRange: number = 30; // Default to 30 days
   public registrationData: { date: string; registrations: number }[] = [];
   public allData: { date: string; registrations: number }[] = [];
   public chart: any;
 
-  //data filter and pagination
+  // Data filter and pagination properties
   public currentPage: number = 1;
-public pageSize: number = 5;
-public sortDirection: string = 'asc';
-public sortColumn: string = 'date';
-public maxPage: number=20;
-public totalPages: number = 1;
-
-
+  public pageSize: number = 5;
+  public sortDirection: string = 'asc';
+  public sortColumn: string = 'date';
+  public maxPage: number = 20; // Maximum number of pages
+  public totalPages: number = 1;
 
   private subscriptions: Subscription[] = []; // Store subscriptions
 
-  constructor(private userService: UserService,   private dataFilterService: DataFilterService    ) {}
+  constructor(
+    private userService: UserService,
+    private dataFilterService: DataFilterService
+  ) {}
 
   ngOnInit(): void {
     this.loadChartData();
   }
 
+  // Load chart data from the server
   loadChartData() {
     // Storing the subscription
     const subscription = this.userService
@@ -53,6 +52,8 @@ public totalPages: number = 1;
 
     this.subscriptions.push(subscription); // Track the subscription
   }
+
+  // Filter data based on date range and create/update the chart
   filterDataAndCreateChart() {
     const endDate = new Date();
     const startDate = new Date();
@@ -60,30 +61,30 @@ public totalPages: number = 1;
 
     // Create a new array for the filtered data
     const filteredData = this.allData.filter((data) => {
-        const dataDate = new Date(data.date);
-        return dataDate >= startDate && dataDate <= endDate;
+      const dataDate = new Date(data.date);
+      return dataDate >= startDate && dataDate <= endDate;
     });
 
     const labels = filteredData.map((data) => data.date);
     const counts = filteredData.map((data) => data.registrations);
 
     this.createChart(labels, counts);
-    this.sortAndPaginateUsing(filteredData); // pass the filtered data to the sort and paginate method
-    this.computeTotalPagesUsing(filteredData); // pass the filtered data to compute the total pages
-}
+    this.sortAndPaginateUsing(filteredData); // Pass the filtered data to the sort and paginate method
+    this.computeTotalPagesUsing(filteredData); // Pass the filtered data to compute the total pages
+  }
 
-  
-
+  // Handle changes in the date range filter
   dateRangeChanged(days: number) {
     this.dateRange = days;
 
-       // Clear the data
-       this.registrationData = [];
+    // Clear the data
+    this.registrationData = [];
 
-       //filter and populate chart and table with new data
+    // Filter and populate chart and table with new data
     this.filterDataAndCreateChart();
   }
 
+  // Create or update the chart with provided labels and data
   createChart(labels: string[], counts: number[]) {
     if (this.chart) {
       this.chart.destroy();
@@ -125,43 +126,51 @@ public totalPages: number = 1;
     });
   }
 
-  //CODE RELATED TO TABLE FILTER AND PAGINATION
-
-  
+  // Handle sorting and pagination of data for the table
   sortAndPaginateUsing(dataArray: any[]) {
-    let sortedData = this.dataFilterService.sort(dataArray, this.sortColumn, this.sortDirection);
+    let sortedData = this.dataFilterService.sort(
+      dataArray,
+      this.sortColumn,
+      this.sortDirection
+    );
     this.maxPage = Math.ceil(sortedData.length / this.pageSize);
-    this.registrationData = this.dataFilterService.paginate(sortedData, this.pageSize, this.currentPage);
-}
+    this.registrationData = this.dataFilterService.paginate(
+      sortedData,
+      this.pageSize,
+      this.currentPage
+    );
+  }
 
-computeTotalPagesUsing(dataArray: any[]) {
+  // Compute the total number of pages for pagination
+  computeTotalPagesUsing(dataArray: any[]) {
     this.totalPages = Math.ceil(dataArray.length / this.pageSize);
-}
-  
-onHeaderClick(column: string) {
-  this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-  this.sortColumn = column;
-  this.sortAndPaginateUsing(this.allData); // Pass `this.allData` as the argument
-}
+  }
 
-nextPage() {
-  if (this.currentPage < this.totalPages) {
+  // Handle sorting when a table header is clicked
+  onHeaderClick(column: string) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    this.sortColumn = column;
+    this.sortAndPaginateUsing(this.allData); // Pass `this.allData` as the argument
+  }
+
+  // Go to the next page of the table
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.sortAndPaginateUsing(this.allData); // Pass `this.allData` as the argument
+    }
   }
-}
 
-prevPage() {
-  if (this.currentPage > 1) {
+  // Go to the previous page of the table
+  prevPage() {
+    if (this.currentPage > 1) {
       this.currentPage--;
       this.sortAndPaginateUsing(this.allData); // Pass `this.allData` as the argument
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Added ngOnDestroy to clear subscriptions
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 }
-
-
-ngOnDestroy(): void {
-  // Added ngOnDestroy to clear subscriptions
-  this.subscriptions.forEach((sub) => sub.unsubscribe());
-}
-}
-

@@ -1,3 +1,4 @@
+// Import necessary modules and components from Angular and other libraries
 import { Component, OnInit, OnDestroy, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CaseStudies } from 'src/app/shared/models/casestudies';
@@ -17,7 +18,7 @@ import { PatientConvoStateService } from 'src/app/services/patient-convo-state.s
 export class CaseStudyDetailComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription | undefined;
-  caseStudy$: Observable<CaseStudies> | undefined;// Use an observable for the case study data
+  caseStudy$: Observable<CaseStudies> | undefined; // Use an observable for the case study data
   isButtonClicked: boolean = false;
   showButton: boolean = true;
   botpressScript!: HTMLScriptElement;
@@ -28,10 +29,10 @@ export class CaseStudyDetailComponent implements OnInit, OnDestroy {
     private buttonStateService: ButtonStateService,
     @Inject(DOCUMENT) private _document: Document,
     private patientConvoStateService: PatientConvoStateService
-
   ) {}
 
   ngOnInit(): void {
+    // Retrieve the case study data using an observable and handle errors
     this.caseStudy$ = this.activatedRoute.params.pipe(
       switchMap(params => this.useCaseService.getUseCaseById(params['useCaseId'])),
       catchError(error => {
@@ -40,14 +41,16 @@ export class CaseStudyDetailComponent implements OnInit, OnDestroy {
         return EMPTY;
       })
     );
+
+    // Subscribe to the caseStudy$ observable and add Botpress chatbot script after data is loaded
     this.subscription = this.caseStudy$.subscribe(() => {
       // Call the method to add the script file for the Botpress chatbot
       this.addScriptToElement("https://cdn.botpress.cloud/webchat/v0/inject.js");
       this.addScriptToElement("https://mediafiles.botpress.cloud/32e236a8-39dd-49e5-8a8d-bd9604e12cf8/webchat/config.js");
     });
-  };
+  }
 
-
+  // Add a script element to the document's body
   addScriptToElement(src: string): HTMLScriptElement {
     const script = this._document.createElement('script');
     script.type = 'text/javascript';
@@ -76,9 +79,10 @@ export class CaseStudyDetailComponent implements OnInit, OnDestroy {
     }
   }
   
+  // Handle button click event
   handleClick(): void {
     this.buttonStateService.changeButtonState(true);
-    this.patientConvoStateService.isPatientConvoFinished = true; // set the state
+    this.patientConvoStateService.isPatientConvoFinished = true; // Set the state
     this.showButton = false;
   }
 }

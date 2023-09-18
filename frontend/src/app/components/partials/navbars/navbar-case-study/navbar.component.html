@@ -22,7 +22,7 @@
         <a class="dropdown-toggle">Investigations</a>
         <ul class="dropdown-menu">
           <li><a [routerLink]="'/investigations-questions/' + caseStudy._id">Investigations Selection</a></li>
-          <li *ngIf="isInvestigationsTestFinished" routerLink]="'/investigations-report'"><a>Investigations Report</a></li>
+          <li [routerLink]="'/investigations-report'" *ngIf="isPatientConvoFinished && isEyeTestFinished"><a>Investigations Report</a></li>
         </ul>
       </li>
       <li *ngIf="isPatientConvoFinished && isEyeTestFinished">
