@@ -14,6 +14,6 @@
 # cd Visual_Eye_Sim/backend
 # npm install
 # Run using npm start
-# Ensure the backend is running properly. By default, it should be on http://localhost:3001/ or a port you've configured.
+# Ensure the backend is running properly. By default, it should be on http://localhost:5001/ or a port you've configured.
 
 
